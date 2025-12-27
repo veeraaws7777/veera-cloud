@@ -385,31 +385,54 @@
   </div>
 
 
-  <!-- INSERT_YOUR_CODE -->
-  <!-- Sandboxed AWS1 Link Button (Veera) -->
-  <div style="position: fixed; bottom: 30px; right: 30px; z-index: 100;">
-    <a href="aws1/awsveera1" target="_blank" style="
-      background: #d8d8b7;
-      color: #22223b;
-      padding: 16px 28px;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: bold;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      border: none;
-      cursor: pointer;
-      outline: none;
-      transition: background 0.2s, transform 0.2s;">
-      <svg style="width:1em; height:1em;" viewBox="0 0 24 24" class="download-icon" fill="none">
-        <path d="M12 4v12m0 0l-4-4m4 4l4-4m-9 8h14" stroke="#22223b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-      Open AWS1 Veera Sandbox
-    </a>
-  </div>
+  <script>
+    // Redirection after sign up and sign in (email/password)
+    document.addEventListener('DOMContentLoaded', function() {
+      // Sign Up (register) listener
+      const signupForm = document.getElementById('signup-form');
+      if (signupForm) {
+        signupForm.addEventListener('submit', function(e) {
+          setTimeout(function() {
+            // Wait for Firebase sign up logic to complete, then redirect if user is logged in
+            if (window.auth && window.auth.currentUser) {
+              window.location.href = "/aws1/awsveera1.html";
+            }
+          }, 900); // Give async time (you may adjust if needed)
+        });
+      }
+      // Sign In listener
+      const signinForm = document.getElementById('signin-form');
+      if (signinForm) {
+        signinForm.addEventListener('submit', function(e) {
+          setTimeout(function() {
+            if (window.auth && window.auth.currentUser) {
+              window.location.href = "/aws1/awsveera1.html";
+            }
+          }, 900);
+        });
+      }
+
+      // Google Sign In button (if present)
+      const googleBtn = document.getElementById('googleSignInBtn');
+      if (googleBtn) {
+        googleBtn.addEventListener('click', function() {
+          // Since the Firebase Google popup is handled elsewhere, observe user sign-in
+          const unsubscribe = (window.onAuthStateChanged || window.firebase && window.firebase.auth && window.firebase.auth().onAuthStateChanged)
+            ? onAuthStateChanged
+            : function (cb) { return cb; }; // fallback
+          let listener = unsubscribe(window.auth, function(user) {
+            if (user) {
+              window.location.href = "/aws1/awsveera1.html";
+              listener(); // unsubscribe on first trigger
+            }
+          });
+        });
+      }
+    });
+  </script>
+
+
+  
   
   <!-- Hidden Welcome/Sandbox Page Trigger (the element itself stays hidden, now launches popup) -->
   <div id="sandbox-welcome" style="display:none;flex-direction:column;">
