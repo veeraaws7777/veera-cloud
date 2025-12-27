@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>5 Button Website</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .container {
+      display: flex;
+      gap: 15px;
+      z-index: 1;
+    }
+
+    button {
+      padding: 15px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #4f46e5;
+      color: white;
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    button:hover {
+      background: #4338ca;
+      transform: scale(1.1);
+    }
+
+    /* Download app button style - cement color */
+    .download-app-btn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: #d8d8b7; /* cement color */
+      color: #22223b;
+      padding: 18px 30px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.16);
+      z-index: 100;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      transition: background 0.2s, transform 0.2s;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .download-app-btn:hover {
+      background: #a5a58d;
+      transform: scale(1.08);
+    }
+
+    .download-icon {
+      width: 1.3em;
+      height: 1.3em;
+      fill: #22223b;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="stars"></canvas>
+
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; position: relative;">
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 30px;">
+      <img src="https://nareshit.in/wp-content/uploads/2023/02/nareshitechnologies-png-logo.png" alt="Naresh IT Logo" style="display:block; margin: 0 auto; width: 200px; height: auto;">
+      <h1 style="text-align: center; font-size: 2.3em; font-weight: bold;">Naresh IT Cloud sandbox by Veera</h1>
+    </div>
+    <div class="container" style="justify-content: center; gap: 18px;">
+      <button style="padding: 18px 26px; font-size: 16px; background: #a5b4fc; color: #1e293b;" onclick="window.location.href='index.html'">
+        AWS-1
+      </button>
+      
+      <button style="padding: 18px 26px; font-size: 16px; background: #a5b4fc; color: #1e293b;" onclick="window.location.href='about.html'">
+        AWS-2
+      </button>
+      <button style="padding: 18px 26px; font-size: 16px; background: #a5b4fc; color: #1e293b;" onclick="window.location.href='services.html'">
+        AWS-3
+      </button>
+      <button style="padding: 18px 26px; font-size: 16px; background: #a5b4fc; color: #1e293b;" onclick="window.location.href='contact.html'">
+        AWS-4
+      </button>
+      <button style="padding: 18px 26px; font-size: 16px; background: #a5b4fc; color: #1e293b;" onclick="window.location.href='login.html'">
+        AWS Girls
+      </button>
+    </div>
+  </div>
+
+  <!-- Download App Button in bottom-right corner -->
+  <a href="your_app_download_link_here.exe" download class="download-app-btn" style="padding:10px 18px; font-size:13px; border-radius:8px;">
+    <svg class="download-icon" style="width:1em; height:1em;" viewBox="0 0 24 24">
+      <path d="M12 16V4m0 12l-4-4m4 4l4-4m-9 8h14" stroke="#22223b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </svg>
+    Download for Desktop
+  </a>
+
+  <script>
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    resizeCanvas();
+
+    const mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+
+    window.addEventListener('mousemove', (e) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    window.addEventListener('resize', resizeCanvas);
+
+    const stars = [];
+    const STAR_COUNT = 250;
+
+    // Initialize stars (80% white, 20% colorful)
+    for (let i = 0; i < STAR_COUNT; i++) {
+      const isColorStar = Math.random() < 0.2;
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 2 + 0.5,
+        speed: Math.random() * 1.5 + 0.8,
+        color: isColorStar
+          ? `hsl(${Math.random() * 360}, 100%, 70%)`
+          : 'white'
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      stars.forEach(star => {
+        const dx = mouse.x - star.x;
+        const dy = mouse.y - star.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+
+        star.x += (dx / dist) * star.speed;
+        star.y += (dy / dist) * star.speed;
+
+        // Respawn star when it reaches the mouse
+        if (dist < 10) {
+          star.x = Math.random() * canvas.width;
+          star.y = Math.random() * canvas.height;
+        }
+
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fillStyle = star.color;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+
+</body>
+</html>
