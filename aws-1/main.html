@@ -395,7 +395,7 @@
           setTimeout(function() {
             // Wait for Firebase sign up logic to complete, then redirect if user is logged in
             if (window.auth && window.auth.currentUser) {
-              window.location.href = "/aws1/awsveera1.html";
+              window.location.href = "/aws-1/aws1/awsveera1.html";
             }
           }, 900); // Give async time (you may adjust if needed)
         });
@@ -406,7 +406,7 @@
         signinForm.addEventListener('submit', function(e) {
           setTimeout(function() {
             if (window.auth && window.auth.currentUser) {
-              window.location.href = "/aws1/awsveera1.html";
+              window.location.href = "/aws-1/aws1/awsveera1.html";
             }
           }, 900);
         });
@@ -422,7 +422,7 @@
             : function (cb) { return cb; }; // fallback
           let listener = unsubscribe(window.auth, function(user) {
             if (user) {
-              window.location.href = "/aws1/awsveera1.html";
+              window.location.href = "/aws-1/aws1/awsveera1.html";
               listener(); // unsubscribe on first trigger
             }
           });
@@ -530,7 +530,7 @@
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCredential.user, { displayName: name });
         //showPopError("Success: Account created!");
-        goToSandbox();
+        window.location.href = "/aws-1/aws1/awsveera1.html";
       } catch (error) {
         showPopError(error && error.message ? error.message : "Unknown error");
       }
@@ -544,7 +544,7 @@
       try {
         await signInWithEmailAndPassword(auth, email, password);
         //showPopError("Success: Logged in!");
-        goToSandbox();
+        window.location.href = "/aws-1/aws1/awsveera1.html";
       } catch (error) {
         showPopError(error && error.message ? error.message : "Unknown error");
       }
@@ -555,7 +555,7 @@
       try {
         await signInWithPopup(auth, provider);
         //showPopError("Welcome " + result.user.displayName);
-        goToSandbox();
+        window.location.href = "/aws-1/aws1/awsveera1.html";
       } catch (error) {
         showPopError(error && error.message ? error.message : "Unknown error");
       }
