@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AWS-2</title>
+  <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #4EA685;
+      --secondary-color: #57B894;
+      --black: #000000;
+      --white: #ffffff;
+      --gray: #efefef;
+      --gray-2: #757575;
+      --facebook-color: #4267B2;
+      --google-color: #DB4437;
+      --bubble-red: #FF4D4F;
+    }
+
+    * {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .container {
+      position: relative;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      height: 100vh;
+    }
+
+    .col {
+      width: 50%;
+    }
+
+    .align-items-center {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .form-wrapper {
+      width: 100%;
+      max-width: 28rem;
+    }
+
+    .form {
+      padding: 2rem;
+      background-color: var(--white);
+      border-radius: 1.5rem;
+      width: 100%;
+      box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      transform: scale(0);
+      transition: .5s ease-in-out;
+      transition-delay: 1s;
+    }
+
+    .input-group {
+      position: relative;
+      width: 100%;
+      margin: 1rem 0;
+    }
+
+    .input-group i {
+      position: absolute;
+      top: 50%;
+      left: 1rem;
+      transform: translateY(-50%);
+      font-size: 1.4rem;
+      color: var(--gray-2);
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 1rem 3rem;
+      font-size: 1rem;
+      background-color: var(--gray);
+      border-radius: .5rem;
+      border: 0.125rem solid var(--white);
+      outline: none;
+    }
+
+    .input-group input:focus {
+      border: 0.125rem solid var(--primary-color);
+    }
+
+    button {
+      cursor: pointer;
+      width: 100%;
+      padding: .8rem 0;
+      border-radius: .5rem;
+      border: none;
+      background-color: var(--primary-color);
+      color: var(--white);
+      font-size: 1.2rem;
+      outline: none;
+      margin-top: 10px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #3e856a;
+    }
+
+    .google-btn {
+      background-color: transparent !important;
+      color: var(--google-color) !important;
+      border: 1.5px solid var(--google-color) !important;
+      padding: 0.8rem;
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: none;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .google-btn:hover {
+      background-color: rgba(219, 68, 55, 0.08) !important;
+      color: var(--google-color) !important;
+      border-color: var(--google-color) !important;
+    }
+    .google-btn .bx {
+      color: var(--google-color) !important;
+      font-size: 1.4rem;
+    }
+
+    .form p {
+      margin: 1rem 0;
+      font-size: .9rem;
+    }
+
+    .pointer { cursor: pointer; color: var(--primary-color); font-weight: 600; }
+
+    /* Animation Classes */
+    .container.sign-in .form.sign-in,
+    .container.sign-up .form.sign-up {
+      transform: scale(1);
+    }
+
+    .content-row {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 6;
+      width: 100%;
+    }
+
+    .text {
+      margin: 4rem;
+      color: var(--white);
+    }
+
+    .text h2 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      transition: 1s ease-in-out;
+    }
+
+    .text.sign-in h2 { transform: translateX(-250%); }
+    .text.sign-up h2 { transform: translateX(250%); }
+
+    .container.sign-in .text.sign-in h2,
+    .container.sign-up .text.sign-up h2 {
+      transform: translateX(0);
+    }
+
+    /* Background Transition */
+    .container::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100vh;
+      width: 300vw;
+      transform: translate(35%, 0);
+      background-image: linear-gradient(-45deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      transition: 1s ease-in-out;
+      z-index: 6;
+      border-bottom-right-radius: max(50vw, 50vh);
+      border-top-left-radius: max(50vw, 50vh);
+    }
+
+    .container.sign-in::before { transform: translate(0, 0); right: 50%; }
+    .container.sign-up::before { transform: translate(100%, 0); right: 50%; }
+
+    .forgot-link {
+      display: block;
+      text-align: right;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+
+    /* Error Pop Bubble Styles */
+    .pop-error-window {
+      position: fixed;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%) scale(1);
+      z-index: 10000;
+      background: transparent;
+      border: none;
+      outline: none;
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 280px;
+    }
+    .bubble-pop-error {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: var(--bubble-red);
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 500;
+      border-radius: 30px;
+      padding: 1rem 2.5rem 1rem 1.7rem;
+      margin-bottom: 10px;
+      box-shadow: 0 6px 24px 0 rgba(250,0,0,0.18);
+      animation: bubble-pop-appear 0.3s cubic-bezier(.49,2.74,.56,.87), bubble-pop-out 0.25s cubic-bezier(.52,.07,.5,1.18) 2.35s forwards;
+      pointer-events: auto;
+      min-width: 150px;
+    }
+    .bubble-pop-error .bx {
+      font-size: 1.55rem;
+      margin-right: 11px;
+      flex: none;
+    }
+    /* .bubble-pop-close removed styles (no longer needed) */
+    @keyframes bubble-pop-appear {
+      0% { opacity: 0; transform: scale(0.5) translateY(-30px);}
+      100% { opacity: 1; transform: scale(1) translateY(0);}
+    }
+    @keyframes bubble-pop-out {
+      to { opacity: 0; transform: scale(0.85) translateY(-20px);}
+    }
+    /* Responsive */
+    @media only screen and (max-width: 425px) {
+      .col { width: 100%; }
+      .text h2 { font-size: 2rem; }
+    }
+
+    /* Welcome Sandbox Styles */
+    #sandbox-welcome {
+      display: none;
+      height: 100vh;
+      width: 100vw;
+      position: fixed;
+      top: 0; left: 0;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      z-index: 99999;
+      color: #fff;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      text-align: center;
+    }
+    #sandbox-welcome h1 {
+      font-size: 2.7rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    #sandbox-welcome p {
+      font-size: 1.5rem;
+      margin-bottom: 18px;
+      font-weight: 400;
+      opacity: 0.94;
+    }
+    #logoutBtn {
+      background: #fff;
+      color: var(--primary-color);
+      font-size: 1.07rem;
+      border: none;
+      border-radius: 8px;
+      padding: 0.7rem 1.7rem;
+      margin-top: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    #logoutBtn:hover {
+      background: var(--primary-color);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Pop error window for errors -->
+  <div id="popErrorWindow" class="pop-error-window" style="display:none;"></div>
+
+  <div id="container" class="container sign-in">
+    <div class="row">
+      <div class="col align-items-center flex-col sign-up">
+        <div class="form-wrapper align-items-center">
+          <div class="form sign-up">
+            <h2>Create Account</h2>
+            <form id="signup-form">
+              <div class="input-group">
+                <i class="bx bx-user"></i>
+                <input id="signup-name" type="text" placeholder="Name" required>
+              </div>
+              <div class="input-group">
+                <i class="bx bx-mail-send"></i>
+                <input id="signup-email" type="email" placeholder="Email" required>
+              </div>
+              <div class="input-group">
+                <i class="bx bxs-lock-alt"></i>
+                <input id="signup-password" type="password" placeholder="Password" required>
+              </div>
+              <div class="input-group">
+                <i class="bx bxs-lock"></i>
+                <input id="signup-confirm-password" type="password" placeholder="Confirm Password" required>
+              </div>
+              <button type="submit">Sign Up</button>
+            </form>
+            <p>
+              <span>Already have an account?</span>
+              <b class="pointer toggle-btn">Sign In</b>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col align-items-center flex-col sign-in">
+        <div class="form-wrapper align-items-center">
+          <div class="form sign-in">
+            <h2>Welcome Back</h2>
+            <form id="signin-form">
+              <div class="input-group">
+                <i class="bx bx-mail-send"></i>
+                <input id="signin-email" type="email" placeholder="Email" required>
+              </div>
+              <div class="input-group">
+                <i class="bx bxs-lock-alt"></i>
+                <input id="signin-password" type="password" placeholder="Password" required>
+              </div>
+              <a href="#" id="forgotPasswordLink" class="forgot-link">Forgot password?</a>
+              <button type="submit">Sign In</button>
+            </form>
+            
+            <div id="googleSignInBtn" class="google-btn pointer" style="margin-top:1rem;">
+              <i class="bx bxl-google"></i> Sign in with Google
+            </div>
+            <p>
+              <span>Don’t have an account?</span>
+              <b class="pointer toggle-btn">Sign Up</b>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row content-row">
+      <div class="col align-items-center flex-col sign-in">
+        <div class="text sign-in"><h2>Welcome<br>To<br>AWS 2</h2></div>
+      </div>
+      <div class="col align-items-center flex-col sign-up">
+        <div class="text sign-up"><h2>Join Us</h2></div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    // Redirection after sign up and sign in (email/password)
+    document.addEventListener('DOMContentLoaded', function() {
+      // Sign Up (register) listener
+      const signupForm = document.getElementById('signup-form');
+      if (signupForm) {
+        signupForm.addEventListener('submit', function(e) {
+          setTimeout(function() {
+            // Wait for Firebase sign up logic to complete, then redirect if user is logged in
+            if (window.auth && window.auth.currentUser) {
+              window.location.href = "/aws-2/aws2/awsveera2.html";
+            }
+          }, 900); // Give async time (you may adjust if needed)
+        });
+      }
+      // Sign In listener
+      const signinForm = document.getElementById('signin-form');
+      if (signinForm) {
+        signinForm.addEventListener('submit', function(e) {
+          setTimeout(function() {
+            if (window.auth && window.auth.currentUser) {
+              window.location.href = "/aws-2/aws2/awsveera2.html";
+            }
+          }, 900);
+        });
+      }
+
+      // Google Sign In button (if present)
+      const googleBtn = document.getElementById('googleSignInBtn');
+      if (googleBtn) {
+        googleBtn.addEventListener('click', function() {
+          // Since the Firebase Google popup is handled elsewhere, observe user sign-in
+          const unsubscribe = (window.onAuthStateChanged || window.firebase && window.firebase.auth && window.firebase.auth().onAuthStateChanged)
+            ? onAuthStateChanged
+            : function (cb) { return cb; }; // fallback
+          let listener = unsubscribe(window.auth, function(user) {
+            if (user) {
+              window.location.href = "/aws-2/aws2/awsveera2.html";
+              listener(); // unsubscribe on first trigger
+            }
+          });
+        });
+      }
+    });
+  </script>
+
+
+  
+  
+  <!-- Hidden Welcome/Sandbox Page Trigger (the element itself stays hidden, now launches popup) -->
+  <div id="sandbox-welcome" style="display:none;flex-direction:column;">
+    <script>
+      // You should call openSandboxDashboard() whenever you want to open the dashboard,
+      // for example, after login or after sign up.
+      // Example usage (uncomment to test): openSandboxDashboard();
+    </script>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail, updateProfile, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDBSIUwdfN38xiPeapdueeyCvdgV7ep-YE",
+      authDomain: "abinash-482505.firebaseapp.com",
+      projectId: "abinash-482505",
+      storageBucket: "abinash-482505.firebasestorage.app",
+      messagingSenderId: "262782630272",
+      appId: "1:262782630272:web:b50bb959a3ec87a3696965"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // --- Error Bubble Pop Window Logic ---
+    function showPopError(message) {
+      const errorWindow = document.getElementById("popErrorWindow");
+      errorWindow.style.display = "flex";
+
+      const msgId = "pop-bubble-" + Math.random().toString(36).substr(2,5);
+
+      const errorBubble = document.createElement("div");
+      errorBubble.className = "bubble-pop-error";
+      errorBubble.id = msgId;
+      errorBubble.innerHTML = `
+        <i class="bx bxs-error-circle"></i>
+        <span>${message}</span>
+      `;
+      errorWindow.appendChild(errorBubble);
+
+      // Auto-dismiss after animation ends (2.6s)
+      setTimeout(() => {
+        if (errorBubble.parentNode) {
+          errorBubble.remove();
+          if (errorWindow.children.length === 0) errorWindow.style.display = "none";
+        }
+      }, 2600);
+
+      // Allow dismiss on ESC
+      const escHandler = (e) => {
+        if (e.key === "Escape") {
+          errorBubble.remove();
+          if (errorWindow.children.length === 0) errorWindow.style.display = "none";
+          document.removeEventListener("keydown", escHandler);
+        }
+      };
+      document.addEventListener("keydown", escHandler);
+    }
+
+    // --- UI Toggle Logic ---
+    const container = document.getElementById('container');
+    const toggleButtons = document.querySelectorAll('.toggle-btn');
+
+    toggleButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        container.classList.toggle('sign-in');
+        container.classList.toggle('sign-up');
+      });
+    });
+
+    // --- 2. Firebase Sign Up ---
+    document.getElementById("signup-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("signup-name").value.trim();
+      const email = document.getElementById("signup-email").value.trim();
+      const password = document.getElementById("signup-password").value;
+      const confirmPassword = document.getElementById("signup-confirm-password").value;
+
+      // Validate fields for empty values
+      if (!name) {
+        showPopError("Please enter your name.");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showPopError("Passwords do not match.");
+        return;
+      }
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(userCredential.user, { displayName: name });
+        //showPopError("Success: Account created!");
+        window.location.href = "/aws-2/aws2/awsveera2.html";
+      } catch (error) {
+        showPopError(error && error.message ? error.message : "Unknown error");
+      }
+    });
+
+    // --- 3. Firebase Sign In ---
+    document.getElementById("signin-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("signin-email").value;
+      const password = document.getElementById("signin-password").value;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        //showPopError("Success: Logged in!");
+        window.location.href = "/aws-2/aws2/awsveera2.html";
+      } catch (error) {
+        showPopError(error && error.message ? error.message : "Unknown error");
+      }
+    });
+
+    // --- 4. Google Sign In ---
+    document.getElementById("googleSignInBtn").onclick = async () => {
+      try {
+        await signInWithPopup(auth, provider);
+        //showPopError("Welcome " + result.user.displayName);
+        window.location.href = "/aws-2/aws2/awsveera2.html";
+      } catch (error) {
+        showPopError(error && error.message ? error.message : "Unknown error");
+      }
+    };
+
+    // --- 5. Forgot Password ---
+    document.getElementById("forgotPasswordLink").onclick = async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("signin-email").value;
+      if (!email) {
+        showPopError("Please enter your email first.");
+        return;
+      }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showPopError("Password reset email sent!");
+      } catch (error) {
+        showPopError(error && error.message ? error.message : "Unknown error");
+      }
+    };
+
+    // --- Sandbox Welcome Handler ---
+    const sandboxDiv = document.getElementById("sandbox-welcome");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const appContainer = document.getElementById("container");
+
+    function goToSandbox() {
+      // Hide login/signup UI, show sandbox
+      appContainer.style.display = "none";
+      sandboxDiv.style.display = "flex";
+    }
+
+    function showAuthUI() {
+      sandboxDiv.style.display = "none";
+      appContainer.style.display = "";
+    }
+
+    // Logout and return to auth screen
+    logoutBtn.addEventListener("click", async () => {
+      await signOut(auth);
+      showAuthUI();
+    });
+
+    // Optional: If you want to persist "sandbox" screen on reload if user is logged in:
+    onAuthStateChanged(auth, function(user) {
+      if (user) {
+        goToSandbox();
+      } else {
+        showAuthUI();
+      }
+    });
+  </script>
+</body>
+</html>
