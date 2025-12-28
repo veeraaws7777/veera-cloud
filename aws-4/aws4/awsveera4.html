@@ -35,7 +35,6 @@
             max-width: 1100px;
         }
 
-        /* Header Section */
         .header {
             display: flex;
             justify-content: space-between;
@@ -68,16 +67,47 @@
             margin-top: 5px; 
         }
 
-        .close-btn {
-            background: #3d3763;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
+        /* Added styles for user-details-box */
+        .user-details-box {
+            background: #222044;
+            color: #fff;
+            border: 1px solid #3d3763;
+            padding: 13px 20px 13px 20px;
+            border-radius: 7px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-size: 15px;
+            min-width: 130px;
+            min-height: 26px;
+            box-shadow: 0 2px 8px rgba(32,16,70,0.08);
+        }
+        .user-details-box .user-name {
+            font-weight: 600;
+            font-size: 15.5px;
+            color: #fae989;
+            margin-bottom: 2px;
+        }
+        .user-details-box .user-email {
+            font-size: 13px;
+            color: #b5b3c5;
+            margin-bottom: 2px;
+        }
+        .user-details-box .user-role {
+            font-size: 12.5px;
+            padding: 2px 7px;
+            border-radius: 12px;
+            background: #5c4ee5;
+            color: #fff;
+            margin-top: 4px;
+            display: inline-block;
         }
 
+        .close-btn {
+            display: none !important; /* Hide the original button just in case */
+        }
+
+        /* ...rest of your existing CSS... */
         /* Main Panel Wrapper */
         .main-panel {
             background: var(--panel-bg);
@@ -199,7 +229,6 @@
         }
         .field-container i:hover { color: white; }
 
-        /* Sidebar Info Box */
         .info-card {
             background: rgba(255,255,255,0.03);
             border-radius: 8px;
@@ -227,7 +256,6 @@
             text-decoration: underline; 
         }
 
-        /* Floating Help Button */
         .help-fab {
             position: fixed;
             bottom: 30px;
@@ -282,10 +310,12 @@
                 </div>
                 <div>
                     <h1>AWS -4 Sandbox</h1>
-                    
                 </div>
             </div>
-            <button class="close-btn" id="btn-close">Close</button>
+            <!-- User details box loaded via JS -->
+            <div id="user-details" class="user-details-box" style="min-width:130px;min-height:26px;">
+                Loading user...
+            </div>
         </header>
 
         <div class="main-panel">
@@ -450,6 +480,115 @@
             }
         })();
 
+        // --- USER DETAIL LOADER from aws4/main.html ---
+        document.addEventListener('DOMContentLoaded', function() {
+            var userBox = document.getElementById('user-details');
+            // Try fetch
+            fetch('aws4/main.html', {credentials: 'include'})
+                .then(function(response) {
+                    if (!response.ok) throw new Error("User not found");
+                    return response.text();
+                })
+                .then(function(htmltxt) {
+                    // Parse main.html & try to extract user info heuristically
+                    var dom = document.createElement('div');
+                    dom.innerHTML = htmltxt;
+
+                    // Try common ways of encoding user info
+                    // 1. Find [data-username], [data-user], [id="user"], .user etc.
+                    // 2. Common patterns in innerText (e.g., "Username", "Email", etc.)
+
+                    function findText(dom, match) {
+                        match = match.toLowerCase();
+                        const els = dom.querySelectorAll('*');
+                        for (const el of els) {
+                            if (el.innerText && el.innerText.toLowerCase().includes(match)) return el;
+                        }
+                        return null;
+                    }
+
+                    let name = '';
+                    let email = '';
+                    let role = '';
+
+                    // Try by common selectors
+                    let userNameNode = dom.querySelector('[data-username], [data-user], #username, #user, .user, .username, .profile-name');
+                    if (userNameNode && userNameNode.textContent.trim().length > 2) {
+                        name = userNameNode.textContent.trim();
+                    }
+
+                    // Find email (look for '@')
+                    let emailNode = dom.querySelector('[href^="mailto:"], .email, #email, [data-email]');
+                    if (emailNode) {
+                        email = emailNode.textContent.trim();
+                    } else {
+                        // search any node containing an '@'
+                        let allNodes = dom.querySelectorAll('*');
+                        for(let n of allNodes) {
+                            let t = n.textContent || "";
+                            if (t.includes('@') && t.length < 50) {
+                                email = t.trim();
+                                break;
+                            }
+                        }
+                    }
+
+                    // Try to pick up a recognizable role
+                    let roleNode = dom.querySelector('[data-role], .role, #role, .user-role, .account-type');
+                    if(roleNode) {
+                        role = roleNode.textContent.trim();
+                    } else {
+                        // fallback: if any span/td/div with "admin", "student", "user", etc.
+                        let poss = ["admin", "student", "instructor", "developer", "manager"];
+                        let all = dom.querySelectorAll('*');
+                        for(let n of all) {
+                            let t = (n.textContent || "").toLowerCase();
+                            for(let p of poss) {
+                                if (t.includes(p)) {
+                                    role = n.textContent.trim();
+                                    break;
+                                }
+                            }
+                            if(role) break;
+                        }
+                    }
+
+                    // If nothing found, try to heuristically extract a line e.g. Username: ABC
+                    if(!name || name.length<3) {
+                        let el = findText(dom, 'username') || findText(dom, 'name');
+                        if(el) {
+                            let t = el.innerText;
+                            let m = t.match(/username\W*:?([\w \-]+)/i) || t.match(/name\W*:?([\w \-]+)/i);
+                            if (m) {
+                                name = m[1].trim();
+                            } else if (t.length < 28) {
+                                name = t.trim();
+                            }
+                        }
+                    }
+
+                    // If still fallback, just grab the <title>
+                    if((!name || name.length<2) && dom.querySelector('title')) {
+                        name = dom.querySelector('title').textContent.trim();
+                    }
+
+                    let html = '';
+                    if (name) html += '<span class="user-name"><i class="far fa-user"></i> ' + name + '</span>';
+                    if (email) html += '<span class="user-email"><i class="far fa-envelope"></i> ' + email + '</span>';
+                    if (role) html += '<span class="user-role">' + role + '</span>';
+
+                    if (html) {
+                        userBox.innerHTML = html;
+                    } else {
+                        userBox.textContent = "User info unavailable";
+                    }
+                })
+                .catch(function() {
+                    userBox.textContent = "User info unavailable";
+                });
+        });
+
+        // *** The rest of the original scripts below ***
         // Copy to clipboard helper
         function copyToClipboard(text) {
             if (navigator.clipboard) {
@@ -553,16 +692,7 @@
             }
         });
 
-        // Close button closes the current tab/window if possible
-        document.getElementById('btn-close').addEventListener('click',function() {
-            // Prefer closing, else fall back to hiding the container
-            if (window.close && window.top == window.self) {
-                window.close();
-            } else {
-                document.querySelector('.sandbox-container').style.display='none';
-                showStatus('You can close this browser tab.', 2400);
-            }
-        });
+        // The original close button is removed from header, so no close functionality needed here.
 
         // Help FAB opens help modal
         document.getElementById('help-fab').addEventListener('click',function(){
