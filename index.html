@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -82,10 +81,34 @@
       fill: #22223b;
       vertical-align: middle;
     }
+
+    /* Move Jerry icon to right-bottom corner */
+    #jerry-corner {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 102;
+      width: 80px;
+      height: 80px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.18s;
+    }
+    #jerry-corner:active {
+      transform: scale(0.96) rotate(-8deg);
+    }
   </style>
 </head>
 <body>
   <canvas id="stars"></canvas>
+
+  <!-- Jerry in right bottom corner -->
+  <img
+    id="jerry-corner"
+    src="https://th.bing.com/th/id/R.62514289353a88b468d0844b99e1971f?rik=brR7y2dWgKXyeQ&riu=http%3a%2f%2fclipart-library.com%2fimages_k%2fjerry-transparent%2fjerry-transparent-16.png&ehk=iOMQqLh6Y22DKmpshjK0uP4xWPwSsPbeDhe5RpXyxbI%3d&risl=&pid=ImgRaw&r=0"
+    alt="Jerry"
+    title="Click Me!"
+  />
 
   <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1; position: relative;">
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 30px;">
@@ -96,7 +119,6 @@
       <button style="padding: 18px 26px; font-size: 16px; background: #a5b4fc; color: #1e293b;" onclick="window.location.href='aws-1/main.html'">
         AWS-1
       </button>
-      
       <button style="padding: 18px 26px; font-size: 16px; background: #a5b4fc; color: #1e293b;" onclick="window.location.href='aws-2/main.html'">
         AWS-2
       </button>
@@ -112,8 +134,85 @@
     </div>
   </div>
 
-  
   <script>
+    // --- Jerry Right Bottom Corner Logic (Cycle through provided URLs in specified order) ---
+    (function() {
+      // Ordered according to instruction
+      const frames = [
+        "https://th.bing.com/th/id/R.62514289353a88b468d0844b99e1971f?rik=brR7y2dWgKXyeQ&riu=http%3a%2f%2fclipart-library.com%2fimages_k%2fjerry-transparent%2fjerry-transparent-16.png&ehk=iOMQqLh6Y22DKmpshjK0uP4xWPwSsPbeDhe5RpXyxbI%3d&risl=&pid=ImgRaw&r=0", // 0: static
+        "https://media.tenor.com/fIaJH6ekS5EAAAAM/jerry-tom-and-jerry.gif", // 1: gif
+        "https://th.bing.com/th/id/R.62514289353a88b468d0844b99e1971f?rik=brR7y2dWgKXyeQ&riu=http%3a%2f%2fclipart-library.com%2fimages_k%2fjerry-transparent%2fjerry-transparent-16.png&ehk=iOMQqLh6Y22DKmpshjK0uP4xWPwSsPbeDhe5RpXyxbI%3d&risl=&pid=ImgRaw&r=0", // 2: static
+        "https://media.tenor.com/4fbnNJsMPtwAAAAM/kiss.gif", // 3: gif
+        "https://th.bing.com/th/id/R.62514289353a88b468d0844b99e1971f?rik=brR7y2dWgKXyeQ&riu=http%3a%2f%2fclipart-library.com%2fimages_k%2fjerry-transparent%2fjerry-transparent-16.png&ehk=iOMQqLh6Y22DKmpshjK0uP4xWPwSsPbeDhe5RpXyxbI%3d&risl=&pid=ImgRaw&r=0", // 4: static
+        "https://media1.tenor.com/m/zxo2L89BXRgAAAAd/tom-and-jerry-angry.gif", // 5: gif
+        "https://th.bing.com/th/id/R.62514289353a88b468d0844b99e1971f?rik=brR7y2dWgKXyeQ&riu=http%3a%2f%2fclipart-library.com%2fimages_k%2fjerry-transparent%2fjerry-transparent-16.png&ehk=iOMQqLh6Y22DKmpshjK0uP4xWPwSsPbeDhe5RpXyxbI%3d&risl=&pid=ImgRaw&r=0", // 6: static
+        "https://media0.giphy.com/media/LUYUCZHGwkwWXU3I1A/giphy.gif" // 7: gif
+      ];
+
+      // 0: static, 1: gif, 2: static, 3: gif, ... etc.
+      // For GIFs, set a 5s duration for full playback.
+      const durations = [
+        0,    // 0: static
+        5000, // 1: gif
+        0,    // 2: static
+        5000, // 3: gif
+        0,    // 4: static
+        5000, // 5: gif
+        0,    // 6: static
+        5000  // 7: gif
+      ];
+
+      let currentIndex = 0;
+      let animating = false;
+      let jerry = document.getElementById('jerry-corner');
+
+      function showFrame(idx) {
+        // For GIFs, force reload to restart animation by creating a fresh img element
+        if (idx % 2 === 1) {
+          // Only GIF indices are odd
+          const newImg = jerry.cloneNode(false);
+          newImg.src = frames[idx] + "?t=" + Date.now(); // Force reload
+          newImg.id = "jerry-corner";
+          newImg.alt = "Jerry";
+          newImg.title = "Click Me!";
+          jerry.parentNode.replaceChild(newImg, jerry);
+          jerry = newImg; // update ref for next use
+          setupHandler(jerry);
+        } else {
+          // For static, set src on existing element
+          jerry.src = frames[idx];
+        }
+      }
+
+      function setupHandler(img) {
+        img.onclick = function() {
+          if (animating) return;
+          currentIndex = (currentIndex + 1) % frames.length;
+          if (currentIndex % 2 === 0) {
+            // Static image, just show
+            showFrame(currentIndex);
+          } else {
+            // GIF, show, then after 5s transition to next static
+            animating = true;
+            showFrame(currentIndex);
+            setTimeout(function() {
+              // Move to next static image after GIF duration
+              currentIndex = (currentIndex + 1) % frames.length;
+              // For static, just set src
+              jerry.src = frames[currentIndex];
+              animating = false;
+            }, durations[currentIndex]);
+          }
+        };
+      }
+
+      setupHandler(jerry);
+
+      // Always start on first static
+      showFrame(currentIndex);
+    })();
+
+    // --- Stars Background (unchanged) ---
     const canvas = document.getElementById('stars');
     const ctx = canvas.getContext('2d');
 
