@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWS Sandbox Dashboard</title>
+    <title>AWS-4 Sandbox Dashboard</title>
     <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -298,9 +298,50 @@
             font-size: 36px;
             margin-bottom: 18px;
         }
+
+        /* Notification box styles */
+        body {
+          font-family: Arial, sans-serif;
+        }
+        #notify-box {
+          position: fixed;
+          top: 20px;
+          right: -400px;
+          width: 320px;
+          background: #ffffff;
+          border-radius: 12px;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+          padding: 16px;
+          transition: right 0.5s ease;
+          z-index: 9999;
+        }
+        #notify-box.show {
+          right: 20px;
+        }
+        .notify-title {
+          font-weight: bold;
+          font-size: 16px;
+          margin-bottom: 6px;
+        }
+        .notify-message {
+          font-size: 14px;
+          color: #333;
+        }
     </style>
+    <!-- Pusher JS -->
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
 </head>
 <body>
+
+    <!-- 🔔 Notification Box -->
+    <div id="notify-box">
+      <div class="notify-title">🔔 Notification</div>
+      <div class="notify-message" id="notify-message"></div>
+    </div>
+    <!-- 🔊 iPhone Bell Sound -->
+    <audio id="notify-sound" preload="auto">
+      <source src="https://potential-yellow-h2kf4sbfiu.edgeone.app/Best%20Notification%20Tone.mp3" type="audio/ogg">
+    </audio>
 
     <div class="sandbox-container">
         <header class="header">
@@ -309,7 +350,7 @@
                     <i class="fab fa-aws"></i>
                 </div>
                 <div>
-                    <h1>AWS -4 Sandbox</h1>
+                    <h1>AWS-4 Sandbox</h1>
                 </div>
             </div>
             <!-- User details box loaded via JS -->
@@ -330,12 +371,16 @@
 
 
 
-                        
+
+
+
                         <span id="url-val" style="user-select: all;">https://381519302116.signin.aws.amazon.com/console?region=us-east-1</span>
 
 
 
-                        
+
+
+
                     </div>
                 </div>
             </div>
@@ -370,13 +415,20 @@
                         <label for="pass">Password <i class="far fa-question-circle" title="Your AWS IAM password"></i></label>
                         <div class="field-container">
                             <input type="password"
-                                
-                                
-                                
-                                
+
+
+
+
+
+
+
                                 value="Q5Tkvj{_M+ur8AzNX69["
-                                
-                                
+
+
+
+
+
+
                                 
                                 id="pass" readonly>
                             <i class="far fa-eye" data-toggle-pass="pass" title="Show/Hide Password"></i><i class="far fa-copy" data-copy-target="pass" style="margin-left:6px;" title="Copy Password"></i>
@@ -743,6 +795,36 @@
         // -- Usage time notice only, not dynamic auto shutdown
         // The usage window is always displayed as 12:30 PM to 07:20 PM in the UI.
 
+        // --- Notification (Pusher) ---
+        // Required for browser audio autoplay rules
+        let audioUnlocked = false;
+        document.addEventListener('click', () => {
+          audioUnlocked = true;
+        });
+
+        // Initialize Pusher
+        var pusher = new Pusher('490689329d6e93a21009', {
+          cluster: 'ap2'
+        });
+
+        var channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+          // Set message
+          document.getElementById('notify-message').innerText = data.message;
+          // Show box
+          const box = document.getElementById('notify-box');
+          box.classList.add('show');
+          // Play sound
+          if (audioUnlocked) {
+            const sound = document.getElementById('notify-sound');
+            sound.currentTime = 0;
+            sound.play();
+          }
+          // Hide after 40 seconds
+          setTimeout(() => {
+            box.classList.remove('show');
+          }, 40000);
+        });
     </script>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBJM2CCKJ6"></script>
