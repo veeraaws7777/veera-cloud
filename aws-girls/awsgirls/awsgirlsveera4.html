@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AWS Girls Sandbox Dashboard</title>
     <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png">
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
     <style>
         :root {
             --bg-dark: #0f0b29;
@@ -107,7 +105,6 @@
             display: none !important; /* Hide the original button just in case */
         }
 
-        /* ...rest of your existing CSS... */
         /* Main Panel Wrapper */
         .main-panel {
             background: var(--panel-bg);
@@ -117,7 +114,6 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* Action Top Bar */
         .action-bar {
             display: flex;
             justify-content: space-between;
@@ -172,7 +168,6 @@
             color: var(--text-dim);
         }
 
-        /* Auto Shutdown Row */
         .status-bar {
             display: flex;
             align-items: center;
@@ -182,7 +177,6 @@
         }
         .status-bar i { color: var(--text-dim); }
 
-        /* Grid for Inputs and Sidebar */
         .content-layout {
             display: grid;
             grid-template-columns: 1fr 320px;
@@ -298,7 +292,45 @@
             font-size: 36px;
             margin-bottom: 18px;
         }
+
+        /* Notification Box */
+        #notify-box {
+            position: fixed;
+            top: 20px;
+            right: -400px;
+            width: 320px;
+            background: #111827;
+            border-radius: 14px;
+            padding: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+            transition: all 0.6s ease;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #notify-box.show {
+            right: 40px;
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        #notify-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+
+        .notify-item {
+            background: #1f2937;
+            padding: 10px;
+            border-radius: 8px;
+        }
     </style>
+
+    <!-- Pusher -->
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+
 </head>
 <body>
 
@@ -312,7 +344,6 @@
                     <h1>AWS Girls Sandbox</h1>
                 </div>
             </div>
-            <!-- User details box loaded via JS -->
             <div id="user-details" class="user-details-box" style="min-width:130px;min-height:26px;">
                 Loading user...
             </div>
@@ -330,12 +361,13 @@
 
 
 
-                        
+
                         <span id="url-val" style="user-select: all;">https://021658586201.signin.aws.amazon.com/console?region=us-east-1</span>
 
 
 
-                        
+
+
                     </div>
                 </div>
             </div>
@@ -351,11 +383,8 @@
                 <span>
                     <strong>Warning:</strong> Your usage is being monitored. If any suspicious activities are detected, your access will be removed.
                 </span>
-            </div><br>
-            <br>
-
-
-            
+            </div>
+            <br><br>
 
             <div class="content-layout">
                 <div class="inputs-grid">
@@ -370,15 +399,17 @@
                         <label for="pass">Password <i class="far fa-question-circle" title="Your AWS IAM password"></i></label>
                         <div class="field-container">
                             <input type="password"
-                                
-                                
-                                
-                                value="1vL[)6Vjz4f^SIpcZ=T7"
-                                
-                                
-                                
-                                id="pass" readonly>
-                            <i class="far fa-eye" data-toggle-pass="pass" title="Show/Hide Password"></i><i class="far fa-copy" data-copy-target="pass" style="margin-left:6px;" title="Copy Password"></i>
+
+
+
+                            
+                            value="1vL[)6Vjz4f^SIpcZ=T7" 
+                            
+                            
+                            
+                            id="pass" readonly>
+                            <i class="far fa-eye" data-toggle-pass="pass" title="Show/Hide Password"></i>
+                            <i class="far fa-copy" data-copy-target="pass" style="margin-left:6px;" title="Copy Password"></i>
                         </div>
                     </div>
                 </div>
@@ -391,7 +422,6 @@
                     </div>
                 </div>
 
-                <!-- Region access restriction now kept below the username and password area -->
                 <ul style="margin-bottom: 18px; padding-left: 18px;">
                   <li style="margin-top:9px;">
                     <b>Region Usage Policy:</b> Resources may only be created or used in the enabled regions listed below. Attempts outside these regions will be blocked. You are limited to a maximum of <strong>9 instances</strong>.
@@ -416,7 +446,6 @@
                   </div>
                 </div>
 
-                
                 <aside class="info-card">
                     <h3>Extend Your Session</h3>
                     <p>Your sandbox will automatically expire 4 hours after your start time. If you need to extend your session, you will receive a notification when you have 1 hour remaining that will allow you to extend your sandbox session for an additional 4 hours.</p>
@@ -430,7 +459,6 @@
         <i class="fas fa-question" style="color: white; font-size: 20px;"></i>
     </div>
 
-    <!-- Access Restriction Modal -->
     <div id="access-restrict-modal">
         <div class="modal-content">
             <i class="fas fa-lock"></i><br>
@@ -442,7 +470,6 @@
         </div>
     </div>
 
-    <!-- Simple Help Modal -->
     <div id="help-modal" style="
         display:none;
         position:fixed;
@@ -476,6 +503,15 @@
         </div>
     </div>
 
+    <!-- Removed the "Click anywhere once to enable sound 🔔" h2 as per instruction -->
+    <div id="notify-box">
+      <div id="notify-title">🔔 Notification</div>
+      <div id="notify-list"></div>
+    </div>
+    <audio id="notify-sound" preload="auto">
+      <source src="https://potential-yellow-h2kf4sbfiu.edgeone.app/Best%20Notification%20Tone.mp3" type="audio/mpeg">
+    </audio>
+
     <script>
         // --- Time Access Restriction Logic ---
         (function() {
@@ -485,9 +521,7 @@
             var start = 9 * 60 + 0; // 9:00 AM
             var end = 18 * 60 + 0; // 6:00 PM
 
-            // If outside window, show modal and disable interactions
             if (mins < start || mins > end) {
-                // Hide main sandbox UI and show restriction modal
                 document.addEventListener('DOMContentLoaded',function() {
                     document.querySelector('.sandbox-container').style.filter="blur(2.5px)";
                     document.querySelector('.sandbox-container').style.pointerEvents="none";
@@ -499,20 +533,14 @@
         // --- USER DETAIL LOADER from aws4/main.html ---
         document.addEventListener('DOMContentLoaded', function() {
             var userBox = document.getElementById('user-details');
-            // Try fetch
             fetch('aws4/main.html', {credentials: 'include'})
                 .then(function(response) {
                     if (!response.ok) throw new Error("User not found");
                     return response.text();
                 })
                 .then(function(htmltxt) {
-                    // Parse main.html & try to extract user info heuristically
                     var dom = document.createElement('div');
                     dom.innerHTML = htmltxt;
-
-                    // Try common ways of encoding user info
-                    // 1. Find [data-username], [data-user], [id="user"], .user etc.
-                    // 2. Common patterns in innerText (e.g., "Username", "Email", etc.)
 
                     function findText(dom, match) {
                         match = match.toLowerCase();
@@ -527,18 +555,15 @@
                     let email = '';
                     let role = '';
 
-                    // Try by common selectors
                     let userNameNode = dom.querySelector('[data-username], [data-user], #username, #user, .user, .username, .profile-name');
                     if (userNameNode && userNameNode.textContent.trim().length > 2) {
                         name = userNameNode.textContent.trim();
                     }
 
-                    // Find email (look for '@')
                     let emailNode = dom.querySelector('[href^="mailto:"], .email, #email, [data-email]');
                     if (emailNode) {
                         email = emailNode.textContent.trim();
                     } else {
-                        // search any node containing an '@'
                         let allNodes = dom.querySelectorAll('*');
                         for(let n of allNodes) {
                             let t = n.textContent || "";
@@ -549,12 +574,10 @@
                         }
                     }
 
-                    // Try to pick up a recognizable role
                     let roleNode = dom.querySelector('[data-role], .role, #role, .user-role, .account-type');
                     if(roleNode) {
                         role = roleNode.textContent.trim();
                     } else {
-                        // fallback: if any span/td/div with "admin", "student", "user", etc.
                         let poss = ["admin", "student", "instructor", "developer", "manager"];
                         let all = dom.querySelectorAll('*');
                         for(let n of all) {
@@ -569,7 +592,6 @@
                         }
                     }
 
-                    // If nothing found, try to heuristically extract a line e.g. Username: ABC
                     if(!name || name.length<3) {
                         let el = findText(dom, 'username') || findText(dom, 'name');
                         if(el) {
@@ -583,7 +605,6 @@
                         }
                     }
 
-                    // If still fallback, just grab the <title>
                     if((!name || name.length<2) && dom.querySelector('title')) {
                         name = dom.querySelector('title').textContent.trim();
                     }
@@ -604,8 +625,6 @@
                 });
         });
 
-        // *** The rest of the original scripts below ***
-        // Copy to clipboard helper
         function copyToClipboard(text) {
             if (navigator.clipboard) {
                 navigator.clipboard.writeText(text).then(() => {
@@ -646,23 +665,20 @@
             document.body.appendChild(stat);
             setTimeout(()=>{ stat.remove(); }, ms);
         }
-        // Copy handlers
+
         document.addEventListener('click', function(e) {
-            // Copy icons
             if (e.target.matches('[data-copy-target]')) {
                 var input = document.getElementById(e.target.getAttribute('data-copy-target'));
                 if (input) {
                     copyToClipboard(input.value || input.innerText);
                 }
             }
-            // Copy URL
             if (e.target.matches('#copy-url')) {
                 let urlSpan = document.getElementById('url-val');
                 copyToClipboard(urlSpan.innerText || urlSpan.textContent);
             }
         });
 
-        // Password toggle (show/hide)
         document.addEventListener('click', function(e) {
             if (e.target.matches('[data-toggle-pass]')) {
                 let inputId = e.target.getAttribute('data-toggle-pass');
@@ -678,13 +694,11 @@
                 }
             }
         });
-        // Ensure correct icon shown for eye/eye-slash on page load
         document.querySelectorAll('[data-toggle-pass]').forEach(function(ic) {
-            ic.classList.remove('fa-copy'); // make sure it isn't fa-copy
+            ic.classList.remove('fa-copy');
             ic.classList.add('fa-eye');
         });
 
-        // Open Sandbox button
         document.getElementById('btn-open').addEventListener('click', function() {
             var url = document.getElementById('url-val').innerText.trim();
             if (url.length > 10) {
@@ -694,33 +708,26 @@
             }
         });
 
-        // Delete Sandbox button
         document.getElementById('btn-delete').addEventListener('click', function() {
             if (confirm('Are you sure you want to delete this sandbox? This action cannot be undone.')) {
-                // For demonstration, just disable open/delete and gray credentials out
                 document.getElementById('btn-open').disabled = true;
                 document.getElementById('btn-delete').disabled = true;
                 document.getElementById('status-bar').innerHTML = 
-                  '<i class="fas fa-exclamation-triangle" style="color:#d81b60"></i> <span><strong>This sandbox has been deleted contact to the admin.</strong></span>';
+                  '<i class="fas fa-exclamation-triangle" style="color:#d81b60"></i> <span><strong>This sandbox has been deleted contact the admin.</strong></span>';
                 document.querySelectorAll('.inputs-grid input').forEach(function(inp){ inp.value=""; inp.disabled=true; inp.style.opacity=0.45; });
                 document.getElementById('url-val').innerText = "[deleted]";
                 showStatus('Sandbox deleted', 1600);
             }
         });
 
-        // The original close button is removed from header, so no close functionality needed here.
-
-        // Help FAB opens help modal
         document.getElementById('help-fab').addEventListener('click',function(){
             document.getElementById('help-modal').style.display = 'flex';
         });
 
-        // Make help modal close on background click (not the help content)
         document.getElementById('help-modal').addEventListener('click', function(e) {
             if (e.target === this) this.style.display = 'none';
         });
 
-        // Optional: select the value in <span id="url-val"> on click for easier copy
         document.getElementById('url-val').addEventListener('click', function(){
             if(document.body.createTextRange) {
                 var range = document.body.createTextRange();
@@ -734,24 +741,53 @@
             }
         });
 
-        // Optional: select input on click for easier copy
         document.querySelectorAll('.inputs-grid input').forEach(function(inp){
             inp.addEventListener('click',function(){ this.select(); });
         });
 
-        // -- Usage time notice only, not dynamic auto shutdown
-        // The usage window is always displayed as 09:00 AM to 06:00 PM in the UI.
+        let audioUnlocked = false;
+        document.addEventListener('click', () => {
+          if (!audioUnlocked) {
+            const audio = document.getElementById('notify-sound');
+            audio.play().then(() => {
+              audio.pause();
+              audio.currentTime = 0;
+              audioUnlocked = true;
+            }).catch(()=>{});
+          }
+        });
 
+        Pusher.logToConsole = true;
+        const pusher = new Pusher('fe30ee9b4937f15ee2b4', {
+          cluster: 'ap2'
+        });
+        const channel = pusher.subscribe('my-channel');
+        channel.bind('my-event', function(data) {
+          const box = document.getElementById('notify-box');
+          const list = document.getElementById('notify-list');
+          const sound = document.getElementById('notify-sound');
+          list.innerHTML = '';
+          const item = document.createElement('div');
+          item.className = 'notify-item';
+          item.innerText = data.message || 'New Notification';
+          list.appendChild(item);
+          box.classList.add('show');
+          if (audioUnlocked) {
+            sound.currentTime = 0;
+            sound.play();
+          }
+          setTimeout(() => {
+            box.classList.remove('show');
+          }, 40000);
+        });
     </script>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MBJM2CCKJ6"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'G-MBJM2CCKJ6');
-</script>
-
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBJM2CCKJ6"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-MBJM2CCKJ6');
+    </script>
 </body>
 </html>
