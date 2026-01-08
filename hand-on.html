@@ -1,1 +1,423 @@
-hi
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hands-On Playground</title>
+    <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png">
+    <style>
+        :root {
+            --bg-deep: #0f0b1d;
+            --card-bg: #1d1733;
+            --text-white: #ffffff;
+            --text-muted: #a19bb8;
+            --accent-purple: #4f46e5;
+            --accent-orange: #f59e0b;
+            --tab-active: #8b5cf6;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
+            background-color: var(--bg-deep); 
+            color: var(--text-white); 
+            padding: 40px 80px;
+        }
+
+        .header { display: flex; align-items: center; gap: 20px; margin-bottom: 40px; }
+        .logo-box { 
+            width: 60px; height: 60px; 
+            background: linear-gradient(135deg, #f59e0b, #d97706); 
+            border-radius: 12px; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 30px;
+        }
+        .header-text h1 { font-size: 32px; font-weight: 700; margin-bottom: 4px; }
+        .header-text p { color: var(--text-muted); font-size: 14px; }
+
+        .tabs { 
+            display: flex; gap: 30px; 
+            border-bottom: 1px solid #2d2545; 
+            margin-bottom: 40px; 
+        }
+        .tab { 
+            padding-bottom: 12px; 
+            font-size: 14px; 
+            font-weight: 600; 
+            color: var(--text-muted); 
+            cursor: pointer; 
+            transition: 0.3s;
+        }
+        .tab:hover { color: white; }
+        .tab.active { 
+            color: white; 
+            border-bottom: 3px solid var(--tab-active); 
+        }
+
+        .content-header h2 { font-size: 20px; margin-bottom: 8px; }
+        .content-header p { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; }
+
+        .playground-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 24px; 
+            margin-bottom: 40px;
+        }
+
+        .card { 
+            background-color: var(--card-bg); 
+            border-radius: 12px; 
+            overflow: hidden; 
+            transition: transform 0.2s;
+        }
+        .card.hide {
+            display: none;
+        }
+        .card:hover { transform: translateY(-5px); }
+
+        .card-banner { 
+            height: 160px; 
+            display: flex; align-items: center; justify-content: center;
+            background: linear-gradient(45deg, #6b21a8 0%, #be185d 100%);
+            position: relative;
+        }
+        .card-banner::before {
+            content: ""; position: absolute; width: 100%; height: 100%;
+            background-image: radial-gradient(#ffffff22 1px, transparent 1px);
+            background-size: 10px 10px;
+        }
+
+        .provider-logo { width: 70px; height: 70px; z-index: 1; border-radius: 10px; }
+
+        .card-content { padding: 24px; }
+        .card-content h3 { font-size: 18px; margin-bottom: 10px; }
+        .card-content p { 
+            color: var(--text-muted); 
+            font-size: 13px; 
+            line-height: 1.5; 
+            height: 40px;
+            margin-bottom: 24px;
+        }
+
+        .btn-group { display: flex; gap: 12px; }
+        .btn { 
+            padding: 8px 16px; border-radius: 6px; font-size: 13px; 
+            font-weight: 600; cursor: pointer; border: none; transition: 0.2s;
+            text-decoration: none; display: inline-flex; align-items: center;
+        }
+        .btn-outline { background: transparent; color: white; border: 1px solid #3d345a; }
+        .btn-outline:hover { background: #3d345a; }
+        .btn-primary { background-color: var(--accent-purple); color: white; }
+        .btn-primary:hover { background-color: #4338ca; }
+
+        .disclaimer { 
+            display: flex; gap: 10px; 
+            font-size: 13px; color: var(--text-muted); 
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px; border-radius: 8px;
+        }
+        .disclaimer a { color: #60a5fa; text-decoration: none; }
+        .warning-icon { color: var(--text-muted); }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="logo-box">
+            <img src="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png" alt="Logo" style="height:60px;">
+        </div>
+        <div class="header-text">
+            <h1>Hands-On Playground</h1>
+            <p>Learn by doing in our real, live practice environments</p>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="switchTab(this, 'aws')">Aws sandbox</div>
+        <div class="tab" onclick="switchTab(this, 'azure')">Azure sandbox</div>
+        <div class="tab" onclick="switchTab(this, 'gcp')">Gcp sandbox</div>
+    </div>
+    <div style="margin: 40px 0 24px 0;">
+        <h2 style="margin-bottom:8px;">Cloud Sandboxes</h2>
+        <p style="color: var(--text-muted); font-size: 15px; max-width: 600px;">
+            Instantly spin up an AWS, Azure, or GCP cloud account to experiment, build, and practice cloud skills without the cost of incurring cloud charges.
+        </p>
+    </div>
+
+    <style>
+      /* Responsive row grid for the AWS sandbox cards */
+      .playground-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 32px;
+      }
+      .playground-row .card {
+        flex: 1 1 320px;
+        max-width: 350px;
+        min-width: 250px;
+      }
+      @media (max-width: 1100px) {
+        .playground-row .card {
+          flex: 1 1 45vw;
+          max-width: 100%;
+        }
+      }
+      @media (max-width: 700px) {
+        .playground-row {
+          flex-direction: column;
+          gap: 16px;
+        }
+        .playground-row .card {
+          width: 100%;
+          min-width: unset;
+          max-width: 100%;
+        }
+      }
+    </style>
+    <div class="playground-row">
+        <div class="card" data-provider="aws">
+            <div class="card-banner" style="background: linear-gradient(45deg, #854d0e, #92400e);">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" class="provider-logo" alt="AWS" style="filter: brightness(0) invert(1);">
+            </div>
+            <div class="card-content">
+                <h3>AWS-1 Sandbox</h3>
+                <p>Dig into Amazon Web Services console <br> (Only 9 instances are allowed to create.)</p>
+                <p><strong>Available: 9AM to 1PM</strong></p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-outline">Learn More ↗</a>
+                    <a href="aws-1/main.html" class="btn btn-primary">Open Sandbox</a>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-provider="aws">
+            <div class="card-banner" style="background: linear-gradient(45deg, #854d0e, #92400e);">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" class="provider-logo" alt="AWS" style="filter: brightness(0) invert(1);">
+            </div>
+            <div class="card-content">
+                <h3>AWS-2 Sandbox</h3>
+                <p>Dig into Amazon Web Services console <br> (Only 9 instances are allowed to create.)</p>
+                <p><strong>Available: 9:15AM to 1:15PM</strong></p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-outline">Learn More ↗</a>
+                    <a href="aws-2/main.html" class="btn btn-primary">Open Sandbox</a>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-provider="aws">
+            <div class="card-banner" style="background: linear-gradient(45deg, #854d0e, #92400e);">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" class="provider-logo" alt="AWS" style="filter: brightness(0) invert(1);">
+            </div>
+            <div class="card-content">
+                <h3>AWS-3 Sandbox</h3>
+                <p>Dig into Amazon Web Services console <br> (Only 9 instances are allowed to create.)</p>
+                <p><strong>Available: 10:45AM to 2:45PM</strong></p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-outline">Learn More ↗</a>
+                    <a href="#" class="btn btn-primary">Open Sandbox</a>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-provider="aws">
+            <div class="card-banner" style="background: linear-gradient(45deg, #854d0e, #92400e);">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" class="provider-logo" alt="AWS" style="filter: brightness(0) invert(1);">
+            </div>
+            <div class="card-content">
+                <h3>AWS-4 Sandbox</h3>
+                <p>Dig into Amazon Web Services console <br> (Only 9 instances are allowed to create.)</p>
+                <p><strong>Available: 11:00 AM to 3:00 PM</strong></p>
+
+                <div class="btn-group">
+                    <a href="#" class="btn btn-outline">Learn More ↗</a>
+                    <a href="#" class="btn btn-primary">Open Sandbox</a>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-provider="aws">
+            <div class="card-banner" style="background: linear-gradient(45deg, #854d0e, #92400e);">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" class="provider-logo" alt="AWS" style="filter: brightness(0) invert(1);">
+            </div>
+            <div class="card-content">
+                <h3>AWS-5 Sandbox ( Not allowed )</h3>
+                <p>Dig into Amazon Web Services console <br> (Only 9 instances are allowed to create.)</p>
+                <p><strong>Available: 12:10 PM to 4:10 PM</strong></p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-outline">Learn More ↗</a>
+                    <a href="#" class="btn btn-primary">Open Sandbox</a>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-provider="aws">
+            <div class="card-banner" style="background: linear-gradient(45deg, #854d0e, #92400e);">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" class="provider-logo" alt="AWS" style="filter: brightness(0) invert(1);">
+            </div>
+            <div class="card-content">
+                <h3>AWS-6 Sandbox ( Not allowed )</h3>
+                <p>Dig into Amazon Web Services console <br> (Only 9 instances are allowed to create.)</p>
+                <p><strong>Available: 12:15 PM to 4:15 PM</strong></p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-outline">Learn More ↗</a>
+                    <a href="#" class="btn btn-primary">Open Sandbox</a>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-provider="aws">
+            <div class="card-banner" style="background: linear-gradient(45deg, #854d0e, #92400e);">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" class="provider-logo" alt="AWS" style="filter: brightness(0) invert(1);">
+            </div>
+            <div class="card-content">
+                <h3>AWS Sandbox girls - 1</h3>
+                <p>Only girls are allowed. Boys are not allowed or else account will be suspended.<br> (Only 9 instances are allowed to create.)</p>
+                <p><strong>Available: 9:00 AM to 6:00 PM</strong></p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-outline">Learn More ↗</a>
+                    <a href="#" class="btn btn-primary">Open Sandbox</a>
+                </div>
+            </div>
+        </div>
+        <div class="card" data-provider="aws">
+            <div class="card-banner" style="background: linear-gradient(45deg, #854d0e, #92400e);">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/93/Amazon_Web_Services_Logo.svg" class="provider-logo" alt="AWS" style="filter: brightness(0) invert(1);">
+            </div>
+            <div class="card-content">
+                <h3>AWS Sandbox girls - 2</h3>
+                <p>Only girls are allowed. Boys are not allowed or else account will be suspended.<br> (Only 9 instances are allowed to create.)</p>
+                <p><strong>Available: 10:30 AM to 7:30 PM</strong></p>
+                <div class="btn-group">
+                    <a href="#" class="btn btn-outline">Learn More ↗</a>
+                    <a href="#" class="btn btn-primary">Open Sandbox</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div class="card-row" style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <div class="card" data-provider="azure" style="flex: 1 1 280px; min-width: 250px;">
+                <div class="card-banner" style="background: linear-gradient(45deg, #1e40af, #1e3a8a);">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg" class="provider-logo" alt="Azure">
+                </div>
+                <div class="card-content">
+                    <h3>Azure-1 Sandbox</h3>
+                    <p>Access a Microsoft Azure sandbox </p>
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-outline">Learn More ↗</a>
+                        <a href="#" class="btn btn-primary">Open Sandbox</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-provider="azure" style="flex: 1 1 280px; min-width: 250px;">
+                <div class="card-banner" style="background: linear-gradient(45deg, #1e40af, #1e3a8a);">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg" class="provider-logo" alt="Azure">
+                </div>
+                <div class="card-content">
+                    <h3>Azure-2 Sandbox</h3>
+                    <p>Access a Microsoft Azure sandbox </p>
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-outline">Learn More ↗</a>
+                        <a href="#" class="btn btn-primary">Open Sandbox</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-provider="azure" style="flex: 1 1 280px; min-width: 250px;">
+                <div class="card-banner" style="background: linear-gradient(45deg, #1e40af, #1e3a8a);">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Microsoft_Azure.svg" class="provider-logo" alt="Azure">
+                </div>
+                <div class="card-content">
+                    <h3>Azure Sandbox girls</h3>
+                    <p>Access a Microsoft Azure sandbox </p>
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-outline">Learn More ↗</a>
+                        <a href="#" class="btn btn-primary">Open Sandbox</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-row" style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <div class="card" data-provider="gcp" style="flex: 1 1 280px; min-width: 250px;">
+                <div class="card-banner" style="background: #6b7280; display: flex; align-items: center; justify-content: center; height: 200px;">
+                    <img src="https://www.freecodecamp.org/news/content/images/2020/10/gcp.png" class="provider-logo" alt="GCP" style="width:100%; height:100%; object-fit: cover;">
+                </div>
+                <div class="card-content">
+                    <h3>GCP-1 Sandbox</h3>
+                    <p>Jump into a Google Cloud Platform sandbox session to try things out on your own.</p>
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-outline">Learn More ↗</a>
+                        <a href="#" class="btn btn-primary">Open Sandbox</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-provider="gcp" style="flex: 1 1 280px; min-width: 250px;">
+                <div class="card-banner" style="background: #6b7280; display: flex; align-items: center; justify-content: center; height: 200px;">
+                    <img src="https://www.freecodecamp.org/news/content/images/2020/10/gcp.png" class="provider-logo" alt="GCP" style="width:100%; height:100%; object-fit: cover;">
+                </div>
+                <div class="card-content">
+                    <h3>GCP-2 Sandbox</h3>
+                    <p>Jump into a Google Cloud Platform sandbox session to try things out on your own.</p>
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-outline">Learn More ↗</a>
+                        <a href="#" class="btn btn-primary">Open Sandbox</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card" data-provider="gcp" style="flex: 1 1 280px; min-width: 250px;">
+                <div class="card-banner" style="background: #6b7280; display: flex; align-items: center; justify-content: center; height: 200px;">
+                    <img src="https://www.freecodecamp.org/news/content/images/2020/10/gcp.png" class="provider-logo" alt="GCP" style="width:100%; height:100%; object-fit: cover;">
+                </div>
+                <div class="card-content">
+                    <h3>GCP-3 Sandbox</h3>
+                    <p>Jump into a Google Cloud Platform sandbox session to try things out on your own.</p>
+                    <div class="btn-group">
+                        <a href="#" class="btn btn-outline">Learn More ↗</a>
+                        <a href="#" class="btn btn-primary">Open Sandbox</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="disclaimer">
+        <span class="warning-icon">⚠️</span>
+        <div>
+            We actively monitor Cloud Playground for abusive, prohibited, or otherwise un-awesome behavior. 
+            Cloud Playground is for educational purposes only. Having issues? <a href="#">Contact Support</a>.
+        </div>
+    </div>
+
+    <script>
+        function switchTab(element, provider) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
+            // Show/hide cards by provider
+            document.querySelectorAll('.card').forEach(card => {
+                if(provider === 'aws') {
+                    if(card.getAttribute('data-provider') === 'aws') {
+                        card.classList.remove('hide');
+                    } else {
+                        card.classList.add('hide');
+                    }
+                } else if(provider === 'azure') {
+                    if(card.getAttribute('data-provider') === 'azure') {
+                        card.classList.remove('hide');
+                    } else {
+                        card.classList.add('hide');
+                    }
+                } else if(provider === 'gcp') {
+                    if(card.getAttribute('data-provider') === 'gcp') {
+                        card.classList.remove('hide');
+                    } else {
+                        card.classList.add('hide');
+                    }
+                } else {
+                    card.classList.remove('hide');
+                }
+            });
+        }
+
+        // On load show only AWS card
+        window.addEventListener('DOMContentLoaded', function () {
+            switchTab(document.querySelector('.tab.active'), 'aws');
+        });
+    </script>
+</body>
+</html>
