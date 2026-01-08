@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Dashboard Clone</title>
+    <style>
+        :root {
+            --bg-dark: #120d1d;
+            --sidebar-bg: #1d152d;
+            --card-bg: #271e3d;
+            --text-main: #ffffff;
+            --text-muted: #a19bb8;
+            --accent-purple: #5e46e8;
+            --active-pink: #f02d64;
+            --search-bg: #251d3a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; height: 100vh; width: 100vw; }
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 240px;
+            min-width: 240px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            border-right: 1px solid #2d2545;
+            position: relative;
+            z-index: 10;
+        }
+        .logo { padding: 0 20px 30px; font-weight: 900; font-size: 22px; letter-spacing: 1px; display: flex; align-items: center; }
+        .logo::before { content: '▶'; margin-right: 8px; color: var(--text-main); }
+        .nav-item { padding: 12px 20px; display: flex; align-items: center; cursor: pointer; color: var(--text-muted); font-size: 14px; transition: background 0.2s, color 0.2s, border-left 0.2s, transform 0.08s cubic-bezier(.3,1.35,.2,1), box-shadow 0.2s; border-left: 3px solid transparent; user-select: none; position: relative; overflow: hidden;}
+        .nav-item:hover { background: #2d2545; color: white; }
+        .nav-item.active { color: white; border-left: 3px solid var(--active-pink); background: linear-gradient(90deg, #32254d 0%, transparent 100%); }
+        .nav-item:active {
+            transform: scale(0.96);
+            background: #403061;
+            box-shadow: 0 2px 8px 0 rgba(60,0,120,0.07);
+            color: white;
+        }
+        .nav-click-ripple {
+            position: absolute;
+            background: rgba(255,255,255,0.18);
+            border-radius: 50%;
+            pointer-events: none;
+            width:100px;height:100px;
+            transform: translate(-50%,-50%);
+            animation: nav-ripple-anim 0.5s;
+            z-index: 1;
+            mix-blend-mode: lighten;
+        }
+        @keyframes nav-ripple-anim {
+            to { opacity:0; transform:translate(-50%,-50%) scale(2.5);}
+        }
+
+        /* MAIN CONTENT */
+        .main-container { flex: 1; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; min-width: 0; background: var(--bg-dark);}
+        header {
+            min-height: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background: var(--bg-dark);
+            border-bottom: 1px solid #2d2545;
+            z-index: 1;
+        }
+        .search-bar { background: var(--search-bg); border: 1px solid #3d345a; border-radius: 4px; padding: 8px 15px; width: 400px; color: white; transition: border 0.2s; }
+        .search-bar:focus { border: 1.5px solid var(--active-pink); outline: none;}
+        .top-right { display: flex; align-items: center; gap: 20px; }
+        .user-icon { width: 32px; height: 32px; background: var(--active-pink); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+
+        .content { padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
+        h2 { font-size: 18px; margin-bottom: 20px; font-weight: 500; }
+
+        /* CONTINUE LEARNING CARD */
+        .hero-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        .hero-info .badge { background: #3d345a; padding: 4px 8px; font-size: 10px; border-radius: 3px; font-weight: bold; }
+        .hero-info h3 { font-size: 24px; margin: 15px 0; }
+        .btn-resume { background: var(--accent-purple); color: white; border: none; padding: 10px 25px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-right: 15px; transition: transform 0.18s, box-shadow 0.14s;}
+        .btn-resume:active { transform: scale(0.97);}
+        .remaining { color: var(--text-muted); font-size: 13px; }
+
+        /* SECTION HEADER & GRID */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .section-header a { color: var(--accent-purple); text-decoration: none; font-size: 14px; }
+        .section-header a:hover { text-decoration: underline; }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .video-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        .video-card:hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 6px 32px 0 #160f26; }
+        .card-thumb { height: 120px; background: #3d345a; position: relative; }
+        .card-duration { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.8); padding: 2px 6px; font-size: 11px; border-radius: 3px; }
+        .card-body { padding: 15px; min-height: 84px;}
+        .card-type { font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 5px; }
+        .card-title { font-size: 14px; font-weight: 500; height: 40px; margin-bottom: 15px; display: block; }
+        .card-footer { font-size: 12px; color: var(--text-muted); }
+
+        /* IRIS CHAT WIDGET */
+        .iris-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--active-pink);
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-weight: bold;
+            font-size: 20px;
+            z-index: 100;
+            transition: transform 0.16s;
+        }
+        .iris-btn:active { transform: scale(0.97);}
+        @media (max-width: 950px) {
+            .main-container .content { padding: 24px 12px; }
+            .search-bar { width: 250px; }
+        }
+        @media (max-width: 700px) {
+            .app-container { flex-direction: column; }
+            .sidebar { width: 100vw; min-width: 0; flex-direction: row; border-right: none; border-bottom: 1px solid #2d2545; overflow-x: auto; }
+            .logo { font-size: 18px; padding: 0 10px 12px 10px;}
+            .nav-item { padding: 8px 12px; font-size: 13px;}
+            .main-container { width: 100vw;}
+        }
+        @media (max-width: 500px) {
+            .main-container .content { padding: 10px 2vw;}
+            .search-bar { width: 98vw; min-width: 0; }
+            .hero-card { flex-direction: column; gap:16px;}
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div style="display: flex; align-items: center; gap: 10px; flex-direction: column;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <img 
+                        src="https://nareshit.in/wp-content/uploads/2023/02/nareshitechnologies-png-logo.png" alt="Veera Logo" 
+                        style="height: 28px; width: auto; vertical-align: middle;"
+                    ><br>
+                    <span style="font-size: 20px; font-weight: bold; color: #fff;">
+                        Veera
+                        <small style="font-size: 12px; color: #eebaff; margin-left: 2px;">Sandbox</small>
+                    </span>
+                </div><br>
+                
+            </div>
+            <style>
+                /* Animation for nav items (slide-in and fade effect) */
+                @keyframes navSlideIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(18px) scale(0.98);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                    }
+                }
+                .sidebar-anim-container .nav-item {
+                    animation: navSlideIn 0.5s cubic-bezier(0.4,0.2,0.2,1) both;
+                }
+                /* Stagger animation delay for each nav item */
+                .sidebar-anim-container .nav-item:nth-child(1) { animation-delay: 0.05s; }
+                .sidebar-anim-container .nav-item:nth-child(2) { animation-delay: 0.1s; }
+                .sidebar-anim-container .nav-item:nth-child(3) { animation-delay: 0.15s; }
+                .sidebar-anim-container .nav-item:nth-child(4) { animation-delay: 0.2s; }
+                .sidebar-anim-container .nav-item:nth-child(5) { animation-delay: 0.25s; }
+                /* Optional hover effect for life */
+                .nav-item {
+                    transition: box-shadow 0.2s, transform 0.2s;
+                }
+                .nav-item:hover {
+                    box-shadow: 0 4px 16px 0 #1d133835, 0 1px 2px 0 #0001;
+                    transform: translateY(-1px) scale(1.02);
+                    background: #2d2347 !important;
+                }
+            </style>
+            <div class="sidebar-anim-container" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <div class="nav-item mouse-anim" data-target="index.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
+                    <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🏠 Home</span>
+                </div>
+                <div class="nav-item mouse-anim" data-target="error.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
+                    <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🌐 Browse all</span>
+                </div>
+                <div class="nav-item mouse-anim" data-target="error.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
+                    <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">📡 Channels</span>
+                </div>
+                <div class="nav-item mouse-anim" data-target="error.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
+                    <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🏆 Certifications</span>
+                </div>
+                <div class="nav-item mouse-anim" data-target="hand-on.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
+                    <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;"> 🛠️ Hands-on</span>
+                </div>
+            </div>
+            <style>
+                /* Mouse-on-it animation for nav items */
+                .mouse-anim {
+                    cursor: pointer;
+                    transition: box-shadow 0.24s cubic-bezier(.37,1.01,.77,.97), 
+                                transform 0.23s cubic-bezier(.37,1.01,.77,.97),
+                                background 0.16s;
+                    box-shadow: none;
+                }
+                .mouse-anim::after {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    pointer-events: none;
+                    left: 50%;
+                    top: 50%;
+                    width: 0px;
+                    height: 0px;
+                    background: radial-gradient(circle, #9f7aea55 0%, #221b3700 80%);
+                    opacity: 0;
+                    transform: translate(-50%, -50%);
+                    transition: opacity 0.3s, width 0.35s cubic-bezier(.37,1.01,.77,.97), height 0.35s cubic-bezier(.37,1.01,.77,.97);
+                    z-index: 0;
+                }
+                .mouse-anim:hover {
+                    box-shadow: 0 8px 24px 0 #9f7aea35, 0 1px 4px 0 #0001;
+                    background: #2d2347 !important;
+                    transform: translateY(-3px) scale(1.035) rotate(-0.7deg);
+                }
+                .mouse-anim:hover::after {
+                    opacity: 1;
+                    width: 170%;
+                    height: 950%;
+                }
+                .mouse-anim span {
+                    position: relative;
+                    z-index: 1;
+                    transition: color 0.2s;
+                }
+                .mouse-anim:hover span {
+                    color: #ffd6fa;
+                    text-shadow: 0 0 5px #b649d3, 0 1px 1px #0004;
+                }
+            </style>
+        </aside>
+
+        <div class="main-container">
+            <header style="display: flex; justify-content: center; align-items: flex-start; padding-top: 24px; position: relative;">
+                <input type="text" class="search-bar" placeholder=" 🔎 Search for learning content">
+                <img 
+                    src="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png" 
+                    alt="Dark Cat Icon" 
+                    style="position: absolute; top: 0; right: 0; height: 48px; width: 48px; object-fit: contain; z-index: 2; margin: 4px 12px 0 0;"
+                >
+            </header><br>
+        <!-- INSERT_YOUR_CODE -->
+        <!-- Main Content beside the sidebar -->
+        <section class="content-area" style="flex:1; padding: 0 32px;">
+        <!-- INSERT_YOUR_CODE -->
+        <div class="ec2-sidebar-info" style="position: relative; margin: 0 0 32px 0; background: transparent; border-radius: 8px; border: 1px solid #221b37; box-sizing: border-box; padding: 32px 24px 24px 32px; font-size: 1.04rem; line-height: 1.65; box-shadow: 1px 0 32px #221b37;">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <strong style="font-size:1.18em;letter-spacing:-1px;">Get started with Amazon EC2</strong>
+            </div>
+            <hr style="margin: 18px 0 14px 0; border:none; border-top:1px solid #dbd4ee;">
+            
+            <div style="margin-top:14px;">
+                <p>
+                    Use this tutorial to get started with <b>Amazon Elastic Compute Cloud (Amazon EC2)</b>. You'll learn how to launch and connect to an EC2 instance. An instance is a virtual server in the AWS Cloud. With Amazon EC2, you can set up and configure the operating system and applications that run on your instance.
+                </p>
+                <h4 style="margin: 1.1em 0 0.67em 0;">Overview</h4>
+                <ul style="padding-left:18px;margin-bottom:1em;">
+                    <li><b>An image</b> – A template containing the software to run on your instance, such as the OS.</li>
+                    <li><b>A key pair</b> – Credentials to prove your identity when connecting (public key on instance, private key on your computer).</li>
+                    <li><b>A network</b> – A default Virtual Private Cloud (VPC) in every AWS Region for your account.</li>
+                    <li><b>A security group</b> – Acts as a virtual firewall to control inbound/outbound traffic.</li>
+                    <li><b>An EBS volume</b> – A root volume is required; data volumes are optional.</li>
+                    <li><b>An instance</b> with security group, key pair, and EBS root volume.</li>
+                <!-- INSERT_YOUR_CODE -->
+                <li>
+                    <b>Getting started flow:</b><br>
+                    <img src="https://docs.aws.amazon.com/images/AWSEC2/latest/UserGuide/images/get-started-diagram.png" alt="Amazon EC2 Getting Started Diagram" style="display:block; margin:14px 0 10px 0; max-width:540px; width:100%; border-radius:7px; box-shadow:0 2px 14px #c7bedeb1;">
+                </li>
+                </ul>
+                <h4 style="margin: 1em 0 0.67em 0;">Cost for this tutorial</h4>
+                <p>
+                    When you create your AWS account, you can get started with Amazon EC2 for free using the AWS Free Tier.<br>
+                    <small>
+                        <ul style="padding-left:17px; margin:0;">
+                            <li>If you created your AWS account before July 15, 2025: It's less than 12 months old and you haven't exceeded Free Tier benefits—it won't cost anything.</li>
+                            <li>If you created your account on or after July 15, 2025: It's less than 6 months old and you have credits—you can complete this tutorial for free.</li>
+                            <li>Otherwise, you'll incur standard Amazon EC2 usage fees from launch until you terminate the instance.</li>
+                        </ul>
+                    </small>
+                </p>
+                <p style="font-size:0.97em;">See <a href="#" style="color:#7249d7">Track your Free Tier usage for Amazon EC2</a> for eligibility.</p>
+                <h4 style="margin: 1em 0 0.7em 0;">Tasks</h4>
+                <ol style="padding-left:18px;margin-bottom:1em;">
+                    <li>Step 1: Launch an instance</li>
+                    <li>Step 2: Connect to your instance</li>
+                    <li>Step 3: Clean up your instance</li>
+                </ol>
+                <h4 style="margin-bottom:0.67em;margin-top:1em;">Step 1: Launch an instance</h4>
+                <ol style="padding-left:20px">
+                    <li>Open the Amazon EC2 console: <a href="https://console.aws.amazon.com/ec2/" target="_blank" style="color:#7249d7">https://console.aws.amazon.com/ec2/</a></li>
+                    <li>Optionally select AWS Region (top menu bar).</li>
+                    <li>In <b>Launch instance</b> pane, choose <b>Launch instance</b>.</li>
+                    <li>Give your instance a descriptive Name under <b>Name and tags</b>.</li>
+                    <li>Choose <b>Quick Start</b> for Application and OS Images (AMI), such as Amazon Linux (preferably Free Tier eligible).</li>
+                    <li>Select an <b>Instance type</b> marked Free Tier eligible.</li>
+                    <li>Choose or create a <b>Key pair (login)</b>. (Required to connect via SSH or RDP.)</li>
+                    <li>
+                        <b>Network settings:</b>
+                        <ul style="padding-left:18px;">
+                            <li>Default VPC and subnet are preselected.</li>
+                            <li>Security group allows connections from anywhere (0.0.0.0/0). <span style="color:#c15844;">Warning: Use <b>Custom</b> for production for better security.</span></li>
+                        </ul>
+                    </li>
+                    <li>Configure storage (root volume preset, no data volumes required for tutorial).</li>
+                    <li>Review and <b>Launch instance</b>.</li>
+                    <li>Monitor status via notification and Instances page (pending → running).</li>
+                </ol>
+                <h4 style="margin:1em 0 0.7em 0;">Step 2: Connect to your instance</h4>
+                <p>
+                    The connection method depends on the instance OS.<br>
+                    <ul style="padding-left:17px;margin-top:6px;">
+                        <li>
+                            <b>Linux:</b> Use SSH with your key pair.
+                        </li>
+                        <li>
+                            <b>Windows:</b> Use RDP with decrypted Administrator password from your key pair.
+                        </li>
+                    </ul>
+                    If you have trouble connecting, see&nbsp;
+                    <a href="#" style="color:#7249d7;">Troubleshoot issues connecting to your Amazon EC2 instance</a>.
+                </p>
+                <h4 style="margin:1em 0 0.67em 0;">Step 3: Clean up your instance</h4>
+                <p>
+                    <span style="color:#be3636; font-weight:bold;">Warning:</span> <b>Terminating an instance is permanent and irreversible.</b>
+                    Back up data as needed.
+                </p>
+                <ol style="padding-left:18px;">
+                    <li>In the navigation pane, choose <b>Instances</b> and select your instance.</li>
+                    <li>Choose <b>Instance state</b> &gt; <b>Terminate (delete) instance</b>.</li>
+                    <li>Confirm <b>Terminate (delete)</b> in prompt.</li>
+                    <li>EC2 shuts down and terminates your instance. Entry disappears after a while.</li>
+                </ol>
+                <p style="font-size:0.97em;">Learn more: <a href="#" style="color:#7249d7">How instance termination works</a></p>
+            </div>
+        </div>
+        </section>
+            
+        </div>
+
+        <div class="iris-btn">?</div>
+    </div>
+    <script>
+        // Sidebar navigation logic
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                const target = this.getAttribute('data-target');
+                if (target) {
+                    window.location.href = target;
+                }
+            });
+        });
+        // Ripple effect on navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                let ripple = document.createElement('span');
+                ripple.className = 'nav-click-ripple';
+                ripple.style.left = (e.clientX - item.getBoundingClientRect().left) + 'px';
+                ripple.style.top = (e.clientY - item.getBoundingClientRect().top) + 'px';
+                item.appendChild(ripple);
+                setTimeout(() => { ripple.remove(); }, 500);
+            });
+        });
+    </script>
+</body>
+</html>
