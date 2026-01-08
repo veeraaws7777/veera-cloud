@@ -169,18 +169,17 @@
 <body>
     <div class="app-container">
         <aside class="sidebar">
-            <div style="display: flex; align-items: center; gap: 10px; flex-direction: column;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <img 
-                        src="https://nareshit.in/wp-content/uploads/2023/02/nareshitechnologies-png-logo.png" alt="Veera Logo" 
-                        style="height: 28px; width: auto; vertical-align: middle;"
-                    ><br>
-                    <span style="font-size: 20px; font-weight: bold; color: #fff;">
-                        Veera
-                        <small style="font-size: 12px; color: #eebaff; margin-left: 2px;">Sandbox</small>
-                    </span>
-                </div><br>
-                
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0; padding-bottom: 14px; width: 100%;">
+                <div style="background: #221b37; border-radius: 10px; padding: 18px 24px; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; width: 92%; margin-top: 8px;">
+                    <img
+                        src="https://nareshit.in/wp-content/uploads/2023/02/nareshitechnologies-png-logo.png"
+                        alt="Veera Logo"
+                        style="display: block; max-width: 180px; width: 100%; height: auto; margin-bottom: 18px;"
+                    >
+                    <div style="font-size: 20px; font-weight: bold; color: #fff; margin-top: 5px;">
+                        Veera <small style="font-size: 18px; color: #eebaff; margin-left: 4px;">Sandbox</small>
+                    </div>
+                </div>
             </div>
             <style>
                 /* Animation for nav items (slide-in and fade effect) */
@@ -278,13 +277,191 @@
 
         <div class="main-container">
             <header style="display: flex; justify-content: center; align-items: flex-start; padding-top: 24px; position: relative;">
-                <input type="text" class="search-bar" placeholder=" 🔎 Search for learning content">
+                <div class="advanced-search-bar-container" style="position: relative; flex: 1; max-width: 460px; min-width: 230px;">
+                    <input 
+                        type="text" 
+                        class="advanced-search-bar" 
+                        placeholder="Search for learning content, courses, sandboxes, topics..." 
+                    >
+                    <span class="advanced-search-icon">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                            <circle cx="10" cy="10" r="7.2" stroke="#baa6ea" stroke-width="2"/>
+                            <path d="M16.15 16.65l-2.13-2.13" stroke="#baa6ea" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <button 
+                        type="button"
+                        class="advanced-search-btn"
+                        title="Start Search"
+                        tabindex="-1"
+                    >
+                        <svg width="17" height="17" fill="none" viewBox="0 0 18 18">
+                            <circle cx="8" cy="8" r="6" stroke="white" stroke-width="2"/>
+                            <path d="M14 14l-2-2" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                    <div class="search-advanced-dropdown">
+                        <button class="advanced-dropdown-toggle" tabindex="-1">
+                            &#9881;
+                        </button>
+                        <div class="advanced-dropdown-menu">
+                            <label><input type="checkbox" checked> Content</label>
+                            <label><input type="checkbox" checked> Courses</label>
+                            <label><input type="checkbox"> Sandboxes</label>
+                            <label><input type="checkbox"> Topics</label>
+                        </div>
+                    </div>
+                </div>
                 <img 
                     src="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png" 
                     alt="Dark Cat Icon" 
                     style="position: absolute; top: 0; right: 0; height: 48px; width: 48px; object-fit: contain; z-index: 2; margin: 4px 12px 0 0;"
                 >
-            </header><br>
+            </header>
+            <style>
+                .advanced-search-bar-container {
+                    display: flex; 
+                    align-items: center;
+                    position: relative;
+                }
+                .advanced-search-bar {
+                    width: 100%;
+                    padding: 13px 115px 13px 45px;
+                    border-radius: 28px;
+                    background: var(--search-bg, #1d162a);
+                    border: none;
+                    font-size: 1.09em;
+                    color: var(--text-main, #fff);
+                    box-shadow: 0 0 0 2px #292043 inset, 0 2px 8px #170e2a40;
+                    transition: box-shadow 0.17s, background 0.19s;
+                }
+                .advanced-search-bar:focus {
+                    outline: none;
+                    box-shadow: 0 0 0 3px #7a5afcaa, 0 2px 8px #3b287580;
+                    background: #221c33;
+                }
+                .advanced-search-bar::placeholder {
+                    color: #b3b3ca;
+                    opacity: 0.97;
+                    letter-spacing: .03em;
+                    font-size: 0.96em;
+                }
+                .advanced-search-icon {
+                    position: absolute;
+                    left: 15px; top: 50%;
+                    transform: translateY(-50%);
+                    color: #baa6ea;
+                    display: flex; align-items: center; height: 100%;
+                    pointer-events: none;
+                    z-index: 2;
+                }
+                .advanced-search-btn {
+                    position: absolute;
+                    right: 46px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: linear-gradient(135deg, var(--accent-purple, #6749d7) 60%, #916afc 100%);
+                    color: #fff;
+                    border: none;
+                    border-radius: 50%;
+                    width: 34px; height: 34px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    box-shadow: 0 2px 10px #5335db35;
+                    cursor: pointer;
+                    font-size: 1.18em;
+                    transition: background 0.16s, box-shadow 0.13s;
+                    z-index: 3;
+                }
+                .advanced-search-btn:hover {
+                    background: linear-gradient(135deg, #845bdd 40%, var(--accent-purple, #6749d7) 100%);
+                    box-shadow: 0 4px 18px #7d58ea50;
+                }
+                .search-advanced-dropdown {
+                    position: absolute;
+                    right: 8px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    z-index: 10;
+                    display: flex;
+                    align-items: center;
+                }
+                .advanced-dropdown-toggle {
+                    background: #1d1530;
+                    color: #baa6ea;
+                    border: none;
+                    border-radius: 50%;
+                    width: 30px; height: 30px;
+                    font-size: 1.2em;
+                    cursor: pointer;
+                    transition: background 0.16s;
+                    margin-left: 8px;
+                    box-shadow: 0 1px 6px #2f216640;
+                    display: flex; align-items: center; justify-content: center;
+                }
+                .advanced-dropdown-toggle:focus,
+                .advanced-dropdown-toggle:hover {
+                    background: var(--accent-purple, #644ee5);
+                    color: #fdefff;
+                }
+                .advanced-dropdown-menu {
+                    display: none;
+                    position: absolute;
+                    right: 0;
+                    top: 40px;
+                    background: #251c39;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 20px #22213f14, 0 1.5px 4px #784af591;
+                    padding: 12px 18px;
+                    min-width: 145px;
+                    font-size: 0.98em;
+                }
+                .advanced-dropdown-toggle:focus + .advanced-dropdown-menu,
+                .advanced-dropdown-toggle:hover + .advanced-dropdown-menu {
+                    display: block;
+                }
+                .advanced-dropdown-menu label {
+                    display: block;
+                    padding: 4px 0;
+                    color: #eaeaed;
+                    cursor: pointer;
+                }
+                .advanced-dropdown-menu input[type="checkbox"] {
+                    margin-right: 8px;
+                    accent-color: #7c5aed;
+                }
+                @media (max-width: 600px) {
+                    .advanced-search-bar-container {
+                        max-width: 99vw;
+                        min-width: 0;
+                    }
+                }
+            </style>
+            <script>
+                // Show/hide custom dropdown on click for accessibility
+                document.addEventListener('DOMContentLoaded', function() {
+                    const toggle = document.querySelector('.advanced-dropdown-toggle');
+                    const menu = document.querySelector('.advanced-dropdown-menu');
+                    let menuTimeout;
+                    if (toggle && menu) {
+                        toggle.addEventListener('focus', function() {
+                            menu.style.display = "block";
+                        });
+                        toggle.addEventListener('blur', function() {
+                            menuTimeout = setTimeout(function () {
+                                menu.style.display = "none";
+                            }, 160);
+                        });
+                        menu.addEventListener('mouseenter', function() {
+                            clearTimeout(menuTimeout);
+                        });
+                        menu.addEventListener('mouseleave', function() {
+                            menu.style.display = "none";
+                        });
+                    }
+                });
+            </script>
         <!-- INSERT_YOUR_CODE -->
         <!-- Main Content beside the sidebar -->
         <section class="content-area" style="flex:1; padding: 0 32px;">
@@ -377,13 +554,55 @@
                     <li>EC2 shuts down and terminates your instance. Entry disappears after a while.</li>
                 </ol>
                 <p style="font-size:0.97em;">Learn more: <a href="#" style="color:#7249d7">How instance termination works</a></p>
+
+            <hr style="margin: 32px 0; border: none; border-top: 2px solid #393150; width: 100%;">
+
+
+            
             </div>
         </div>
         </section>
             
         </div>
 
-        <div class="iris-btn">?</div>
+        <div class="iris-btn" id="iris-btn">?</div>
+        <div id="iris-popup" style="display:none; position:fixed; bottom:80px; right:20px; background:#241a36; color:white; border-radius:8px; box-shadow:0 4px 20px #140c22a2; padding:22px 25px; z-index:102; width:305px; max-width:95vw; font-size:15px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <span style="font-weight:bold; font-size:16px;">Welcome!</span>
+                <button id="iris-close" style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;line-height:1;">&times;</button>
+            </div>
+            <div>
+                Are you ready to use the cloud services: <b>AWS</b>, <b>Azure</b>, <b>GCP</b>?
+            </div>
+        </div>
+        <script>
+            const irisBtn = document.getElementById('iris-btn');
+            const irisPopup = document.getElementById('iris-popup');
+            const irisClose = document.getElementById('iris-close');
+
+            // Show the popup automatically after 1 second
+            setTimeout(() => {
+                irisPopup.style.display = 'block';
+            }, 1000);
+
+            irisBtn.addEventListener('click', () => {
+                irisPopup.style.display = 'block';
+            });
+
+            irisClose.addEventListener('click', () => {
+                irisPopup.style.display = 'none';
+            });
+
+            // Optional: close popup clicking outside of it
+            document.addEventListener('mousedown', function(event) {
+                if (irisPopup.style.display === 'block'
+                    && !irisPopup.contains(event.target)
+                    && event.target !== irisBtn) {
+                    irisPopup.style.display = 'none';
+                }
+            });
+        </script>
+        
     </div>
     <script>
         // Sidebar navigation logic
