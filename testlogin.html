@@ -398,7 +398,7 @@ body {
     }
   };
 
-  // On successful login/signup, redirect to devopsexam.html
+  // On successful login/signup, redirect to devopsgitexam.html
   // ------ LOGIN --------
   document.getElementById('login-form').onsubmit = async function(e){
     e.preventDefault();
@@ -412,7 +412,7 @@ body {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       showPopup("Login successful!", "success");
-      setTimeout(() => window.location.href = 'devopsexam.html', 1200);
+      setTimeout(() => window.location.href = 'devopsgitexam.html', 1200);
     }
     catch (err) {
       let msg = "Email or password is wrong!";
