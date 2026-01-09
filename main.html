@@ -326,6 +326,50 @@
                     style="position: absolute; top: 0; right: 0; height: 48px; width: 48px; object-fit: contain; z-index: 2; margin: 4px 12px 0 0;"
                 >
             </header>
+            <div style="display: flex; flex-direction: row; justify-content: center; padding: 40px 0;">
+                <div style="background-color: #1e1e3f; border-radius: 8px; padding: 40px 30px; flex: 1; min-width: 300px; max-width: 380px; text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; margin: 0 10px; transition: transform 0.3s;">
+                    <div style="width: 54px; height: 54px; border-radius: 10px; background-color: transparent; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; z-index: 1;">
+                        <img 
+                            src="https://cdn-icons-png.flaticon.com/512/13079/13079033.png" 
+                            alt="Learning Path Logo"
+                            style="width: 56px; height: 56px; object-fit: contain; border-radius: 6px; background: transparent;" 
+                            loading="lazy"
+                        >
+                    </div>
+                    <h2 style="font-size: 18px; margin-bottom: 15px; z-index: 1;">Start a learning path</h2>
+                    <p style="font-size: 14px; color: #b1b1c7; line-height: 1.6; margin-bottom: 30px; z-index: 1;">
+                        Expertly curated <b>learning paths</b> combine specific courses and tools to help you learn a skill from start to finish.
+                    </p>
+                </div>
+                <div style="background-color: #1e1e3f; border-radius: 8px; padding: 40px 30px; flex: 1; min-width: 300px; max-width: 380px; text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; margin: 0 10px; transition: transform 0.3s;">
+                    <div style="width: 54px; height: 54px; border-radius: 10px; background-color: transparent; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; z-index: 1;">
+                        <img 
+                            src="https://images.vexels.com/media/users/3/129747/isolated/svg/dd8fa8cfc9d859a9bc3a517f6d1e6817.svg" 
+                            alt="Learning Path Logo"
+                            style="width: 56px; height: 56px; object-fit: contain; border-radius: 6px; background: transparent;" 
+                            loading="lazy"
+                        >
+                    </div> 
+                    <h2 style="font-size: 18px; margin-bottom: 15px; z-index: 1;">Certification prep</h2>
+                    <p style="font-size: 14px; color: #b1b1c7; line-height: 1.6; margin-bottom: 30px; z-index: 1;">
+                        The <b>certification prep center</b> will help you develop the knowledge and skills you need to pass industry certification exams.
+                    </p>
+                </div>
+                <div style="background-color: #1e1e3f; border-radius: 8px; padding: 40px 30px; flex: 1; min-width: 300px; max-width: 380px; text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; margin: 0 10px; transition: transform 0.3s;">
+                    <div style="width: 54px; height: 54px; border-radius: 10px; background-color: transparent; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; z-index: 1;">
+                        <img 
+                            src="https://cdn-icons-png.flaticon.com/512/8661/8661341.png" 
+                            alt="Learning Path Logo"
+                            style="width: 56px; height: 56px; object-fit: contain; border-radius: 6px; background: transparent;" 
+                            loading="lazy"
+                        >
+                    </div>
+                    <h2 style="font-size: 18px; margin-bottom: 15px; z-index: 1;">Measure your skills</h2>
+                    <p style="font-size: 14px; color: #b1b1c7; line-height: 1.6; margin-bottom: 30px; z-index: 1;">
+                        Take a <b>Skill IQ assessment</b> to identify your knowledge gaps and strengths, then view recommendations.
+                    </p>
+                </div>
+            </div>
             <style>
                 .advanced-search-bar-container {
                     display: flex;
@@ -538,7 +582,7 @@
                     showResponseSpeedAndBots(responseBox);
 
                     try {
-                        const res = await fetch("http://aiabinashkumar.duckdns.org/ask", {
+                        const res = await fetch("http://136.116.209.162/ask", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ prompt })
