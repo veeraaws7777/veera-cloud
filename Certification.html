@@ -148,12 +148,76 @@
             <ul class="sidebar-nav" id="sidebarNav">
                 <li data-category="itops"><b>DevOps</b></li>
                 <li data-category="cloud"><b>Cloud</b></li>
-                <li data-category="security"><b>Security</b></li>
-                <li data-category="project"><b>Project Management</b></li>
-                <li data-category="data"><b>Data</b></li>
+                <li data-category="security" class="develop-soon-trigger"><b>Security</b></li>
+                <li data-category="project"><b>Project Management <span style="color:#bbb; font-size:11px; margin-left:6px; background:#232629; border-radius:4px; padding:2px 6px;">Working</span></b></li>
+                <li data-category="data" class="develop-soon-trigger"><b>Data</b></li>
+
+                <div id="developSoonPopup" style="display:none; position:fixed; top:40px; right:40px; background:#232629; color:#fff; box-shadow:0 4px 24px #00000040; border-radius:8px; padding:32px 48px; z-index:9999; min-width:250px; max-width:90vw;">
+                    <span id="closeDevelopSoonPopup" style="position:absolute;top:10px;right:14px;cursor:pointer;font-size:22px;">&times;</span>
+                    <div style="font-size:18px; font-weight:600; margin-bottom:8px;">Coming Soon</div>
+                    <div style="font-size:14px; color:#bbb;">This feature is under development.<br><b>Developing soon...</b></div>
+                </div>
+                <script>
+                (function() {
+                    const triggers = document.querySelectorAll('.develop-soon-trigger');
+                    const popup = document.getElementById('developSoonPopup');
+                    const closeBtn = document.getElementById('closeDevelopSoonPopup');
+                    triggers.forEach(t => {
+                        t.addEventListener('click', function(e) {
+                            // Show popup when clicking these items
+                            popup.style.display = 'block';
+                        });
+                    });
+                    closeBtn.addEventListener('click', function() {
+                        popup.style.display = 'none';
+                    });
+                    // Hide popup on outside click
+                    window.addEventListener('mousedown', function(e){
+                        if (popup.style.display === 'block' && !popup.contains(e.target) && ![...triggers].some(el => el.contains(e.target))) {
+                            popup.style.display = 'none';
+                        }
+                    });
+                })();
+                </script>
                 <li data-category="software"><b>Software Development</b></li>
-                <li data-category="popular"><b>Popular Certifications</b></li>
-                <li data-category="newest"><b>Newest</b></li>
+                <li data-category="popular" class="cloud-popular-trigger"><b>Popular Cloud Certifications</b></li>
+
+                <div id="cloudPopularPopup" style="display:none; position:fixed; top:60px; right:40px; background:#232629; color:#fff; box-shadow:0 4px 24px #00000040; border-radius:8px; padding:40px 48px; z-index:9999; min-width:270px; max-width:92vw;">
+                    <span id="closeCloudPopularPopup" style="position:absolute;top:10px;right:14px;cursor:pointer;font-size:22px;">&times;</span>
+                    <div style="font-size:18px; font-weight:700; margin-bottom:16px;">Top Cloud Certifications</div>
+                    <ul style="list-style:none; padding-left:0; font-size:15px; line-height:2;">
+                        <li><i class="fab fa-aws aws" style="margin-right:8px;"></i>AWS Certified Solutions Architect</li>
+                        <li><i class="fab fa-microsoft ms" style="margin-right:8px;"></i>Microsoft Azure Administrator Associate</li>
+                        <li><i class="fab fa-google google" style="margin-right:8px;"></i>Google Cloud Professional Cloud Architect</li>
+                    </ul>
+                    <div style="font-size:13px; color:#bbb; margin-top:12px;">More cloud certs coming soon!</div>
+                </div>
+                <script>
+                (function() {
+                    const triggers = document.querySelectorAll('.cloud-popular-trigger');
+                    const popup = document.getElementById('cloudPopularPopup');
+                    const closeBtn = document.getElementById('closeCloudPopularPopup');
+                    triggers.forEach(t => {
+                        t.addEventListener('click', function(e) {
+                            popup.style.display = 'block';
+                        });
+                    });
+                    closeBtn.addEventListener('click', function() {
+                        popup.style.display = 'none';
+                    });
+                    window.addEventListener('mousedown', function(e){
+                        if (popup.style.display === 'block' && !popup.contains(e.target) && ![...triggers].some(el => el.contains(e.target))) {
+                            popup.style.display = 'none';
+                        }
+                    });
+                })();
+                </script>
+                <li data-category="newest" id="externalLinkTrigger"><b>Newest</b></li>
+                <script>
+                    document.getElementById('externalLinkTrigger').addEventListener('click', function(e) {
+                        window.open('https://hyddevops-hyderabad-s-devops-news-jobs-463831035964.us-west1.run.app/', '_blank');
+                    });
+                </script>
             </ul>
         </div>
         <script>
@@ -245,13 +309,13 @@
                     <img src="https://www.ovhcloud.com/sites/default/files/styles/text_media_horizontal/public/2021-04/K8S-logo.png" alt="Kubernetes Icon" class="card-icon" style="width:70px;height:70px;object-fit:cover;display:block;margin-left:0;">
                     <div class="card-label">Certification Prep</div>
                     <div class="card-title">Kubernetes</div>
-                    <button class="btn-plans" onclick="window.location.href='Kubernetes/login.html'">Start Exam <span>&rarr;</span></button>
+                    <button class="btn-plans" onclick="window.location.href='testlogin.html'">Start Exam <span>&rarr;</span></button>
                 </div>
                 <div class="card">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/GitHub_Invertocat_Logo.svg/250px-GitHub_Invertocat_Logo.svg.png" alt="git Icon" class="card-icon" style="width:70px;height:70px;object-fit:cover;display:block;margin-left:0;">
                     <div class="card-label">Certification Prep</div>
                     <div class="card-title">Full GitHub</div>
-                    <button class="btn-plans" onclick="window.location.href='git/login.html'">Start Exam <span>&rarr;</span></button>
+                    <button class="btn-plans" onclick="window.location.href='testlogin.html'">Start Exam <span>&rarr;</span></button>
                 </div>
                 <button class="next-arrow"><i class="fa-solid fa-chevron-right"></i></button>
             </div>
