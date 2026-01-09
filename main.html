@@ -276,10 +276,7 @@
         </aside>
 
         <div class="main-container">
-            <!--
-                Advanced Gemini Search Bar – Powered by API Key:
-                AIzaSyDa_Vv4DHRntG-cKFPOfAkqd357GV3BcjA
-            -->
+            
             <header style="display: flex; justify-content: center; align-items: flex-start; padding-top: 24px; position: relative;">
                 <div class="advanced-search-bar-container" style="position: relative; flex: 1; max-width: 600px; min-width: 230px;">
                     <input 
@@ -622,7 +619,7 @@
                         if (!query) return;
 
                         // API Key for demonstration purposes only
-                        const apiKey = "AIzaSyDa_Vv4DHRntG-cKFPOfAkqd357GV3BcjA";
+                        const apiKey = "";
                         const endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + apiKey;
                         resultDiv.style.display = 'block';
                         resultDiv.innerHTML = `<span class="gimini-search-loading">${spinnerSVG()}Loading results for "<b>${escapeHtml(query)}</b>"${chosenFilters.length ? " with filters: <i>" + chosenFilters.join(', ') + "</i>" : ""}...</span>`;
