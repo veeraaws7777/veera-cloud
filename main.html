@@ -222,7 +222,7 @@
                 <div class="nav-item mouse-anim" data-target="error.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">📡 Channels</span>
                 </div>
-                <div class="nav-item mouse-anim" data-target="Certification.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
+                <div class="nav-item mouse-anim" data-target="error.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🏆 Certifications</span>
                 </div>
                 <div class="nav-item mouse-anim" data-target="hand-on.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
@@ -276,15 +276,23 @@
         </aside>
 
         <div class="main-container">
+            <!--
+                Advanced Gemini Search Bar – Powered by API Key:
+                AIzaSyDa_Vv4DHRntG-cKFPOfAkqd357GV3BcjA
+            -->
             <header style="display: flex; justify-content: center; align-items: flex-start; padding-top: 24px; position: relative;">
-                <div class="advanced-search-bar-container" style="position: relative; flex: 1; max-width: 460px; min-width: 230px;">
+                <div class="advanced-search-bar-container" style="position: relative; flex: 1; max-width: 600px; min-width: 230px;">
                     <input 
                         type="text" 
-                        class="advanced-search-bar" 
-                        placeholder="Search for learning content, courses, sandboxes, topics..." 
+                        class="advanced-search-bar"
+                        id="gimini-search-input"
+                        placeholder="Search for learning content, courses, sandboxes, topics..."
+                        aria-label="Search for learning content"
+                        autocomplete="off"
+                        spellcheck="false"
                     >
-                    <span class="advanced-search-icon">
-                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    <span class="advanced-search-icon" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" focusable="false">
                             <circle cx="10" cy="10" r="7.2" stroke="#baa6ea" stroke-width="2"/>
                             <path d="M16.15 16.65l-2.13-2.13" stroke="#baa6ea" stroke-width="2" stroke-linecap="round"/>
                         </svg>
@@ -292,37 +300,40 @@
                     <button 
                         type="button"
                         class="advanced-search-btn"
+                        id="gimini-search-btn"
                         title="Start Search"
-                        tabindex="-1"
+                        aria-label="Start Search"
                     >
-                        <svg width="17" height="17" fill="none" viewBox="0 0 18 18">
+                        <svg width="17" height="17" fill="none" viewBox="0 0 18 18" focusable="false">
                             <circle cx="8" cy="8" r="6" stroke="white" stroke-width="2"/>
                             <path d="M14 14l-2-2" stroke="white" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </button>
                     <div class="search-advanced-dropdown">
-                        <button class="advanced-dropdown-toggle" tabindex="-1">
+                        <button class="advanced-dropdown-toggle" title="Advanced Search Filters" aria-haspopup="true" aria-expanded="false">
                             &#9881;
                         </button>
-                        <div class="advanced-dropdown-menu">
-                            <label><input type="checkbox" checked> Content</label>
-                            <label><input type="checkbox" checked> Courses</label>
-                            <label><input type="checkbox"> Sandboxes</label>
-                            <label><input type="checkbox"> Topics</label>
+                        <div class="advanced-dropdown-menu" aria-label="Advanced Search Filters">
+                            <label><input type="checkbox" class="filter-checkbox" value="Content" checked> Content</label>
+                            <label><input type="checkbox" class="filter-checkbox" value="Courses" checked> Courses</label>
+                            <label><input type="checkbox" class="filter-checkbox" value="Sandboxes"> Sandboxes</label>
+                            <label><input type="checkbox" class="filter-checkbox" value="Topics"> Topics</label>
                         </div>
                     </div>
                 </div>
                 <img 
                     src="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png" 
-                    alt="Dark Cat Icon" 
+                    alt="Dark Cat Icon"
+                    loading="lazy"
                     style="position: absolute; top: 0; right: 0; height: 48px; width: 48px; object-fit: contain; z-index: 2; margin: 4px 12px 0 0;"
                 >
             </header>
             <style>
                 .advanced-search-bar-container {
-                    display: flex; 
+                    display: flex;
                     align-items: center;
                     position: relative;
+                    width: 100%;
                 }
                 .advanced-search-bar {
                     width: 100%;
@@ -330,10 +341,11 @@
                     border-radius: 28px;
                     background: var(--search-bg, #1d162a);
                     border: none;
-                    font-size: 1.09em;
+                    font-size: 1.12em;
                     color: var(--text-main, #fff);
                     box-shadow: 0 0 0 2px #292043 inset, 0 2px 8px #170e2a40;
                     transition: box-shadow 0.17s, background 0.19s;
+                    font-family: inherit;
                 }
                 .advanced-search-bar:focus {
                     outline: none;
@@ -371,10 +383,13 @@
                     box-shadow: 0 2px 10px #5335db35;
                     cursor: pointer;
                     font-size: 1.18em;
-                    transition: background 0.16s, box-shadow 0.13s;
+                    transition: background 0.16s, box-shadow 0.13s, transform 0.14s;
                     z-index: 3;
                 }
-                .advanced-search-btn:hover {
+                .advanced-search-btn:active {
+                    transform: scale(0.96);
+                }
+                .advanced-search-btn:hover, .advanced-search-btn:focus {
                     background: linear-gradient(135deg, #845bdd 40%, var(--accent-purple, #6749d7) 100%);
                     box-shadow: 0 4px 18px #7d58ea50;
                 }
@@ -395,7 +410,7 @@
                     width: 30px; height: 30px;
                     font-size: 1.2em;
                     cursor: pointer;
-                    transition: background 0.16s;
+                    transition: background 0.16s, color 0.15s;
                     margin-left: 8px;
                     box-shadow: 0 1px 6px #2f216640;
                     display: flex; align-items: center; justify-content: center;
@@ -414,18 +429,20 @@
                     border-radius: 8px;
                     box-shadow: 0 4px 20px #22213f14, 0 1.5px 4px #784af591;
                     padding: 12px 18px;
-                    min-width: 145px;
-                    font-size: 0.98em;
+                    min-width: 155px;
+                    font-size: 1.04em;
+                    z-index: 99;
                 }
-                .advanced-dropdown-toggle:focus + .advanced-dropdown-menu,
-                .advanced-dropdown-toggle:hover + .advanced-dropdown-menu {
+                .advanced-dropdown-toggle.active + .advanced-dropdown-menu,
+                .advanced-dropdown-menu:focus-within {
                     display: block;
                 }
                 .advanced-dropdown-menu label {
                     display: block;
-                    padding: 4px 0;
+                    padding: 5px 0;
                     color: #eaeaed;
                     cursor: pointer;
+                    font-size: 1em;
                 }
                 .advanced-dropdown-menu input[type="checkbox"] {
                     margin-right: 8px;
@@ -437,131 +454,242 @@
                         min-width: 0;
                     }
                 }
+                .gimini-search-results {
+                    margin: 20px 0 18px 0;
+                    background: #251e38;
+                    border-radius: 12px;
+                    padding: 19px 24px;
+                    color: #eae3ff;
+                    font-size: 1.09em;
+                    box-shadow: 0 2px 12px #12072917;
+                    min-height: 48px;
+                    position: relative;
+                    overflow-x: auto;
+                    word-break: break-word;
+                    border-left: 5px solid #7a5afc30;
+                }
+                .gimini-search-loading {
+                    color: #afa1e3;
+                    font-size: 1em;
+                    display: flex;
+                    align-items: center;
+                    gap: 7px;
+                }
+                .gimini-search-loading .spinner {
+                    display: inline-block;
+                    width: 18px;
+                    height: 18px;
+                    border: 2.4px solid #c9b8f0;
+                    border-top: 2.4px solid #644ee5;
+                    border-radius: 50%;
+                    animation: spin 0.95s linear infinite;
+                }
+                @keyframes spin {
+                    100% { transform: rotate(360deg); }
+                }
+                .gimini-search-error {
+                    color: #f26d94;
+                    font-weight: bold;
+                    font-size: 1em;
+                }
+                .gimini-search-actions {
+                    margin-top: 9px;
+                    display: flex;
+                    gap: 10px;
+                }
+                .gimini-search-actions button {
+                    background: #281d3e;
+                    color: #b9a8e8;
+                    border: none;
+                    border-radius: 6px;
+                    padding: 6px 14px;
+                    font-size: 0.98em;
+                    cursor: pointer;
+                    transition: background 0.14s, color 0.13s;
+                }
+                .gimini-search-actions button:hover {
+                    background: #7053fa;
+                    color: #fff;
+                }
             </style>
             <script>
-                // Show/hide custom dropdown on click for accessibility
                 document.addEventListener('DOMContentLoaded', function() {
+                    // Dropdown accessibility logic
                     const toggle = document.querySelector('.advanced-dropdown-toggle');
                     const menu = document.querySelector('.advanced-dropdown-menu');
-                    let menuTimeout;
                     if (toggle && menu) {
-                        toggle.addEventListener('focus', function() {
-                            menu.style.display = "block";
-                        });
-                        toggle.addEventListener('blur', function() {
-                            menuTimeout = setTimeout(function () {
+                        let toggled = false;
+                        toggle.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            toggled = !toggle.classList.contains('active');
+                            document.querySelectorAll('.advanced-dropdown-toggle').forEach(btn => btn.classList.remove('active'));
+                            if (toggled) {
+                                toggle.classList.add('active');
+                                menu.style.display = "block";
+                                toggle.setAttribute('aria-expanded', 'true');
+                            } else {
+                                toggle.classList.remove('active');
                                 menu.style.display = "none";
-                            }, 160);
+                                toggle.setAttribute('aria-expanded', 'false');
+                            }
                         });
-                        menu.addEventListener('mouseenter', function() {
-                            clearTimeout(menuTimeout);
-                        });
-                        menu.addEventListener('mouseleave', function() {
-                            menu.style.display = "none";
+                        document.addEventListener('mousedown', function(event) {
+                            if (!menu.contains(event.target) && event.target !== toggle) {
+                                toggle.classList.remove('active');
+                                menu.style.display = "none";
+                                toggle.setAttribute('aria-expanded', 'false');
+                            }
                         });
                     }
+
+                    // Advanced Gemini API Search Integration
+
+                    const searchBtn = document.getElementById('gimini-search-btn');
+                    const searchInput = document.getElementById('gimini-search-input');
+                    const filters = Array.from(document.querySelectorAll('.filter-checkbox'));
+                    const contentArea = document.querySelector('.content-area');
+                    
+                    // Results display area
+                    let resultDiv = document.createElement('div');
+                    resultDiv.className = 'gimini-search-results';
+                    resultDiv.style.display = "none";
+                    contentArea.parentNode.insertBefore(resultDiv, contentArea);
+
+                    // Search state
+                    let lastQuery = '';
+                    let lastFilters = [];
+                    
+                    // Utility for escape
+                    function escapeHtml(str) {
+                        return String(str)
+                            .replace(/&/g, "&amp;")
+                            .replace(/</g, "&lt;")
+                            .replace(/>/g, "&gt;")
+                            .replace(/"/g, "&quot;")
+                            .replace(/'/g, "&#039;");
+                    }
+                    // Text formatting
+                    function formatParagraphs(text) {
+                        // Auto paragraph formatting for AI output
+                        return text
+                            .split(/\n{2,}/)
+                            .map(t => `<p style="margin:10px 0;">${t.replace(/\n/g,'<br>')}</p>`)
+                            .join('');
+                    }
+
+                    // Compose advanced prompt for Gemini
+                    function buildPrompt(query, chosenFilters) {
+                        if (!chosenFilters.length) return `Learning search: ${query}`;
+                        return `Learning search: ${query}. Only include results related to: ${chosenFilters.join(", ")}. Format results with clarity for a technical user.`;
+                    }
+                    // Spinner for loading indication
+                    function spinnerSVG() {
+                        return `<span class="spinner" aria-hidden="true"></span>`;
+                    }
+
+                    // Handle advanced filter changes
+                    function getActiveFilters() {
+                        return filters.filter(c => c.checked).map(c => c.value);
+                    }
+                    filters.forEach(checkbox => {
+                        checkbox.addEventListener('change', () => {
+                            if (lastQuery) {
+                                doGiminiSearch(lastQuery, true); // refresh results if a query already exists
+                            }
+                        });
+                    });
+
+                    function showActions(query, filtersArr) {
+                        return `<div class="gimini-search-actions">
+                            <button type="button" onclick="navigator.clipboard.writeText('${escapeHtml(query)}')" title="Copy Query">Copy Query</button>
+                            <button type="button" onclick="window.dispatchEvent(new CustomEvent('gimini-clear-search'))" title="Clear Results">Clear</button>
+                        </div>`;
+                    }
+                    window.addEventListener('gimini-clear-search', function() {
+                        resultDiv.innerHTML = "";
+                        resultDiv.style.display = "none";
+                        searchInput.value = "";
+                        searchInput.focus();
+                    });
+
+                    // Main search workflow
+                    async function doGiminiSearch(optionalQuery, triggeredByFilters = false) {
+                        const query = typeof optionalQuery === "string" ? optionalQuery : searchInput.value.trim();
+                        const chosenFilters = getActiveFilters();
+                        lastQuery = query;
+                        lastFilters = chosenFilters;
+
+                        if (!query) return;
+
+                        // API Key for demonstration purposes only
+                        const apiKey = "AIzaSyDa_Vv4DHRntG-cKFPOfAkqd357GV3BcjA";
+                        const endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=" + apiKey;
+                        resultDiv.style.display = 'block';
+                        resultDiv.innerHTML = `<span class="gimini-search-loading">${spinnerSVG()}Loading results for "<b>${escapeHtml(query)}</b>"${chosenFilters.length ? " with filters: <i>" + chosenFilters.join(', ') + "</i>" : ""}...</span>`;
+
+                        const payload = {
+                            contents: [{
+                                parts: [{ text: buildPrompt(query, chosenFilters) }]
+                            }]
+                        };
+
+                        try {
+                            const res = await fetch(endpoint, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify(payload)
+                            });
+                            if (!res.ok) {
+                                throw new Error(`HTTP ${res.status}`);
+                            }
+                            const data = await res.json();
+
+                            let text = '';
+                            if (data && data.candidates && data.candidates.length > 0) {
+                                text = data.candidates[0].content.parts[0].text;
+                            } else if (data && data.candidates && data.candidates.length) {
+                                text = data.candidates[0].output || '[No output]';
+                            } else {
+                                text = '[No results found]';
+                            }
+
+                            resultDiv.innerHTML = `
+                                <div>
+                                    <span style="color:#c9b8f0;font-size:1.07em;font-weight:600;letter-spacing:0.03em;">
+                                        Gemini Results${chosenFilters.length ? ' [' + chosenFilters.join(', ') + ']' : ''}:
+                                    </span>
+                                    <br>${formatParagraphs(escapeHtml(text))}
+                                    ${showActions(query, chosenFilters)}
+                                </div>`;
+                        } catch (err) {
+                            resultDiv.innerHTML = `<span class="gimini-search-error">Failed to fetch from Gemini API. ${(err && err.message)||''}</span>
+                                ${showActions(query, chosenFilters)}`;
+                        }
+                    }
+
+                    // Enter key and search button
+                    searchInput.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') {
+                            doGiminiSearch();
+                        }
+                    });
+                    searchBtn.addEventListener('click', function() {
+                        doGiminiSearch();
+                    });
+
+                    // Support submitting via Ctrl+Enter for power users
+                    searchInput.addEventListener('keydown', function(e){
+                        if (e.ctrlKey && e.key.toLowerCase() === "enter") {
+                            doGiminiSearch();
+                        }
+                    });
+
+                    // Autofocus the search on page load for quick access
+                    setTimeout(() => { searchInput.focus(); }, 360);
+
                 });
             </script>
-        <!-- INSERT_YOUR_CODE -->
-        <!-- Main Content beside the sidebar -->
-        <section class="content-area" style="flex:1; padding: 0 32px;">
-        <!-- INSERT_YOUR_CODE -->
-        <div class="ec2-sidebar-info" style="position: relative; margin: 0 0 32px 0; background: transparent; border-radius: 8px; border: 1px solid #221b37; box-sizing: border-box; padding: 32px 24px 24px 32px; font-size: 1.04rem; line-height: 1.65; box-shadow: 1px 0 32px #221b37;">
-             <h1 style="text-align: center; font-weight: bold;">
-                Get started with Amazon EC2
-            </h1>
-            <hr style="margin: 18px 0 14px 0; border:none; border-top:1px solid #dbd4ee;">
-            
-            <div style="margin-top:14px;">
-                <p>
-                    Use this tutorial to get started with <b>Amazon Elastic Compute Cloud (Amazon EC2)</b>. You'll learn how to launch and connect to an EC2 instance. An instance is a virtual server in the AWS Cloud. With Amazon EC2, you can set up and configure the operating system and applications that run on your instance.
-                </p>
-                <h4 style="margin: 1.1em 0 0.67em 0;">Overview</h4>
-                <ul style="padding-left:18px;margin-bottom:1em;">
-                    <li><b>An image</b> – A template containing the software to run on your instance, such as the OS.</li>
-                    <li><b>A key pair</b> – Credentials to prove your identity when connecting (public key on instance, private key on your computer).</li>
-                    <li><b>A network</b> – A default Virtual Private Cloud (VPC) in every AWS Region for your account.</li>
-                    <li><b>A security group</b> – Acts as a virtual firewall to control inbound/outbound traffic.</li>
-                    <li><b>An EBS volume</b> – A root volume is required; data volumes are optional.</li>
-                    <li><b>An instance</b> with security group, key pair, and EBS root volume.</li>
-                <!-- INSERT_YOUR_CODE -->
-                <li>
-                    <b>Getting started flow:</b><br>
-                    <img src="https://docs.aws.amazon.com/images/AWSEC2/latest/UserGuide/images/get-started-diagram.png" alt="Amazon EC2 Getting Started Diagram" style="display:block; margin:14px 0 10px 0; max-width:540px; width:100%; border-radius:7px; box-shadow:0 2px 14px #c7bedeb1;">
-                </li>
-                </ul>
-                <h4 style="margin: 1em 0 0.67em 0;">Cost for this tutorial</h4>
-                <p>
-                    When you create your AWS account, you can get started with Amazon EC2 for free using the AWS Free Tier.<br>
-                    <small>
-                        <ul style="padding-left:17px; margin:0;">
-                            <li>If you created your AWS account before July 15, 2025: It's less than 12 months old and you haven't exceeded Free Tier benefits—it won't cost anything.</li>
-                            <li>If you created your account on or after July 15, 2025: It's less than 6 months old and you have credits—you can complete this tutorial for free.</li>
-                            <li>Otherwise, you'll incur standard Amazon EC2 usage fees from launch until you terminate the instance.</li>
-                        </ul>
-                    </small>
-                </p>
-                <p style="font-size:0.97em;">See <a href="#" style="color:#7249d7">Track your Free Tier usage for Amazon EC2</a> for eligibility.</p>
-                <h4 style="margin: 1em 0 0.7em 0;">Tasks</h4>
-                <ol style="padding-left:18px;margin-bottom:1em;">
-                    <li>Step 1: Launch an instance</li>
-                    <li>Step 2: Connect to your instance</li>
-                    <li>Step 3: Clean up your instance</li>
-                </ol>
-                <h4 style="margin-bottom:0.67em;margin-top:1em;">Step 1: Launch an instance</h4>
-                <ol style="padding-left:20px">
-                    <li>Open the Amazon EC2 console: <a href="https://console.aws.amazon.com/ec2/" target="_blank" style="color:#7249d7">https://console.aws.amazon.com/ec2/</a></li>
-                    <li>Optionally select AWS Region (top menu bar).</li>
-                    <li>In <b>Launch instance</b> pane, choose <b>Launch instance</b>.</li>
-                    <li>Give your instance a descriptive Name under <b>Name and tags</b>.</li>
-                    <li>Choose <b>Quick Start</b> for Application and OS Images (AMI), such as Amazon Linux (preferably Free Tier eligible).</li>
-                    <li>Select an <b>Instance type</b> marked Free Tier eligible.</li>
-                    <li>Choose or create a <b>Key pair (login)</b>. (Required to connect via SSH or RDP.)</li>
-                    <li>
-                        <b>Network settings:</b>
-                        <ul style="padding-left:18px;">
-                            <li>Default VPC and subnet are preselected.</li>
-                            <li>Security group allows connections from anywhere (0.0.0.0/0). <span style="color:#c15844;">Warning: Use <b>Custom</b> for production for better security.</span></li>
-                        </ul>
-                    </li>
-                    <li>Configure storage (root volume preset, no data volumes required for tutorial).</li>
-                    <li>Review and <b>Launch instance</b>.</li>
-                    <li>Monitor status via notification and Instances page (pending → running).</li>
-                </ol>
-                <h4 style="margin:1em 0 0.7em 0;">Step 2: Connect to your instance</h4>
-                <p>
-                    The connection method depends on the instance OS.<br>
-                    <ul style="padding-left:17px;margin-top:6px;">
-                        <li>
-                            <b>Linux:</b> Use SSH with your key pair.
-                        </li>
-                        <li>
-                            <b>Windows:</b> Use RDP with decrypted Administrator password from your key pair.
-                        </li>
-                    </ul>
-                    If you have trouble connecting, see&nbsp;
-                    <a href="#" style="color:#7249d7;">Troubleshoot issues connecting to your Amazon EC2 instance</a>.
-                </p>
-                <h4 style="margin:1em 0 0.67em 0;">Step 3: Clean up your instance</h4>
-                <p>
-                    <span style="color:#be3636; font-weight:bold;">Warning:</span> <b>Terminating an instance is permanent and irreversible.</b>
-                    Back up data as needed.
-                </p>
-                <ol style="padding-left:18px;">
-                    <li>In the navigation pane, choose <b>Instances</b> and select your instance.</li>
-                    <li>Choose <b>Instance state</b> &gt; <b>Terminate (delete) instance</b>.</li>
-                    <li>Confirm <b>Terminate (delete)</b> in prompt.</li>
-                    <li>EC2 shuts down and terminates your instance. Entry disappears after a while.</li>
-                </ol>
-                <p style="font-size:0.97em;">Learn more: <a href="#" style="color:#7249d7">How instance termination works</a></p>
-
-            <hr style="margin: 32px 0; border: none; border-top: 2px solid #393150; width: 100%;">
-
-
-            
-            </div>
-        </div>
-        </section>
+            <section class="content-area" style="flex:1; padding: 0 32px;"></section>
             
         </div>
 
