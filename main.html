@@ -212,23 +212,35 @@
                     background: #2d2347 !important;
                 }
             </style>
-            <div class="sidebar-anim-container" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-                <div class="nav-item mouse-anim" data-target="#" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
+            <!-- Sidebar navigation with proper "active" support -->
+            <nav class="sidebar-anim-container" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <a href="#" class="nav-item mouse-anim active no-expand" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;"
+                   onclick="event.preventDefault();">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🏠 Home</span>
-                </div>
-                <div class="nav-item mouse-anim" data-target="error.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
+                </a>
+                <a href="error.html" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🌐 Browse all</span>
-                </div>
-                <div class="nav-item mouse-anim" data-target="error.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
+                </a>
+                <a href="error.html" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">📡 Channels</span>
-                </div>
-                <div class="nav-item mouse-anim" data-target="Certification.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
+                </a>
+                <a href="Certification.html" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🏆 Certifications</span>
-                </div>
-                <div class="nav-item mouse-anim" data-target="hand-on.html" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden;">
+                </a>
+                <a href="hand-on.html" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;"> 🛠️ Hands-on</span>
-                </div>
-            </div>
+                </a>
+            </nav>
+            <style>
+                /* Prevent expand effect on active nav item */
+                .nav-item.active.no-expand,
+                .nav-item.active.no-expand:hover,
+                .nav-item.active.no-expand:active {
+                    transform: none !important;
+                    box-shadow: none !important;
+                    background: #221b37 !important;
+                }
+            </style>
             <style>
                 /* Mouse-on-it animation for nav items */
                 .mouse-anim {
