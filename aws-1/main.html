@@ -505,7 +505,8 @@ button:disabled,
       createUserWithEmailAndPassword,
       sendPasswordResetEmail,
       GoogleAuthProvider,
-      signInWithPopup 
+      signInWithPopup,
+      updateProfile
     } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -606,12 +607,19 @@ button:disabled,
       btn.disabled = true;
       try {
         const result = await signInWithEmailAndPassword(auth, email, password);
+        const user = result.user;
+        let displayName = user.displayName || "";
+        let userMessage = "";
+        if (displayName && displayName.trim() !== "") {
+          userMessage = `Welcome, ${displayName} (${user.email})! You have logged in successfully.`;
+        } else {
+          userMessage = `Welcome, ${user.email}! You have logged in successfully.`;
+        }
         showMessage(
-          'Login successful',
+          userMessage,
           'success',
-          'Success',
+          'Login Success',
           function() {
-            // Redirect to veeraws1.html after successful login
             window.location.href = "veeraws1.html";
           }
         );
@@ -644,15 +652,26 @@ button:disabled,
       }
       try {
         const result = await createUserWithEmailAndPassword(auth, email, password);
-        if (result.user && name) {
-          if (typeof result.user.updateProfile === "function") {
-            await result.user.updateProfile({ displayName: name });
-          }
+        const user = result.user;
+        // Set displayName for new user
+        if (user && name) {
+          // Use updateProfile from Firebase Auth module
+          await updateProfile(user, { displayName: name });
         }
-        showMessage('Account created successfully for ' + email, 'success', null, function() {
-          // Redirect to veeraws1.html after successful sign up
-          window.location.href = "veeraws1.html";
-        });
+        let userMessage = "";
+        if (name && name.trim() !== "") {
+          userMessage = `Welcome, ${name} (${user.email})! Signup successful.`;
+        } else {
+          userMessage = `Welcome, ${user.email}! Signup successful.`;
+        }
+        showMessage(
+          userMessage,
+          'success',
+          'Signup Success',
+          function() {
+            window.location.href = "veeraws1.html";
+          }
+        );
       } catch (error) {
         showMessage('Sign up failed: ' + (error.message || ''), 'error');
       }
@@ -669,12 +688,25 @@ button:disabled,
         showMessage(messagePre, 'info', null);
         // signInWithPopup: opens a popup but continues in same top-level app
         const result = await signInWithPopup(auth, provider);
-        // In-app state: Show welcome with user's email
+        const user = result.user;
+        let displayName = user.displayName || "";
+        let userMessage = "";
+        if (displayName && displayName.trim() !== "") {
+          userMessage =
+            (context === 'login' ?
+              `Welcome, ${displayName} (${user.email})! You have logged in successfully with Google.` :
+              `Welcome, ${displayName} (${user.email})! Signup successful with Google.`);
+        } else {
+          userMessage =
+            (context === 'login' ?
+              `Welcome, ${user.email}! You have logged in successfully with Google.` :
+              `Welcome, ${user.email}! Signup successful with Google.`);
+        }
         showMessage(
-          'Signed in with Google as ' + result.user.email,
-          'success', null,
+          userMessage,
+          'success',
+          (context === 'login' ? 'Login Success' : 'Signup Success'),
           function() {
-            // Redirect to veeraws1.html after successful Google sign in
             window.location.href = "veeraws1.html";
           }
         );
