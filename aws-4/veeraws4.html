@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AWS-4 Sandbox Dashboard</title>
+    <title>AWS Sandbox Dashboard</title>
     <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -35,6 +35,7 @@
             max-width: 1100px;
         }
 
+        /* Header Section */
         .header {
             display: flex;
             justify-content: space-between;
@@ -67,47 +68,16 @@
             margin-top: 5px; 
         }
 
-        /* Added styles for user-details-box */
-        .user-details-box {
-            background: #222044;
-            color: #fff;
-            border: 1px solid #3d3763;
-            padding: 13px 20px 13px 20px;
-            border-radius: 7px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            font-size: 15px;
-            min-width: 130px;
-            min-height: 26px;
-            box-shadow: 0 2px 8px rgba(32,16,70,0.08);
-        }
-        .user-details-box .user-name {
-            font-weight: 600;
-            font-size: 15.5px;
-            color: #fae989;
-            margin-bottom: 2px;
-        }
-        .user-details-box .user-email {
-            font-size: 13px;
-            color: #b5b3c5;
-            margin-bottom: 2px;
-        }
-        .user-details-box .user-role {
-            font-size: 12.5px;
-            padding: 2px 7px;
-            border-radius: 12px;
-            background: #5c4ee5;
-            color: #fff;
-            margin-top: 4px;
-            display: inline-block;
-        }
-
         .close-btn {
-            display: none !important; /* Hide the original button just in case */
+            background: #3d3763;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
         }
 
-        /* ...rest of your existing CSS... */
         /* Main Panel Wrapper */
         .main-panel {
             background: var(--panel-bg);
@@ -229,6 +199,7 @@
         }
         .field-container i:hover { color: white; }
 
+        /* Sidebar Info Box */
         .info-card {
             background: rgba(255,255,255,0.03);
             border-radius: 8px;
@@ -256,6 +227,7 @@
             text-decoration: underline; 
         }
 
+        /* Floating Help Button */
         .help-fab {
             position: fixed;
             bottom: 30px;
@@ -298,50 +270,9 @@
             font-size: 36px;
             margin-bottom: 18px;
         }
-
-        /* Notification box styles */
-        body {
-          font-family: Arial, sans-serif;
-        }
-        #notify-box {
-          position: fixed;
-          top: 20px;
-          right: -400px;
-          width: 320px;
-          background: #ffffff;
-          border-radius: 12px;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-          padding: 16px;
-          transition: right 0.5s ease;
-          z-index: 9999;
-        }
-        #notify-box.show {
-          right: 20px;
-        }
-        .notify-title {
-          font-weight: bold;
-          font-size: 16px;
-          margin-bottom: 6px;
-        }
-        .notify-message {
-          font-size: 14px;
-          color: #333;
-        }
     </style>
-    <!-- Pusher JS -->
-    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
 </head>
 <body>
-
-    <!-- 🔔 Notification Box -->
-    <div id="notify-box">
-      <div class="notify-title">🔔 Notification</div>
-      <div class="notify-message" id="notify-message"></div>
-    </div>
-    <!-- 🔊 iPhone Bell Sound -->
-    <audio id="notify-sound" preload="auto">
-      <source src="https://potential-yellow-h2kf4sbfiu.edgeone.app/Best%20Notification%20Tone.mp3" type="audio/ogg">
-    </audio>
 
     <div class="sandbox-container">
         <header class="header">
@@ -350,13 +281,11 @@
                     <i class="fab fa-aws"></i>
                 </div>
                 <div>
-                    <h1>AWS-4 Sandbox</h1>
+                    <h1>AWS -1  Sandbox</h1>
+                    
                 </div>
             </div>
-            <!-- User details box loaded via JS -->
-            <div id="user-details" class="user-details-box" style="min-width:130px;min-height:26px;">
-                Loading user...
-            </div>
+            <button class="close-btn" id="btn-close">Close</button>
         </header>
 
         <div class="main-panel">
@@ -370,17 +299,12 @@
                     <div class="copy-box">
 
 
+                        
+                        <span id="url-val" style="user-select: all;">https://934192905834.signin.aws.amazon.com/console?region=us-east-1</span>
 
 
 
-
-                        <span id="url-val" style="user-select: all;">https://471112595794.signin.aws.amazon.com/console?region=us-east-1</span>
-
-
-
-
-
-
+                        
                     </div>
                 </div>
             </div>
@@ -388,7 +312,7 @@
             <div class="status-bar" id="status-bar">
                 <i class="far fa-clock"></i>
                 <span>
-                    <strong>Usage Window</strong>: <b>12:30 PM</b> to <b>07:20 PM</b>. Access is only allowed during this time period.
+                    <strong>Usage Window</strong>: <b>11:00 AM</b> to <b>03:00 PM</b>. Access is only allowed during this time period.
                 </span>
             </div>
             <div style="background: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 6px; padding: 9px 15px; margin: 12px 0; font-size: 15px; display: flex; align-items: center; gap: 9px;">
@@ -415,20 +339,14 @@
                         <label for="pass">Password <i class="far fa-question-circle" title="Your AWS IAM password"></i></label>
                         <div class="field-container">
                             <input type="password"
-
-
-
-
-
-
-
-                                value="Agg@W9M!Of+29*Huml6S"
-
-
-
-
-
-
+                                
+                                
+                                
+                                
+                                value="Iq7]JUU3h7w[{njFF8%b"
+                                
+                                
+                                
                                 
                                 id="pass" readonly>
                             <i class="far fa-eye" data-toggle-pass="pass" title="Show/Hide Password"></i><i class="far fa-copy" data-copy-target="pass" style="margin-left:6px;" title="Copy Password"></i>
@@ -489,7 +407,7 @@
             <i class="fas fa-lock"></i><br>
             <b>Access Restricted</b>
             <div style="margin-top:14px;font-size:16px;">
-                Sandbox access is allowed only between <b>12:30 PM</b> and <b>07:20 PM</b>.<br>
+                Sandbox access is allowed only between <b>11:00 AM</b> and <b>03:00 PM</b>.<br>
                 Please return during access hours.
             </div>
         </div>
@@ -532,11 +450,11 @@
     <script>
         // --- Time Access Restriction Logic ---
         (function() {
-            // Allowed window: 12:30PM (12*60+30) to 7:20PM (19*60+20)
+            // Allowed window: 11:00AM (11*60+0) to 3:00PM (15*60+0)
             var now = new Date();
             var mins = now.getHours() * 60 + now.getMinutes();
-            var start = 12 * 60 + 30; // 12:30 PM
-            var end = 19 * 60 + 20; // 7:20 PM
+            var start = 11 * 60 + 0; // 11:00 AM
+            var end = 15 * 60 + 0;   // 3:00 PM
 
             // If outside window, show modal and disable interactions
             if (mins < start || mins > end) {
@@ -549,115 +467,6 @@
             }
         })();
 
-        // --- USER DETAIL LOADER from aws4/main.html ---
-        document.addEventListener('DOMContentLoaded', function() {
-            var userBox = document.getElementById('user-details');
-            // Try fetch
-            fetch('aws4/main.html', {credentials: 'include'})
-                .then(function(response) {
-                    if (!response.ok) throw new Error("User not found");
-                    return response.text();
-                })
-                .then(function(htmltxt) {
-                    // Parse main.html & try to extract user info heuristically
-                    var dom = document.createElement('div');
-                    dom.innerHTML = htmltxt;
-
-                    // Try common ways of encoding user info
-                    // 1. Find [data-username], [data-user], [id="user"], .user etc.
-                    // 2. Common patterns in innerText (e.g., "Username", "Email", etc.)
-
-                    function findText(dom, match) {
-                        match = match.toLowerCase();
-                        const els = dom.querySelectorAll('*');
-                        for (const el of els) {
-                            if (el.innerText && el.innerText.toLowerCase().includes(match)) return el;
-                        }
-                        return null;
-                    }
-
-                    let name = '';
-                    let email = '';
-                    let role = '';
-
-                    // Try by common selectors
-                    let userNameNode = dom.querySelector('[data-username], [data-user], #username, #user, .user, .username, .profile-name');
-                    if (userNameNode && userNameNode.textContent.trim().length > 2) {
-                        name = userNameNode.textContent.trim();
-                    }
-
-                    // Find email (look for '@')
-                    let emailNode = dom.querySelector('[href^="mailto:"], .email, #email, [data-email]');
-                    if (emailNode) {
-                        email = emailNode.textContent.trim();
-                    } else {
-                        // search any node containing an '@'
-                        let allNodes = dom.querySelectorAll('*');
-                        for(let n of allNodes) {
-                            let t = n.textContent || "";
-                            if (t.includes('@') && t.length < 50) {
-                                email = t.trim();
-                                break;
-                            }
-                        }
-                    }
-
-                    // Try to pick up a recognizable role
-                    let roleNode = dom.querySelector('[data-role], .role, #role, .user-role, .account-type');
-                    if(roleNode) {
-                        role = roleNode.textContent.trim();
-                    } else {
-                        // fallback: if any span/td/div with "admin", "student", "user", etc.
-                        let poss = ["admin", "student", "instructor", "developer", "manager"];
-                        let all = dom.querySelectorAll('*');
-                        for(let n of all) {
-                            let t = (n.textContent || "").toLowerCase();
-                            for(let p of poss) {
-                                if (t.includes(p)) {
-                                    role = n.textContent.trim();
-                                    break;
-                                }
-                            }
-                            if(role) break;
-                        }
-                    }
-
-                    // If nothing found, try to heuristically extract a line e.g. Username: ABC
-                    if(!name || name.length<3) {
-                        let el = findText(dom, 'username') || findText(dom, 'name');
-                        if(el) {
-                            let t = el.innerText;
-                            let m = t.match(/username\W*:?([\w \-]+)/i) || t.match(/name\W*:?([\w \-]+)/i);
-                            if (m) {
-                                name = m[1].trim();
-                            } else if (t.length < 28) {
-                                name = t.trim();
-                            }
-                        }
-                    }
-
-                    // If still fallback, just grab the <title>
-                    if((!name || name.length<2) && dom.querySelector('title')) {
-                        name = dom.querySelector('title').textContent.trim();
-                    }
-
-                    let html = '';
-                    if (name) html += '<span class="user-name"><i class="far fa-user"></i> ' + name + '</span>';
-                    if (email) html += '<span class="user-email"><i class="far fa-envelope"></i> ' + email + '</span>';
-                    if (role) html += '<span class="user-role">' + role + '</span>';
-
-                    if (html) {
-                        userBox.innerHTML = html;
-                    } else {
-                        userBox.textContent = "User info unavailable";
-                    }
-                })
-                .catch(function() {
-                    userBox.textContent = "User info unavailable";
-                });
-        });
-
-        // *** The rest of the original scripts below ***
         // Copy to clipboard helper
         function copyToClipboard(text) {
             if (navigator.clipboard) {
@@ -676,7 +485,6 @@
                 textarea.value = text;
                 document.body.appendChild(textarea);
                 textarea.select();
-                document.execCommand('copy');
                 document.body.removeChild(textarea);
                 showStatus('Copied!', 1200);
             } catch(e){
@@ -761,7 +569,16 @@
             }
         });
 
-        // The original close button is removed from header, so no close functionality needed here.
+        // Close button closes the current tab/window if possible
+        document.getElementById('btn-close').addEventListener('click',function() {
+            // Prefer closing, else fall back to hiding the container
+            if (window.close && window.top == window.self) {
+                window.close();
+            } else {
+                document.querySelector('.sandbox-container').style.display='none';
+                showStatus('You can close this browser tab.', 2400);
+            }
+        });
 
         // Help FAB opens help modal
         document.getElementById('help-fab').addEventListener('click',function(){
@@ -793,38 +610,8 @@
         });
 
         // -- Usage time notice only, not dynamic auto shutdown
-        // The usage window is always displayed as 12:30 PM to 07:20 PM in the UI.
+        // The usage window is always displayed as 11:00 AM to 03:00 PM in the UI.
 
-        // --- Notification (Pusher) ---
-        // Required for browser audio autoplay rules
-        let audioUnlocked = false;
-        document.addEventListener('click', () => {
-          audioUnlocked = true;
-        });
-
-        // Initialize Pusher
-        var pusher = new Pusher('490689329d6e93a21009', {
-          cluster: 'ap2'
-        });
-
-        var channel = pusher.subscribe('my-channel');
-        channel.bind('my-event', function(data) {
-          // Set message
-          document.getElementById('notify-message').innerText = data.message;
-          // Show box
-          const box = document.getElementById('notify-box');
-          box.classList.add('show');
-          // Play sound
-          if (audioUnlocked) {
-            const sound = document.getElementById('notify-sound');
-            sound.currentTime = 0;
-            sound.play();
-          }
-          // Hide after 40 seconds
-          setTimeout(() => {
-            box.classList.remove('show');
-          }, 40000);
-        });
     </script>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBJM2CCKJ6"></script>
