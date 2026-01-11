@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!-- Coding By CodingNepal - www.codingnepalweb.com -->
 <html>
 <head>
   <meta charset="UTF-8">
@@ -612,17 +611,8 @@ button:disabled,
           'success',
           'Success',
           function() {
-            // For demonstration, we just show in-app feedback.
-            // To "continue in this page," we can update the UI state as desired.
-            // For now, let's reset the form and display a message.
-            document.getElementById('loginForm').reset();
-            // Maybe show/hide forms, set logged-in state, or update DOM here.
-            // E.g. show a welcome message (you can customize based on needs)
-            const wrapper = document.querySelector('.wrapper');
-            wrapper.innerHTML = `
-              <h2 style="color:#6DF89E;">Welcome, ${result.user.email}!</h2>
-              <p style="margin-top:18px;color:#fff;">You logged in successfully using Email/Password.<br/><br/>Enjoy using the app on this page!</p>
-            `;
+            // Redirect to veeraws1.html after successful login
+            window.location.href = "veeraws1.html";
           }
         );
       } catch (error) {
@@ -660,13 +650,8 @@ button:disabled,
           }
         }
         showMessage('Account created successfully for ' + email, 'success', null, function() {
-          // For demo: update UI state in app, don't redirect.
-          document.getElementById('signupForm').reset();
-          const wrapper = document.querySelector('.wrapper');
-          wrapper.innerHTML = `
-            <h2 style="color:#6DF89E;">Welcome, ${name || email}!</h2>
-            <p style="margin-top:18px;color:#fff;">Sign up complete. <br/><br/>You're now using this app page as a registered user!</p>
-          `;
+          // Redirect to veeraws1.html after successful sign up
+          window.location.href = "veeraws1.html";
         });
       } catch (error) {
         showMessage('Sign up failed: ' + (error.message || ''), 'error');
@@ -689,13 +674,8 @@ button:disabled,
           'Signed in with Google as ' + result.user.email,
           'success', null,
           function() {
-            // Replace inner wrapper content to show as "logged in" state
-            const name = result.user.displayName || result.user.email;
-            const wrapper = document.querySelector('.wrapper');
-            wrapper.innerHTML = `
-              <h2 style="color:#6DF89E;">Welcome, ${name}!</h2>
-              <p style="margin-top:18px;color:#fff;">You are signed in with Google.<br/><br/>You can now use the app on this page!</p>
-            `;
+            // Redirect to veeraws1.html after successful Google sign in
+            window.location.href = "veeraws1.html";
           }
         );
       } catch (error) {
