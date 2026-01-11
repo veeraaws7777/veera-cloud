@@ -314,6 +314,90 @@ button:disabled,
   color: #B0E0F7;
 }
 
+/* Google Sign-In Modal styles (CSS kept for compatibility) */
+#googleModalOverlay {
+  position: fixed;
+  z-index: 2000;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  background: rgba(30,40,60,0.55);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#googleModalBox {
+  background: rgba(255,255,255,0.97);
+  padding: 36px 35px 32px 35px;
+  border-radius: 18px;
+  min-width: 328px;
+  max-width: 95vw;
+  text-align: center;
+  box-shadow: 0 4px 32px 0 rgba(60,60,110,0.27);
+  position: relative;
+  color: #222;
+}
+
+#googleModalBox .google-modal-title {
+  font-size: 1.23rem;
+  margin-bottom: 0.85em;
+  font-weight: 700;
+  color: #364149;
+}
+
+#googleModalBox .google-popup-btn {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  color: #222;
+  border: 1px solid #888;
+  border-radius: 2.5em;
+  padding: 12px 28px;
+  margin: 0 auto 16px auto;
+  gap: 12px;
+  font-size: 1.06rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.14s;
+  box-shadow: 0 2px 8px 0 rgba(180,180,180,0.06);
+}
+#googleModalBox .google-popup-btn:hover {
+  background: #f7f8fa;
+  box-shadow: 0 3px 12px rgba(51,70,150,0.09);
+}
+#googleModalBox .google-icon {
+  width: 22px;
+  height: 22px;
+}
+
+#googleModalBox .google-modal-close-btn {
+  background: #f4f6fc;
+  color: #454e52;
+  border: none;
+  font-size: 15px;
+  border-radius: 3px;
+  padding: 7px 28px;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 16px;
+  transition: background 0.13s, color 0.13s;
+}
+#googleModalBox .google-modal-close-btn:hover {
+  background: #ebedf2;
+  color: #191f22;
+}
+
+#googleModalBox .google-modal-body {
+  color: #575a64;
+  font-size: 0.98rem;
+  margin-bottom: 18px;
+}
+
+#googleModalBox .google-modal-error {
+  color: #c34747;
+  font-size: 0.98rem;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
 </style>
 <body>
   <div class="wrapper">
@@ -322,7 +406,7 @@ button:disabled,
       <button id="signupTab" onclick="showForm('signup')">Sign Up</button>
     </div>
     <form id="loginForm" action="#" autocomplete="off">
-      <h2>Login</h2>
+      <h2>Login Aws-1</h2>
       <div class="input-field">
         <input type="text" required id="loginEmail" autocomplete="username">
         <label for="loginEmail">Enter your email</label>
@@ -343,7 +427,7 @@ button:disabled,
       <div class="social-btn">
         <button type="button" class="google-btn" id="googleLoginBtn" onclick="continueWithGoogle('login')">
           <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo"/>
-          Sign in with Google
+          Continue with Google
         </button>
       </div>
       <div class="register">
@@ -354,7 +438,7 @@ button:disabled,
       </div>
     </form>
     <form id="signupForm" action="#" style="display: none;" autocomplete="off">
-      <h2>Sign Up</h2>
+      <h2>Sign Up Aws-1</h2>
       <div class="input-field">
         <input type="text" required id="signupName" autocomplete="name">
         <label for="signupName">Enter your name</label>
@@ -376,7 +460,7 @@ button:disabled,
       <div class="social-btn">
         <button type="button" class="google-btn" id="googleSignupBtn" onclick="continueWithGoogle('signup')">
           <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo"/>
-          Sign in with Google
+          Continue with Google
         </button>
       </div>
       <div class="login-link">
@@ -397,8 +481,23 @@ button:disabled,
       </div>
     </div>
   </div>
+  <!-- 
+    We keep the Google modal HTML & CSS for compatibility,
+    but it will no longer be shown/used by any button (per new requirements).
+  -->
+  <div id="googleModalOverlay" style="display: none;">
+    <div id="googleModalBox">
+      <div class="google-modal-title" id="googleModalTitle"></div>
+      <div class="google-modal-body" id="googleModalBody"></div>
+      <button class="google-popup-btn" id="googlePopupBtn">
+        <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo" />
+        <span id="googlePopupBtnText">Sign in with Google</span>
+      </button>
+      <div class="google-modal-error" id="googleModalError" style="display:none;"></div>
+      <button class="google-modal-close-btn" id="googleModalCloseBtn">Cancel</button>
+    </div>
+  </div>
   <script type="module">
-    // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
     import { 
@@ -409,9 +508,7 @@ button:disabled,
       GoogleAuthProvider,
       signInWithPopup 
     } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-    // https://firebase.google.com/docs/web/setup#available-libraries
 
-    // Your web app's Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDBSIUwdfN38xiPeapdueeyCvdgV7ep-YE",
       authDomain: "abinash-482505.firebaseapp.com",
@@ -423,7 +520,6 @@ button:disabled,
       measurementId: "G-MBJM2CCKJ6"
     };
 
-    // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
@@ -435,7 +531,6 @@ button:disabled,
       const box = document.getElementById('modalMessageBox');
       const modalTitle = document.getElementById('modalMessageTitle');
       const modalBody = document.getElementById('modalMessageBody');
-      // Use type for color
       let tTitle = '';
       switch(type) {
         case 'success': tTitle = 'Success'; break;
@@ -455,14 +550,12 @@ button:disabled,
           callbackAfterClose();
         }
       }
-      // Remove previous event listeners if any
+
       const closeBtn = document.getElementById('modalMessageCloseBtn');
       closeBtn.onclick = closeModal;
-      // Allow closing by clicking overlay (not the modal itself)
       overlay.onclick = function(e) {
         if (e.target === overlay) closeModal();
       };
-      // Allow ESC to close modal
       document.onkeydown = function(e) {
         if (e.key === "Escape") closeModal();
       };
@@ -514,16 +607,24 @@ button:disabled,
       btn.disabled = true;
       try {
         const result = await signInWithEmailAndPassword(auth, email, password);
-        // --- Begin Custom Success Prompt logic ---
         showMessage(
           'Login successful',
           'success',
           'Success',
           function() {
-            window.location.href = 'veeraws1.html';
+            // For demonstration, we just show in-app feedback.
+            // To "continue in this page," we can update the UI state as desired.
+            // For now, let's reset the form and display a message.
+            document.getElementById('loginForm').reset();
+            // Maybe show/hide forms, set logged-in state, or update DOM here.
+            // E.g. show a welcome message (you can customize based on needs)
+            const wrapper = document.querySelector('.wrapper');
+            wrapper.innerHTML = `
+              <h2 style="color:#6DF89E;">Welcome, ${result.user.email}!</h2>
+              <p style="margin-top:18px;color:#fff;">You logged in successfully using Email/Password.<br/><br/>Enjoy using the app on this page!</p>
+            `;
           }
         );
-        // --- End Custom Success Prompt logic ---
       } catch (error) {
         showMessage('Login failed: ' + (error.message || ''), 'error');
       }
@@ -553,12 +654,19 @@ button:disabled,
       }
       try {
         const result = await createUserWithEmailAndPassword(auth, email, password);
-        // Set displayName (optional): you can update profile on signup if needed
         if (result.user && name) {
-          await result.user.updateProfile({ displayName: name });
+          if (typeof result.user.updateProfile === "function") {
+            await result.user.updateProfile({ displayName: name });
+          }
         }
         showMessage('Account created successfully for ' + email, 'success', null, function() {
-          window.location.href = 'veeraws1.html';
+          // For demo: update UI state in app, don't redirect.
+          document.getElementById('signupForm').reset();
+          const wrapper = document.querySelector('.wrapper');
+          wrapper.innerHTML = `
+            <h2 style="color:#6DF89E;">Welcome, ${name || email}!</h2>
+            <p style="margin-top:18px;color:#fff;">Sign up complete. <br/><br/>You're now using this app page as a registered user!</p>
+          `;
         });
       } catch (error) {
         showMessage('Sign up failed: ' + (error.message || ''), 'error');
@@ -566,21 +674,33 @@ button:disabled,
       btn.disabled = false;
     });
 
-    // Sign in with Google
+    // Google Sign-In directly (no modal), continue "in this page" (in-app, no redirect or new tab)
     window.continueWithGoogle = async function(context) {
-      const btn = context === 'login'
-        ? document.getElementById('googleLoginBtn')
-        : document.getElementById('googleSignupBtn');
-      btn.disabled = true;
+      let messagePre = (context === 'login')
+        ? 'Logging in with Google...'
+        : 'Signing up with Google...';
+
       try {
+        showMessage(messagePre, 'info', null);
+        // signInWithPopup: opens a popup but continues in same top-level app
         const result = await signInWithPopup(auth, provider);
-        showMessage('Signed in with Google as ' + (result.user.email), 'success', null, function() {
-          window.location.href = 'veeraws1.html';
-        });
+        // In-app state: Show welcome with user's email
+        showMessage(
+          'Signed in with Google as ' + result.user.email,
+          'success', null,
+          function() {
+            // Replace inner wrapper content to show as "logged in" state
+            const name = result.user.displayName || result.user.email;
+            const wrapper = document.querySelector('.wrapper');
+            wrapper.innerHTML = `
+              <h2 style="color:#6DF89E;">Welcome, ${name}!</h2>
+              <p style="margin-top:18px;color:#fff;">You are signed in with Google.<br/><br/>You can now use the app on this page!</p>
+            `;
+          }
+        );
       } catch (error) {
-        showMessage('Google sign in failed: ' + (error.message || ''), 'error');
+        showMessage("Google sign in failed: " + (error.message || ''), 'error', "Google Sign In");
       }
-      btn.disabled = false;
     };
   </script>
 </body>
