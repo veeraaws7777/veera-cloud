@@ -1,707 +1,700 @@
+
 <!DOCTYPE html>
-<!-- Coding By CodingNepal - www.codingnepalweb.com -->
-<html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login & Signup Form</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Dashboard </title>
+     <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png">
+    <style>
+        :root {
+            --bg-dark: #120d1d;
+            --sidebar-bg: #1d152d;
+            --card-bg: #271e3d;
+            --text-main: #ffffff;
+            --text-muted: #a19bb8;
+            --accent-purple: #5e46e8;
+            --active-pink: #f02d64;
+            --search-bg: #251d3a;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; height: 100vh; width: 100vw; }
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 240px;
+            min-width: 240px;
+            background-color: var(--sidebar-bg);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 0;
+            border-right: 1px solid #2d2545;
+            position: relative;
+            z-index: 10;
+        }
+        .logo { padding: 0 20px 30px; font-weight: 900; font-size: 22px; letter-spacing: 1px; display: flex; align-items: center; }
+        .logo::before { content: '▶'; margin-right: 8px; color: var(--text-main); }
+        .nav-item { padding: 12px 20px; display: flex; align-items: center; cursor: pointer; color: var(--text-muted); font-size: 14px; transition: background 0.2s, color 0.2s, border-left 0.2s, transform 0.08s cubic-bezier(.3,1.35,.2,1), box-shadow 0.2s; border-left: 3px solid transparent; user-select: none; position: relative; overflow: hidden;}
+        .nav-item:hover { background: #2d2545; color: white; }
+        .nav-item.active { color: white; border-left: 3px solid var(--active-pink); background: linear-gradient(90deg, #32254d 0%, transparent 100%); }
+        .nav-item:active {
+            transform: scale(0.96);
+            background: #403061;
+            box-shadow: 0 2px 8px 0 rgba(60,0,120,0.07);
+            color: white;
+        }
+        .nav-click-ripple {
+            position: absolute;
+            background: rgba(255,255,255,0.18);
+            border-radius: 50%;
+            pointer-events: none;
+            width:100px;height:100px;
+            transform: translate(-50%,-50%);
+            animation: nav-ripple-anim 0.5s;
+            z-index: 1;
+            mix-blend-mode: lighten;
+        }
+        @keyframes nav-ripple-anim {
+            to { opacity:0; transform:translate(-50%,-50%) scale(2.5);}
+        }
+
+        /* MAIN CONTENT */
+        .main-container { flex: 1; display: flex; flex-direction: column; overflow-x: hidden; overflow-y: auto; min-width: 0; background: var(--bg-dark);}
+        header {
+            min-height: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            background: var(--bg-dark);
+            border-bottom: 1px solid #2d2545;
+            z-index: 1;
+        }
+        .search-bar { background: var(--search-bg); border: 1px solid #3d345a; border-radius: 4px; padding: 8px 15px; width: 400px; color: white; transition: border 0.2s; }
+        .search-bar:focus { border: 1.5px solid var(--active-pink); outline: none;}
+        .top-right { display: flex; align-items: center; gap: 20px; }
+        .user-icon { width: 32px; height: 32px; background: var(--active-pink); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+
+        .content { padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
+        h2 { font-size: 18px; margin-bottom: 20px; font-weight: 500; }
+
+        /* CONTINUE LEARNING CARD */
+        .hero-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            gap: 32px;
+            flex-wrap: wrap;
+        }
+        .hero-info .badge { background: #3d345a; padding: 4px 8px; font-size: 10px; border-radius: 3px; font-weight: bold; }
+        .hero-info h3 { font-size: 24px; margin: 15px 0; }
+        .btn-resume { background: var(--accent-purple); color: white; border: none; padding: 10px 25px; border-radius: 4px; font-weight: bold; cursor: pointer; margin-right: 15px; transition: transform 0.18s, box-shadow 0.14s;}
+        .btn-resume:active { transform: scale(0.97);}
+        .remaining { color: var(--text-muted); font-size: 13px; }
+
+        /* SECTION HEADER & GRID */
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .section-header a { color: var(--accent-purple); text-decoration: none; font-size: 14px; }
+        .section-header a:hover { text-decoration: underline; }
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+        }
+
+        .video-card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+        .video-card:hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 6px 32px 0 #160f26; }
+        .card-thumb { height: 120px; background: #3d345a; position: relative; }
+        .card-duration { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.8); padding: 2px 6px; font-size: 11px; border-radius: 3px; }
+        .card-body { padding: 15px; min-height: 84px;}
+        .card-type { font-size: 10px; color: var(--text-muted); display: block; margin-bottom: 5px; }
+        .card-title { font-size: 14px; font-weight: 500; height: 40px; margin-bottom: 15px; display: block; }
+        .card-footer { font-size: 12px; color: var(--text-muted); }
+
+        /* IRIS CHAT WIDGET */
+        .iris-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--active-pink);
+            width: 50px; height: 50px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            font-weight: bold;
+            font-size: 20px;
+            z-index: 100;
+            transition: transform 0.16s;
+        }
+        .iris-btn:active { transform: scale(0.97);}
+        @media (max-width: 950px) {
+            .main-container .content { padding: 24px 12px; }
+            .search-bar { width: 250px; }
+        }
+        @media (max-width: 700px) {
+            .app-container { flex-direction: column; }
+            .sidebar { width: 100vw; min-width: 0; flex-direction: row; border-right: none; border-bottom: 1px solid #2d2545; overflow-x: auto; }
+            .logo { font-size: 18px; padding: 0 10px 12px 10px;}
+            .nav-item { padding: 8px 12px; font-size: 13px;}
+            .main-container { width: 100vw;}
+        }
+        @media (max-width: 500px) {
+            .main-container .content { padding: 10px 2vw;}
+            .search-bar { width: 98vw; min-width: 0; }
+            .hero-card { flex-direction: column; gap:16px;}
+        }
+    </style>
 </head>
-<style>
-  @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700&display=swap");
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Open Sans", sans-serif;
-}
-
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  width: 100%;
-  padding: 0 10px;
-  position: relative;
-  z-index: 0;
-}
-
-body::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: url("https://4kwallpapers.com/images/walls/thumbs_3t/25008.jpg"), #000;
-  background-position: center;
-  background-size: cover;
-  z-index: -1;
-}
-
-.wrapper {
-  width: 400px;
-  border-radius: 8px;
-  padding: 30px;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
-  background-color: rgba(255,255,255,0.02);
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  transition: .3s;
-}
-
-h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #fff;
-}
-
-.input-field {
-  position: relative;
-  border-bottom: 2px solid #ccc;
-  margin: 15px 0;
-}
-
-.input-field label {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  color: #fff;
-  font-size: 16px;
-  pointer-events: none;
-  transition: 0.15s ease;
-}
-
-.input-field input {
-  width: 100%;
-  height: 40px;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  color: #fff;
-}
-
-.input-field input:focus~label,
-.input-field input:valid~label {
-  font-size: 0.8rem;
-  top: 10px;
-  transform: translateY(-120%);
-}
-
-.forget {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 25px 0 35px 0;
-  color: #fff;
-}
-
-#remember {
-  accent-color: #fff;
-}
-
-.forget label {
-  display: flex;
-  align-items: center;
-}
-
-.forget label p {
-  margin-left: 8px;
-}
-
-.wrapper a {
-  color: #efefef;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.wrapper a:hover {
-  text-decoration: underline;
-}
-
-button {
-  background: #fff;
-  color: #000;
-  font-weight: 600;
-  border: none;
-  padding: 12px 20px;
-  cursor: pointer;
-  border-radius: 3px;
-  font-size: 16px;
-  border: 2px solid transparent;
-  transition: 0.3s ease;
-}
-
-button:hover {
-  color: #fff;
-  border-color: #fff;
-  background: rgba(255, 255, 255, 0.15);
-}
-
-button:disabled,
-.google-btn[disabled] {
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-.register,
-.login-link {
-  text-align: center;
-  margin-top: 30px;
-  color: #fff;
-}
-.divider {
-  display: flex;
-  align-items: center;
-  margin: 22px 0 18px 0;
-}
-.divider::before, .divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: #ccc;
-  opacity: 0.35;
-}
-.divider span {
-  margin: 0 15px;
-  color: #ccc;
-  font-size: 0.95rem;
-}
-.social-btn {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 14px;
-}
-.google-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: none;
-  background: #fff;
-  color: #444;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  border-radius: 3px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 15px;
-  transition: box-shadow .2s;
-}
-.google-btn:hover {
-  box-shadow: 0 3px 12px rgba(0,0,0,0.20);
-}
-
-.google-icon {
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.tab-switcher {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 25px;
-}
-
-.tab-switcher button {
-  border-radius: 8px 8px 0 0;
-  background: rgba(255,255,255,.08);
-  margin: 0 4px;
-  padding: 8px 24px;
-  font-size: 1rem;
-  border: 1px solid rgba(255,255,255,0.22);
-  border-bottom: none;
-  color: #fff;
-  transition: background .2s;
-}
-
-.tab-switcher button.active {
-  background: #fff;
-  color: #222;
-  font-weight: bold;
-}
-
-.tab-switcher button:not(.active):hover {
-  background: rgba(255,255,255,0.18);
-}
-
-.forgot-btn {
-  background: transparent;
-  color: #efefef;
-  border: none;
-  font: inherit;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-}
-
-.forgot-btn:disabled {
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-/* Custom styles for modal message */
-#modalMessageOverlay {
-  position: fixed;
-  z-index: 1000;
-  left: 0; top: 0; width: 100vw; height: 100vh;
-  background: rgba(30,40,60,0.35); /* slightly darker overlay */
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-
-#modalMessageBox {
-  background: rgba(22,23,38,0.98);
-  color: #fff;
-  padding: 26px 35px 22px 35px;
-  border-radius: 8px;
-  min-width: 320px;
-  max-width: 90vw;
-  text-align: center;
-  box-shadow: 0 4px 24px 0 rgba(60,60,110,0.18);
-  position: relative;
-}
-
-#modalMessageBox .modal-title {
-  font-size: 1.15rem;
-  margin-bottom: 0.65em;
-  font-weight: 700;
-}
-
-#modalMessageBox .modal-body {
-  font-size: 1rem;
-}
-
-#modalMessageBox .modal-footer {
-  margin-top: 20px;
-}
-
-#modalMessageBox .modal-close-btn {
-  background: #276EF1;
-  color: #fff;
-  border: none;
-  font-size: 15px;
-  border-radius: 3px;
-  padding: 7px 22px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.18s;
-}
-#modalMessageBox .modal-close-btn:hover {
-  background: #16397a;
-}
-#modalMessageBox .modal-error {
-  color: #FFB7B6;
-}
-#modalMessageBox .modal-success {
-  color: #6DF89E;
-}
-#modalMessageBox .modal-warning {
-  color: #F8EF8E;
-}
-#modalMessageBox .modal-info {
-  color: #B0E0F7;
-}
-
-/* Google Sign-In Modal styles (CSS kept for compatibility) */
-#googleModalOverlay {
-  position: fixed;
-  z-index: 2000;
-  left: 0; top: 0; width: 100vw; height: 100vh;
-  background: rgba(30,40,60,0.55);
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-
-#googleModalBox {
-  background: rgba(255,255,255,0.97);
-  padding: 36px 35px 32px 35px;
-  border-radius: 18px;
-  min-width: 328px;
-  max-width: 95vw;
-  text-align: center;
-  box-shadow: 0 4px 32px 0 rgba(60,60,110,0.27);
-  position: relative;
-  color: #222;
-}
-
-#googleModalBox .google-modal-title {
-  font-size: 1.23rem;
-  margin-bottom: 0.85em;
-  font-weight: 700;
-  color: #364149;
-}
-
-#googleModalBox .google-popup-btn {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  color: #222;
-  border: 1px solid #888;
-  border-radius: 2.5em;
-  padding: 12px 28px;
-  margin: 0 auto 16px auto;
-  gap: 12px;
-  font-size: 1.06rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.15s, box-shadow 0.14s;
-  box-shadow: 0 2px 8px 0 rgba(180,180,180,0.06);
-}
-#googleModalBox .google-popup-btn:hover {
-  background: #f7f8fa;
-  box-shadow: 0 3px 12px rgba(51,70,150,0.09);
-}
-#googleModalBox .google-icon {
-  width: 22px;
-  height: 22px;
-}
-
-#googleModalBox .google-modal-close-btn {
-  background: #f4f6fc;
-  color: #454e52;
-  border: none;
-  font-size: 15px;
-  border-radius: 3px;
-  padding: 7px 28px;
-  cursor: pointer;
-  font-weight: 600;
-  margin-top: 16px;
-  transition: background 0.13s, color 0.13s;
-}
-#googleModalBox .google-modal-close-btn:hover {
-  background: #ebedf2;
-  color: #191f22;
-}
-
-#googleModalBox .google-modal-body {
-  color: #575a64;
-  font-size: 0.98rem;
-  margin-bottom: 18px;
-}
-
-#googleModalBox .google-modal-error {
-  color: #c34747;
-  font-size: 0.98rem;
-  margin-top: 10px;
-  margin-bottom: 0;
-}
-</style>
 <body>
-  <div class="wrapper">
-    <div class="tab-switcher">
-      <button id="loginTab" class="active" onclick="showForm('login')">Login</button>
-      <button id="signupTab" onclick="showForm('signup')">Sign Up</button>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 0; padding-bottom: 14px; width: 100%;">
+                <div style="background: #221b37; border-radius: 10px; padding: 18px 24px; display: flex; flex-direction: column; align-items: center; box-sizing: border-box; width: 92%; margin-top: 8px;">
+                    <img
+                        src="https://nareshit.in/wp-content/uploads/2023/02/nareshitechnologies-png-logo.png"
+                        alt="Veera Logo"
+                        style="display: block; max-width: 180px; width: 100%; height: auto; margin-bottom: 18px;"
+                    >
+                    <div style="font-size: 20px; font-weight: bold; color: #fff; margin-top: 5px;">
+                        Veera <small style="font-size: 18px; color: #eebaff; margin-left: 4px;">Sandbox</small>
+                    </div>
+                </div>
+            </div>
+            <style>
+                /* Animation for nav items (slide-in and fade effect) */
+                @keyframes navSlideIn {
+                    from {
+                        opacity: 0;
+                        transform: translateY(18px) scale(0.98);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                    }
+                }
+                .sidebar-anim-container .nav-item {
+                    animation: navSlideIn 0.5s cubic-bezier(0.4,0.2,0.2,1) both;
+                }
+                /* Stagger animation delay for each nav item */
+                .sidebar-anim-container .nav-item:nth-child(1) { animation-delay: 0.05s; }
+                .sidebar-anim-container .nav-item:nth-child(2) { animation-delay: 0.1s; }
+                .sidebar-anim-container .nav-item:nth-child(3) { animation-delay: 0.15s; }
+                .sidebar-anim-container .nav-item:nth-child(4) { animation-delay: 0.2s; }
+                .sidebar-anim-container .nav-item:nth-child(5) { animation-delay: 0.25s; }
+                /* Optional hover effect for life */
+                .nav-item {
+                    transition: box-shadow 0.2s, transform 0.2s;
+                }
+                .nav-item:hover {
+                    box-shadow: 0 4px 16px 0 #1d133835, 0 1px 2px 0 #0001;
+                    transform: translateY(-1px) scale(1.02);
+                    background: #2d2347 !important;
+                }
+            </style>
+            <!-- Sidebar navigation with proper "active" support -->
+            <nav class="sidebar-anim-container" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+                <a href="#" class="nav-item mouse-anim active no-expand" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;"
+                   onclick="event.preventDefault();">
+                    <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🏠 Home</span>
+                </a>
+                <a href="error.html" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
+                    <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🌐 Browse all</span>
+                </a>
+                <a href="error.html" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
+                    <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">📡 Channels</span>
+                </a>
+                <a href="Certification.html" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
+                    <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🏆 Certifications</span>
+                </a>
+                <a href="hand-on.html" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
+                    <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;"> 🛠️ Hands-on</span>
+                </a>
+                <a href="https://taskflow-463831035964.us-west1.run.app" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
+                    <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;"> 🐣 Task</span>
+                </a>
+            </nav>
+            <style>
+                /* Prevent expand effect on active nav item */
+                .nav-item.active.no-expand,
+                .nav-item.active.no-expand:hover,
+                .nav-item.active.no-expand:active {
+                    transform: none !important;
+                    box-shadow: none !important;
+                    background: #221b37 !important;
+                }
+            </style>
+            <style>
+                /* Mouse-on-it animation for nav items */
+                .mouse-anim {
+                    cursor: pointer;
+                    transition: box-shadow 0.24s cubic-bezier(.37,1.01,.77,.97), 
+                                transform 0.23s cubic-bezier(.37,1.01,.77,.97),
+                                background 0.16s;
+                    box-shadow: none;
+                }
+                .mouse-anim::after {
+                    content: '';
+                    display: block;
+                    position: absolute;
+                    pointer-events: none;
+                    left: 50%;
+                    top: 50%;
+                    width: 0px;
+                    height: 0px;
+                    background: radial-gradient(circle, #9f7aea55 0%, #221b3700 80%);
+                    opacity: 0;
+                    transform: translate(-50%, -50%);
+                    transition: opacity 0.3s, width 0.35s cubic-bezier(.37,1.01,.77,.97), height 0.35s cubic-bezier(.37,1.01,.77,.97);
+                    z-index: 0;
+                }
+                .mouse-anim:hover {
+                    box-shadow: 0 8px 24px 0 #9f7aea35, 0 1px 4px 0 #0001;
+                    background: #2d2347 !important;
+                    transform: translateY(-3px) scale(1.035) rotate(-0.7deg);
+                }
+                .mouse-anim:hover::after {
+                    opacity: 1;
+                    width: 170%;
+                    height: 950%;
+                }
+                .mouse-anim span {
+                    position: relative;
+                    z-index: 1;
+                    transition: color 0.2s;
+                }
+                .mouse-anim:hover span {
+                    color: #ffd6fa;
+                    text-shadow: 0 0 5px #b649d3, 0 1px 1px #0004;
+                }
+            </style>
+        </aside>
+
+        <div class="main-container">
+           
+            <header style="display: flex; justify-content: center; align-items: flex-start; padding-top: 24px; position: relative;">
+                <div class="advanced-search-bar-container" style="position: relative; flex: 1; max-width: 600px; min-width: 230px;">
+                    <input 
+                        type="text"
+                        class="advanced-search-bar"
+                        id="prompt"
+                        placeholder="Clear your doubt on AWS, Azure, or GCP question"
+                        aria-label="Clear your doubt on AWS, Azure, or GCP"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <span class="advanced-search-icon" aria-hidden="true">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" focusable="false">
+                            <circle cx="10" cy="10" r="7.2" stroke="#baa6ea" stroke-width="2"/>
+                            <path d="M16.15 16.65l-2.13-2.13" stroke="#baa6ea" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                    <button 
+                        type="button"
+                        class="advanced-search-btn"
+                        id="ask-gemini-btn"
+                        title="Clear Doubt"
+                        aria-label="Clear Doubt"
+                    >
+                        <svg width="17" height="17" fill="none" viewBox="0 0 18 18" focusable="false">
+                            <circle cx="8" cy="8" r="6" stroke="white" stroke-width="2"/>
+                            <path d="M14 14l-2-2" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </button>
+                </div>
+                <img 
+                    src="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png" 
+                    alt="Dark Cat Icon"
+                    loading="lazy"
+                    style="position: absolute; top: 0; right: 0; height: 48px; width: 48px; object-fit: contain; z-index: 2; margin: 4px 12px 0 0;"
+                >
+            </header>
+            <div style="display: flex; flex-direction: row; justify-content: center; padding: 40px 0;">
+                <div style="background-color: #1e1e3f; border-radius: 8px; padding: 40px 30px; flex: 1; min-width: 300px; max-width: 380px; text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; margin: 0 10px; transition: transform 0.3s;">
+                    <div style="width: 54px; height: 54px; border-radius: 10px; background-color: transparent; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; z-index: 1;">
+                        <img 
+                            src="https://cdn-icons-png.flaticon.com/512/13079/13079033.png" 
+                            alt="Learning Path Logo"
+                            style="width: 56px; height: 56px; object-fit: contain; border-radius: 6px; background: transparent;" 
+                            loading="lazy"
+                        >
+                    </div>
+                    <h2 style="font-size: 18px; margin-bottom: 15px; z-index: 1;">Start a learning path</h2>
+                    <p style="font-size: 14px; color: #b1b1c7; line-height: 1.6; margin-bottom: 30px; z-index: 1;">
+                        Expertly curated <b>learning paths</b> combine specific courses and tools to help you learn a skill from start to finish.
+                    </p>
+                </div>
+                <div style="background-color: #1e1e3f; border-radius: 8px; padding: 40px 30px; flex: 1; min-width: 300px; max-width: 380px; text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; margin: 0 10px; transition: transform 0.3s;">
+                    <div style="width: 54px; height: 54px; border-radius: 10px; background-color: transparent; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; z-index: 1;">
+                        <img 
+                            src="https://images.vexels.com/media/users/3/129747/isolated/svg/dd8fa8cfc9d859a9bc3a517f6d1e6817.svg" 
+                            alt="Learning Path Logo"
+                            style="width: 56px; height: 56px; object-fit: contain; border-radius: 6px; background: transparent;" 
+                            loading="lazy"
+                        >
+                    </div> 
+                    <h2 style="font-size: 18px; margin-bottom: 15px; z-index: 1;">Certification prep</h2>
+                    <p style="font-size: 14px; color: #b1b1c7; line-height: 1.6; margin-bottom: 30px; z-index: 1;">
+                        The <b>certification prep center</b> will help you develop the knowledge and skills you need to pass industry certification exams.
+                    </p>
+                </div>
+                <div style="background-color: #1e1e3f; border-radius: 8px; padding: 40px 30px; flex: 1; min-width: 300px; max-width: 380px; text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; margin: 0 10px; transition: transform 0.3s;">
+                    <div style="width: 54px; height: 54px; border-radius: 10px; background-color: transparent; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; z-index: 1;">
+                        <img 
+                            src="https://cdn-icons-png.flaticon.com/512/8661/8661341.png" 
+                            alt="Learning Path Logo"
+                            style="width: 56px; height: 56px; object-fit: contain; border-radius: 6px; background: transparent;" 
+                            loading="lazy"
+                        >
+                    </div>
+                    <h2 style="font-size: 18px; margin-bottom: 15px; z-index: 1;">Measure your skills</h2>
+                    <p style="font-size: 14px; color: #b1b1c7; line-height: 1.6; margin-bottom: 30px; z-index: 1;">
+                        Take a <b>Skill IQ assessment</b> to identify your knowledge gaps and strengths, then view recommendations.
+                    </p>
+                </div>
+            </div>
+            <style>
+                .advanced-search-bar-container {
+                    display: flex;
+                    align-items: center;
+                    position: relative;
+                    width: 100%;
+                }
+                .advanced-search-bar {
+                    width: 100%;
+                    padding: 13px 115px 13px 45px;
+                    border-radius: 28px;
+                    background: var(--search-bg, #1d162a);
+                    border: none;
+                    font-size: 1.12em;
+                    color: var(--text-main, #fff);
+                    box-shadow: 0 0 0 2px #292043 inset, 0 2px 8px #170e2a40;
+                    transition: box-shadow 0.17s, background 0.19s;
+                    font-family: inherit;
+                }
+                .advanced-search-bar:focus {
+                    outline: none;
+                    box-shadow: 0 0 0 3px #7a5afcaa, 0 2px 8px #3b287580;
+                    background: #221c33;
+                }
+                .advanced-search-bar::placeholder {
+                    color: #b3b3ca;
+                    opacity: 0.97;
+                    letter-spacing: .03em;
+                    font-size: 0.96em;
+                }
+                .advanced-search-icon {
+                    position: absolute;
+                    left: 15px; top: 50%;
+                    transform: translateY(-50%);
+                    color: #baa6ea;
+                    display: flex; align-items: center; height: 100%;
+                    pointer-events: none;
+                    z-index: 2;
+                }
+                .advanced-search-btn {
+                    position: absolute;
+                    right: 46px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    background: linear-gradient(135deg, var(--accent-purple, #6749d7) 60%, #916afc 100%);
+                    color: #fff;
+                    border: none;
+                    border-radius: 50%;
+                    width: 34px; height: 34px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    box-shadow: 0 2px 10px #5335db35;
+                    cursor: pointer;
+                    font-size: 1.18em;
+                    transition: background 0.16s, box-shadow 0.13s, transform 0.14s;
+                    z-index: 3;
+                }
+                .advanced-search-btn:active {
+                    transform: scale(0.96);
+                }
+                .advanced-search-btn:hover, .advanced-search-btn:focus {
+                    background: linear-gradient(135deg, #845bdd 40%, var(--accent-purple, #6749d7) 100%);
+                    box-shadow: 0 4px 18px #7d58ea50;
+                }
+                @media (max-width: 600px) {
+                    .advanced-search-bar-container {
+                        max-width: 99vw;
+                        min-width: 0;
+                    }
+                }
+                .gemini-response-results {
+                    margin: 20px 0 18px 0;
+                    background: #251e38;
+                    border-radius: 12px;
+                    padding: 19px 24px;
+                    color: #eae3ff;
+                    font-size: 1.09em;
+                    box-shadow: 0 2px 12px #12072917;
+                    min-height: 48px;
+                    position: relative;
+                    overflow-x: auto;
+                    word-break: break-word;
+                    border-left: 5px solid #7a5afc30;
+                }
+                /* Bot typing animation */
+                .bots-typing {
+                    display: flex;
+                    align-items: flex-end;
+                    gap: 18px;
+                    height: 32px;
+                    margin-bottom: 2px;
+                    justify-content: flex-start;
+                }
+                .bot-ball {
+                    width: 15px;
+                    height: 15px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, #8e7dd9, #6749d7);
+                    animation: bot-bounce 0.4s infinite alternate;
+                }
+                .bot-ball:nth-child(2) { animation-delay: 0.10s;}
+                .bot-ball:nth-child(3) { animation-delay: 0.20s;}
+                @keyframes bot-bounce {
+                    0% { transform: translateY(0);}
+                    100% { transform: translateY(-12px);}
+                }
+                .res-bot-logo-wrap {
+                    display: flex;
+                    align-items: flex-end;
+                    gap: 10px;
+                    margin-bottom: 8px;
+                    margin-left: 0px;
+                    margin-top: 4px;
+                }
+                .res-bot-logo-img {
+                    width: 35px;
+                    height: 35px;
+                    border-radius: 50%;
+                    object-fit: contain;
+                    border: 2px solid #5335db40;
+                    background: #1a1530;
+                    box-shadow: 0 2px 5px #2d184855;
+                    margin-right: 7px;
+                }
+                .response-speed {
+                    color: #7a5afc;
+                    font-size: 13px;
+                    margin-bottom: 7px;
+                    font-style: italic;
+                    letter-spacing: 0.02em;
+                    opacity: 0.85;
+                }
+            </style>
+            <script>
+                // Typing effect for each line - now much faster
+                function typeLinesWithLogo(targetEl, lines, lineIndex = 0) {
+                    // Always keep logo at the left of text lines
+                    if (!targetEl.querySelector('.res-bot-logo-img')) {
+                        const div = document.createElement('div');
+                        div.className = 'res-bot-logo-wrap';
+                        div.style.marginBottom = '0';
+                        div.innerHTML = `
+                          <img src="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png"
+                               alt="Bot"
+                               class="res-bot-logo-img"
+                               style="margin-bottom:-5px;"
+                          />
+                        `;
+                        targetEl.appendChild(div);
+                        // The rest of .response-content will go to this
+                        const content = document.createElement('div');
+                        content.className = 'response-content';
+                        content.style.display = 'inline-block';
+                        div.appendChild(content);
+                    }
+                    const contentDiv = targetEl.querySelector('.response-content');
+                    function doLine(lineNum) {
+                        if (lineNum >= lines.length) return;
+                        if (lineNum > 0) contentDiv.innerHTML += "<br/>";
+                        let chars = lines[lineNum].split("");
+                        let charPos = 0;
+                        function typeChar() {
+                            if (charPos < chars.length) {
+                                contentDiv.innerHTML += chars[charPos];
+                                charPos++;
+                                setTimeout(typeChar, 7); // fast
+                            } else {
+                                setTimeout(() => doLine(lineNum + 1), 100);
+                            }
+                        }
+                        typeChar();
+                    }
+                    doLine(lineIndex);
+                }
+
+                /**
+                 * Shows "Response speed: fast" then bots animation, then transitions to response.
+                 */
+                function showResponseSpeedAndBots(responseBox) {
+                    responseBox.innerHTML = `
+                        <div class="response-speed">Response speed: <b>fast</b></div>
+                        <div class="res-bot-logo-wrap" style="margin-bottom:0">
+                            <img 
+                                src="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png"
+                                alt="Bot"
+                                class="res-bot-logo-img"
+                                style="margin-bottom:-5px;"
+                            />
+                            <div class="bots-typing" id="bots-typing-anim">
+                                <div class="bot-ball"></div>
+                                <div class="bot-ball"></div>
+                                <div class="bot-ball"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                function clearBotsAndSpeed(responseBox) {
+                    responseBox.innerHTML = '';
+                }
+
+                async function askGemini() {
+                    const prompt = document.getElementById("prompt").value;
+                    const responseBox = document.getElementById("response");
+                    if (!prompt) {
+                        responseBox.innerText = "Please enter your AWS, Azure, or GCP question.";
+                        return;
+                    }
+                    showResponseSpeedAndBots(responseBox);
+
+                    try {
+                        const res = await fetch("http://alb-interview-1026938623.us-east-1.elb.amazonaws.com/ask", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ prompt })
+                        });
+                        const data = await res.json();
+                        let responseText = data.response || JSON.stringify(data, null, 2);
+
+                        setTimeout(() => {
+                            clearBotsAndSpeed(responseBox);
+                            let lines = responseText.split(/\r?\n/).filter(line => line.length > 0);
+                            if (!lines.length) lines = [responseText];
+                            typeLinesWithLogo(responseBox, lines, 0);
+                        }, 430); // show bots+speed for ~0.4s
+                    } catch (err) {
+                        clearBotsAndSpeed(responseBox);
+                        responseBox.innerText = "Error connecting to backend";
+                    }
+                }
+
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Insert the response area after header
+                    const header = document.querySelector('header');
+                    let responseDiv = document.createElement('div');
+                    responseDiv.className = 'gemini-response-results';
+                    responseDiv.id = 'response';
+                    responseDiv.style.display = "block";
+                    header.parentNode.insertBefore(responseDiv, header.nextSibling);
+
+                    // Button and Enter key
+                    const askBtn = document.getElementById('ask-gemini-btn');
+                    const promptInput = document.getElementById('prompt');
+                    askBtn.addEventListener('click', function() {
+                        askGemini();
+                    });
+                    promptInput.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter') {
+                            askGemini();
+                        }
+                    });
+                    setTimeout(() => { promptInput.focus(); }, 360);
+                });
+            </script>
+            <section class="content-area" style="flex:1; padding: 0 32px;"></section>
+            
+        </div>
+
+        <div class="iris-btn" id="iris-btn">?</div>
+        <div id="iris-popup" style="display:none; position:fixed; bottom:80px; right:20px; background:#241a36; color:white; border-radius:8px; box-shadow:0 4px 20px #140c22a2; padding:22px 25px; z-index:102; width:305px; max-width:95vw; font-size:15px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <span style="font-weight:bold; font-size:16px;">Welcome!</span>
+                <button id="iris-close" style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;line-height:1;">&times;</button>
+            </div>
+            <div>
+                Are you ready to use the cloud services: <b>AWS</b>, <b>Azure</b>, <b>GCP</b>?
+            </div>
+        </div>
+        <script>
+            const irisBtn = document.getElementById('iris-btn');
+            const irisPopup = document.getElementById('iris-popup');
+            const irisClose = document.getElementById('iris-close');
+
+            // Show the popup automatically after 1 second
+            setTimeout(() => {
+                irisPopup.style.display = 'block';
+            }, 1000);
+
+            irisBtn.addEventListener('click', () => {
+                irisPopup.style.display = 'block';
+            });
+
+            irisClose.addEventListener('click', () => {
+                irisPopup.style.display = 'none';
+            });
+
+            // Optional: close popup clicking outside of it
+            document.addEventListener('mousedown', function(event) {
+                if (irisPopup.style.display === 'block'
+                    && !irisPopup.contains(event.target)
+                    && event.target !== irisBtn) {
+                    irisPopup.style.display = 'none';
+                }
+            });
+        </script>
+        
     </div>
-    <form id="loginForm" action="#" autocomplete="off">
-      <h2>Login Aws-1</h2>
-      <div class="input-field">
-        <input type="text" required id="loginEmail" autocomplete="username">
-        <label for="loginEmail">Enter your email</label>
-      </div>
-      <div class="input-field">
-        <input type="password" required id="loginPassword" autocomplete="current-password">
-        <label for="loginPassword">Enter your password</label>
-      </div>
-      <div class="forget">
-        <label for="remember">
-          <input type="checkbox" id="remember">
-          <p>Remember me</p>
-        </label>
-        <button type="button" class="forgot-btn" id="forgotBtn" onclick="forgotPassword()">Forgot password?</button>
-      </div>
-      <button type="submit" id="loginSubmitBtn">Log In</button>
-      <div class="divider"><span>or</span></div>
-      <div class="social-btn">
-        <button type="button" class="google-btn" id="googleLoginBtn" onclick="continueWithGoogle('login')">
-          <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo"/>
-          Continue with Google
-        </button>
-      </div>
-      <div class="register">
-        <p>
-          Don't have an account?
-          <a onclick="showForm('signup')">Register</a>
-        </p>
-      </div>
-    </form>
-    <form id="signupForm" action="#" style="display: none;" autocomplete="off">
-      <h2>Sign Up Aws-1</h2>
-      <div class="input-field">
-        <input type="text" required id="signupName" autocomplete="name">
-        <label for="signupName">Enter your name</label>
-      </div>
-      <div class="input-field">
-        <input type="text" required id="signupEmail" autocomplete="email">
-        <label for="signupEmail">Enter your email</label>
-      </div>
-      <div class="input-field">
-        <input type="password" required id="signupPassword" autocomplete="new-password">
-        <label for="signupPassword">Create password</label>
-      </div>
-      <div class="input-field">
-        <input type="password" required id="signupPasswordConfirm" autocomplete="new-password">
-        <label for="signupPasswordConfirm">Confirm password</label>
-      </div>
-      <button type="submit" id="signupSubmitBtn">Sign Up</button>
-      <div class="divider"><span>or</span></div>
-      <div class="social-btn">
-        <button type="button" class="google-btn" id="googleSignupBtn" onclick="continueWithGoogle('signup')">
-          <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo"/>
-          Continue with Google
-        </button>
-      </div>
-      <div class="login-link">
-        <p>
-          Already have an account?
-          <a onclick="showForm('login')">Login</a>
-        </p>
-      </div>
-    </form>
-  </div>
-  <!-- Modal Message Overlay for messages -->
-  <div id="modalMessageOverlay">
-    <div id="modalMessageBox">
-      <div class="modal-title" id="modalMessageTitle"></div>
-      <div class="modal-body" id="modalMessageBody"></div>
-      <div class="modal-footer" style="text-align: center;">
-        <button class="modal-close-btn" id="modalMessageCloseBtn">OK</button>
-      </div>
-    </div>
-  </div>
-  <!-- 
-    We keep the Google modal HTML & CSS for compatibility,
-    but it will no longer be shown/used by any button (per new requirements).
-  -->
-  <div id="googleModalOverlay" style="display: none;">
-    <div id="googleModalBox">
-      <div class="google-modal-title" id="googleModalTitle"></div>
-      <div class="google-modal-body" id="googleModalBody"></div>
-      <button class="google-popup-btn" id="googlePopupBtn">
-        <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo" />
-        <span id="googlePopupBtnText">Sign in with Google</span>
-      </button>
-      <div class="google-modal-error" id="googleModalError" style="display:none;"></div>
-      <button class="google-modal-close-btn" id="googleModalCloseBtn">Cancel</button>
-    </div>
-  </div>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
-    import { 
-      getAuth, 
-      signInWithEmailAndPassword, 
-      createUserWithEmailAndPassword,
-      sendPasswordResetEmail,
-      GoogleAuthProvider,
-      signInWithPopup 
-    } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDBSIUwdfN38xiPeapdueeyCvdgV7ep-YE",
-      authDomain: "abinash-482505.firebaseapp.com",
-      databaseURL: "https://abinash-482505-default-rtdb.firebaseio.com",
-      projectId: "abinash-482505",
-      storageBucket: "abinash-482505.firebasestorage.app",
-      messagingSenderId: "262782630272",
-      appId: "1:262782630272:web:b50bb959a3ec87a3696965",
-      measurementId: "G-MBJM2CCKJ6"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
-
-    // Modal message logic (replaces alert)
-    function showMessage(msg, type = 'info', title = null, callbackAfterClose = null) {
-      const overlay = document.getElementById('modalMessageOverlay');
-      const box = document.getElementById('modalMessageBox');
-      const modalTitle = document.getElementById('modalMessageTitle');
-      const modalBody = document.getElementById('modalMessageBody');
-      let tTitle = '';
-      switch(type) {
-        case 'success': tTitle = 'Success'; break;
-        case 'error': tTitle = 'Error'; break;
-        case 'warning': tTitle = 'Warning'; break;
-        case 'info': default: tTitle = 'Info';
-      }
-      modalTitle.textContent = title || tTitle;
-      modalTitle.className = 'modal-title modal-' + type;
-      modalBody.textContent = msg;
-      modalBody.className = 'modal-body modal-' + type;
-      overlay.style.display = 'flex';
-
-      function closeModal() {
-        overlay.style.display = 'none';
-        if (typeof callbackAfterClose === 'function') {
-          callbackAfterClose();
-        }
-      }
-
-      const closeBtn = document.getElementById('modalMessageCloseBtn');
-      closeBtn.onclick = closeModal;
-      overlay.onclick = function(e) {
-        if (e.target === overlay) closeModal();
-      };
-      document.onkeydown = function(e) {
-        if (e.key === "Escape") closeModal();
-      };
-    }
-
-    window.showForm = function(form) {
-      const loginForm = document.getElementById('loginForm');
-      const signupForm = document.getElementById('signupForm');
-      const loginTab = document.getElementById('loginTab');
-      const signupTab = document.getElementById('signupTab');
-      if (form === 'login') {
-        loginForm.style.display = '';
-        signupForm.style.display = 'none';
-        loginTab.classList.add('active');
-        signupTab.classList.remove('active');
-      } else {
-        loginForm.style.display = 'none';
-        signupForm.style.display = '';
-        loginTab.classList.remove('active');
-        signupTab.classList.add('active');
-      }
-    };
-
-    // Forgot Password
-    window.forgotPassword = async function() {
-      const email = document.getElementById('loginEmail').value.trim();
-      if (!email) {
-        showMessage('Please enter your email for password reset.', 'warning', 'Reset password');
-        document.getElementById('loginEmail').focus();
-        return;
-      }
-      const btn = document.getElementById('forgotBtn');
-      btn.disabled = true;
-      try {
-        await sendPasswordResetEmail(auth, email);
-        showMessage('Password reset link sent to ' + email, 'info', 'Reset password');
-      } catch (error) {
-        showMessage('Error: ' + (error.message || 'Unable to send reset email.'), 'error', 'Reset password');
-      }
-      btn.disabled = false;
-    };
-
-    // Email/Password Login
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const btn = document.getElementById('loginSubmitBtn');
-      btn.disabled = true;
-      try {
-        const result = await signInWithEmailAndPassword(auth, email, password);
-        showMessage(
-          'Login successful',
-          'success',
-          'Success',
-          function() {
-            // For demonstration, we just show in-app feedback.
-            // To "continue in this page," we can update the UI state as desired.
-            // For now, let's reset the form and display a message.
-            document.getElementById('loginForm').reset();
-            // Maybe show/hide forms, set logged-in state, or update DOM here.
-            // E.g. show a welcome message (you can customize based on needs)
-            const wrapper = document.querySelector('.wrapper');
-            wrapper.innerHTML = `
-              <h2 style="color:#6DF89E;">Welcome, ${result.user.email}!</h2>
-              <p style="margin-top:18px;color:#fff;">You logged in successfully using Email/Password.<br/><br/>Enjoy using the app on this page!</p>
-            `;
-          }
-        );
-      } catch (error) {
-        showMessage('Login failed: ' + (error.message || ''), 'error');
-      }
-      btn.disabled = false;
-    });
-
-    // Email/Password Signup
-    document.getElementById('signupForm').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const name = document.getElementById('signupName').value.trim();
-      const email = document.getElementById('signupEmail').value.trim();
-      const password = document.getElementById('signupPassword').value;
-      const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
-      const btn = document.getElementById('signupSubmitBtn');
-      btn.disabled = true;
-
-      if (!name) {
-        showMessage('Please enter your name', 'warning');
-        document.getElementById('signupName').focus();
-        btn.disabled = false;
-        return;
-      }
-      if (password !== passwordConfirm) {
-        showMessage('Passwords do not match', 'error');
-        btn.disabled = false;
-        return;
-      }
-      try {
-        const result = await createUserWithEmailAndPassword(auth, email, password);
-        if (result.user && name) {
-          if (typeof result.user.updateProfile === "function") {
-            await result.user.updateProfile({ displayName: name });
-          }
-        }
-        showMessage('Account created successfully for ' + email, 'success', null, function() {
-          // For demo: update UI state in app, don't redirect.
-          document.getElementById('signupForm').reset();
-          const wrapper = document.querySelector('.wrapper');
-          wrapper.innerHTML = `
-            <h2 style="color:#6DF89E;">Welcome, ${name || email}!</h2>
-            <p style="margin-top:18px;color:#fff;">Sign up complete. <br/><br/>You're now using this app page as a registered user!</p>
-          `;
+    <script>
+        // Sidebar navigation logic
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+                const target = this.getAttribute('data-target');
+                if (target) {
+                    window.location.href = target;
+                }
+            });
         });
-      } catch (error) {
-        showMessage('Sign up failed: ' + (error.message || ''), 'error');
-      }
-      btn.disabled = false;
-    });
-
-    // Google Sign-In directly (no modal), continue "in this page" (in-app, no redirect or new tab)
-    window.continueWithGoogle = async function(context) {
-      let messagePre = (context === 'login')
-        ? 'Logging in with Google...'
-        : 'Signing up with Google...';
-
-      try {
-        showMessage(messagePre, 'info', null);
-        // signInWithPopup: opens a popup but continues in same top-level app
-        const result = await signInWithPopup(auth, provider);
-        // In-app state: Show welcome with user's email
-        showMessage(
-          'Signed in with Google as ' + result.user.email,
-          'success', null,
-          function() {
-            // Replace inner wrapper content to show as "logged in" state
-            const name = result.user.displayName || result.user.email;
-            const wrapper = document.querySelector('.wrapper');
-            wrapper.innerHTML = `
-              <h2 style="color:#6DF89E;">Welcome, ${name}!</h2>
-              <p style="margin-top:18px;color:#fff;">You are signed in with Google.<br/><br/>You can now use the app on this page!</p>
-            `;
-          }
-        );
-      } catch (error) {
-        showMessage("Google sign in failed: " + (error.message || ''), 'error', "Google Sign In");
-      }
-    };
-  </script>
+        // Ripple effect on navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                let ripple = document.createElement('span');
+                ripple.className = 'nav-click-ripple';
+                ripple.style.left = (e.clientX - item.getBoundingClientRect().left) + 'px';
+                ripple.style.top = (e.clientY - item.getBoundingClientRect().top) + 'px';
+                item.appendChild(ripple);
+                setTimeout(() => { ripple.remove(); }, 500);
+            });
+        });
+    </script>
 </body>
 </html>
