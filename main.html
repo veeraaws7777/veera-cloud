@@ -585,7 +585,7 @@
                     showResponseSpeedAndBots(responseBox);
 
                     try {
-                        const res = await fetch("http://136.116.209.162/ask", {
+                        const res = await fetch("http://alb-interview-1026938623.us-east-1.elb.amazonaws.com/ask", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ prompt })
