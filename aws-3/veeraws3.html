@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AWS Sandbox Dashboard</title>
-    <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png">
+      <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -281,7 +281,7 @@
                     <i class="fab fa-aws"></i>
                 </div>
                 <div>
-                    <h1>AWS -3 Sandbox</h1>
+                    <h1>AWS -1  Sandbox</h1>
                     
                 </div>
             </div>
@@ -299,9 +299,8 @@
                     <div class="copy-box">
 
 
-
                         
-                        <span id="url-val" style="user-select: all;">https://922897610805.signin.aws.amazon.com/console?region=us-east-1</span>
+                        <span id="url-val" style="user-select: all;">https://934192905834.signin.aws.amazon.com/console?region=us-east-1</span>
 
 
 
@@ -313,7 +312,7 @@
             <div class="status-bar" id="status-bar">
                 <i class="far fa-clock"></i>
                 <span>
-                    <strong>Usage Window</strong>: <b>12:20 PM</b> to <b>07:10 PM</b>. Access is only allowed during this time period.
+                    <strong>Usage Window</strong>: <b>10:45 AM</b> to <b>02:45 PM</b>. Access is only allowed during this time period.
                 </span>
             </div>
             <div style="background: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 6px; padding: 9px 15px; margin: 12px 0; font-size: 15px; display: flex; align-items: center; gap: 9px;">
@@ -339,11 +338,13 @@
                     <div class="input-group">
                         <label for="pass">Password <i class="far fa-question-circle" title="Your AWS IAM password"></i></label>
                         <div class="field-container">
-                            <input type="password" 
+                            <input type="password"
                                 
                                 
                                 
-                                value="5rqb{t}qU)j9Z]Z12VKZ"
+                                
+                                value="Iq7]JUU3h7w[{njFF8%b"
+                                
                                 
                                 
                                 
@@ -406,7 +407,7 @@
             <i class="fas fa-lock"></i><br>
             <b>Access Restricted</b>
             <div style="margin-top:14px;font-size:16px;">
-                Sandbox access is allowed only between <b>12:20 PM</b> and <b>07:10 PM</b>.<br>
+                Sandbox access is allowed only between <b>10:45 AM</b> and <b>02:45 PM</b>.<br>
                 Please return during access hours.
             </div>
         </div>
@@ -449,11 +450,11 @@
     <script>
         // --- Time Access Restriction Logic ---
         (function() {
-            // Allowed window: 12:20PM (12*60+20) to 7:10PM (19*60+10)
+            // Allowed window: 10:45AM (10*60+45) to 2:45PM (14*60+45)
             var now = new Date();
             var mins = now.getHours() * 60 + now.getMinutes();
-            var start = 12 * 60 + 20; // 12:20 PM
-            var end = 19 * 60 + 10; // 7:10 PM
+            var start = 10 * 60 + 45; // 10:45 AM
+            var end = 14 * 60 + 45; // 2:45 PM
 
             // If outside window, show modal and disable interactions
             if (mins < start || mins > end) {
@@ -484,7 +485,6 @@
                 textarea.value = text;
                 document.body.appendChild(textarea);
                 textarea.select();
-                document.execCommand('copy');
                 document.body.removeChild(textarea);
                 showStatus('Copied!', 1200);
             } catch(e){
@@ -610,7 +610,7 @@
         });
 
         // -- Usage time notice only, not dynamic auto shutdown
-        // The usage window is always displayed as 12:20 PM to 07:10 PM in the UI.
+        // The usage window is always displayed as 10:45 AM to 02:45 PM in the UI.
 
     </script>
     <!-- Google tag (gtag.js) -->
