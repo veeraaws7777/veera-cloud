@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -222,9 +221,17 @@
                 <a href="error.html" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🌐 Browse all</span>
                 </a>
-                <a href="https://web.telegram.org/a/" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
+                <a href="https://web.telegram.org/a/" class="nav-item mouse-anim" id="channels-link" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">📡 Channels</span>
                 </a>
+                <script>
+                // When user clicks channel link, save login flag to localStorage (represents "remember login details")
+                document.getElementById("channels-link").addEventListener("click", function(event){
+                    // Simulate "user is logged in" and set a flag (key) in localStorage
+                    localStorage.setItem("user_login_remembered", "true");
+                    // You may also store details like username, token, etc, if available
+                });
+                </script>
                 <a href="Certification.html" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🏆 Certifications</span>
                 </a>
