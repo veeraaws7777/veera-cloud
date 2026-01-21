@@ -292,15 +292,16 @@
             <div class="action-bar">
                 <div class="btn-group">
                     <button class="delete-btn" id="btn-delete"><i class="fas fa-trash-alt"></i> Delete Sandbox</button>
-                    <button class="open-btn" id="btn-open">Open Sandbox</button>
+                    <button class="open-btn" id="btn-open" onclick="window.location.href=document.getElementById('url-val').textContent;">Open Sandbox</button>
                 </div>
                 <div class="url-section">
                     <label>Sandbox URL</label>
                     <div class="copy-box">
 
 
+
                         
-                        <span id="url-val" style="user-select: all;">https://730335379517.signin.aws.amazon.com/console?region=us-east-1</span>
+                        <span id="url-val" style="user-select: all; display:none;">https://730335379517.signin.aws.amazon.com/console?region=us-east-1</span>
 
 
 
