@@ -302,9 +302,15 @@
                 </div>
             </div>
             <script>
-                // Open in same tab when button is clicked
-                document.getElementById('btn-open').onclick = function() {
-                    window.location.href = document.getElementById('url-val').textContent;
+                // Open in same tab only (prevent opening in another app, e.g., don't use _blank)
+                document.getElementById('btn-open').onclick = function(e) {
+                    e.preventDefault();
+                    // Go to the URL in the current tab
+                    const url = document.getElementById('url-val').textContent;
+                    // Extra check: allow only http(s) protocol, prevent unwanted url schemes
+                    if (/^https?:\/\//.test(url)) {
+                        window.location.href = url;
+                    }
                 }
             </script>
 
