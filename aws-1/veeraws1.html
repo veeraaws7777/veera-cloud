@@ -302,14 +302,36 @@
                 </div>
             </div>
             <script>
-                // Open in same tab only (prevent opening in another app, e.g., don't use _blank)
+                // Attempt to open the URL in a specific browser or application using a custom protocol handler if available.
+                // Otherwise fallback to opening in the default browser.
                 document.getElementById('btn-open').onclick = function(e) {
                     e.preventDefault();
-                    // Go to the URL in the current tab
                     const url = document.getElementById('url-val').textContent;
-                    // Extra check: allow only http(s) protocol, prevent unwanted url schemes
+                    
+                    // Custom protocol handler logic (example: for Microsoft Edge)
+                    // For demonstration, using 'microsoft-edge:' as a prefix to open in Edge
+                    // You may adjust or extend this for other browsers/applications if needed
+                    
                     if (/^https?:\/\//.test(url)) {
-                        window.location.href = url;
+                        // Try to open in Edge browser (works only if protocol handler is registered in OS)
+                        // Replace with your desired protocol handler if needed
+                        var edgeUrl = 'microsoft-edge:' + url;
+                        var opened = false;
+
+                        // Try to open Edge if on Windows (will fallback to default if fails)
+                        try {
+                            window.location.href = edgeUrl;
+                            opened = true;
+                        } catch (err) {
+                            opened = false;
+                        }
+
+                        // If not opened, fallback to default way (current tab)
+                        setTimeout(function() {
+                            if (!opened) {
+                                window.location.href = url;
+                            }
+                        }, 500);
                     }
                 }
             </script>
