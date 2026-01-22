@@ -312,7 +312,7 @@
             <div class="status-bar" id="status-bar">
                 <i class="far fa-clock"></i>
                 <span>
-                    <strong>Usage Window</strong>: <b>12:15 PM</b> to <b>04:15 PM</b>. Access is only allowed during this time period.
+                    <strong>Usage Window</strong>: <b>03:00 PM</b> to <b>07:00 PM</b>. Access is only allowed during this time period.
                 </span>
             </div>
             <div style="background: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 6px; padding: 9px 15px; margin: 12px 0; font-size: 15px; display: flex; align-items: center; gap: 9px;">
@@ -407,7 +407,7 @@
             <i class="fas fa-lock"></i><br>
             <b>Access Restricted</b>
             <div style="margin-top:14px;font-size:16px;">
-                Sandbox access is allowed only between <b>12:15 PM</b> and <b>04:15 PM</b>.<br>
+                Sandbox access is allowed only between <b>03:00 PM</b> and <b>07:00 PM</b>.<br>
                 Please return during access hours.
             </div>
         </div>
@@ -450,11 +450,11 @@
     <script>
         // --- Time Access Restriction Logic ---
         (function() {
-            // Allowed window: 12:15PM (12*60+15) to 4:15PM (16*60+15)
+            // Allowed window: 3:00PM (15*60+0) to 7:00PM (19*60+0)
             var now = new Date();
             var mins = now.getHours() * 60 + now.getMinutes();
-            var start = 12 * 60 + 15; // 12:15 PM
-            var end = 16 * 60 + 15;   // 4:15 PM
+            var start = 15 * 60 + 0; // 3:00 PM
+            var end = 19 * 60 + 0;   // 7:00 PM
 
             // If outside window, show modal and disable interactions
             if (mins < start || mins > end) {
@@ -610,7 +610,7 @@
         });
 
         // -- Usage time notice only, not dynamic auto shutdown
-        // The usage window is always displayed as 12:15 PM to 04:15 PM in the UI.
+        // The usage window is always displayed as 03:00 PM to 07:00 PM in the UI.
 
     </script>
     <!-- Google tag (gtag.js) -->
