@@ -241,6 +241,9 @@
                 <a href="https://python-358616850101.us-west1.run.app" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🐍 python</span>
                 </a>
+                <a href="newpage.html" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
+                  <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🛞 kubernetes</span>
+              </a>
                  <a href="newpage.html" class="nav-item mouse-anim" style="min-width: 220px; max-width: 350px; width:100%; text-align: center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background: #221b37; margin: 4px 0; position:relative; overflow:hidden; text-decoration: none;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow: 0 0 1px #000, 0 1px 1px #221b37;">🐣 Task</span>
                 </a>
@@ -341,7 +344,7 @@
                 >
             </header>
             <div style="display: flex; flex-direction: row; justify-content: center; padding: 40px 0;">
-                <div style="background-color: #1e1e3f; border-radius: 8px; padding: 40px 30px; flex: 1; min-width: 300px; max-width: 380px; text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; margin: 0 10px; transition: transform 0.3s;">
+                <div class="clickable-learning-path" onclick="window.location.href='hand-on.html';">
                     <div style="width: 54px; height: 54px; border-radius: 10px; background-color: transparent; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; z-index: 1;">
                         <img 
                             src="https://cdn-icons-png.flaticon.com/512/13079/13079033.png" 
@@ -355,7 +358,62 @@
                         Expertly curated <b>learning paths</b> combine specific courses and tools to help you learn a skill from start to finish.
                     </p>
                 </div>
-                <div style="background-color: #1e1e3f; border-radius: 8px; padding: 40px 30px; flex: 1; min-width: 300px; max-width: 380px; text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; margin: 0 10px; transition: transform 0.3s;">
+                <style>
+                    .clickable-learning-path {
+                        background-color: #1e1e3f;
+                        border-radius: 8px;
+                        padding: 40px 30px;
+                        flex: 1;
+                        min-width: 300px;
+                        max-width: 380px;
+                        text-align: center;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        position: relative;
+                        overflow: hidden;
+                        margin: 0 10px;
+                        transition: transform 0.3s, box-shadow 0.3s, background 0.2s;
+                        cursor: pointer;
+                        box-shadow: 0 2px 8px #0004;
+                        border: 2px solid transparent;
+                    }
+                    .clickable-learning-path:hover {
+                        transform: translateY(-7px) scale(1.025);
+                        box-shadow: 0 6px 24px #6a3ccc60;
+                        border: 2px solid #a187fa;
+                        background: linear-gradient(100deg, #28204f 30%, #1e1e3f 100%);
+                    }
+                </style>
+                <style>
+                    .clickable-certification-prep {
+                        background-color: #1e1e3f;
+                        border-radius: 8px;
+                        padding: 40px 30px;
+                        flex: 1;
+                        min-width: 300px;
+                        max-width: 380px;
+                        text-align: center;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        position: relative;
+                        overflow: hidden;
+                        margin: 0 10px;
+                        transition: transform 0.3s, box-shadow 0.3s, background 0.2s;
+                        cursor: pointer;
+                        box-shadow: 0 2px 8px #0004;
+                        border: 2px solid transparent;
+                    }
+                    .clickable-certification-prep:hover {
+                        transform: translateY(-7px) scale(1.025);
+                        box-shadow: 0 6px 24px #6a3ccc60;
+                        border: 2px solid #a187fa;
+                        background: linear-gradient(100deg, #28204f 30%, #1e1e3f 100%);
+                    }
+                </style>
+                <div class="clickable-certification-prep"
+                    onclick="window.location.href='Certification.html';">
                     <div style="width: 54px; height: 54px; border-radius: 10px; background-color: transparent; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; z-index: 1;">
                         <img 
                             src="https://images.vexels.com/media/users/3/129747/isolated/svg/dd8fa8cfc9d859a9bc3a517f6d1e6817.svg" 
@@ -369,11 +427,13 @@
                         The <b>certification prep center</b> will help you develop the knowledge and skills you need to pass industry certification exams.
                     </p>
                 </div>
-                <div style="background-color: #1e1e3f; border-radius: 8px; padding: 40px 30px; flex: 1; min-width: 300px; max-width: 380px; text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; margin: 0 10px; transition: transform 0.3s;">
+                <div class="clickable-certification-prep"
+                    onclick="if(Math.random() < 0.5){window.location.href='Certification.html';}else{window.location.href='hand-on.html';}"
+                    style="background-color: #1e1e3f; border-radius: 8px; padding: 40px 30px; flex: 1; min-width: 300px; max-width: 380px; text-align: center; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; margin: 0 10px; transition: transform 0.3s;">
                     <div style="width: 54px; height: 54px; border-radius: 10px; background-color: transparent; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; z-index: 1;">
                         <img 
                             src="https://cdn-icons-png.flaticon.com/512/8661/8661341.png" 
-                            alt="Learning Path Logo"
+                            alt="Skill Assessment Logo"
                             style="width: 56px; height: 56px; object-fit: contain; border-radius: 6px; background: transparent;" 
                             loading="lazy"
                         >
@@ -596,7 +656,7 @@
                     showResponseSpeedAndBots(responseBox);
 
                     try {
-                        const res = await fetch("http://alb-interview-1026938623.us-east-1.elb.amazonaws.com/ask", {
+                        const res = await fetch("https://d1xcw8ndqyxxkp.cloudfront.net/ask", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ prompt })
