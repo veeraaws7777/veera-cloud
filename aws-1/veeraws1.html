@@ -369,7 +369,7 @@
                 <aside class="info-card">
                     <h3>Extend Your Session</h3>
                     <p>Your sandbox will automatically expire 4 hours after your start time. If you need to extend your session, you will receive a notification when you have 1 hour remaining that will allow you to extend your sandbox session for an additional 4 hours.</p>
-                    <a href="https://docs.aws.amazon.com/console/open-console-using-incognito" target="_blank" rel="noopener">Learn more about why this matters in our Knowledge base article.</a>
+                    <a href="https://docs.aws.amazon.com/console/open-console-using-incognito">Learn more about why this matters in our Knowledge base article.</a>
                 </aside>
             </div>
         </div>
@@ -520,20 +520,7 @@
         document.getElementById('btn-open').addEventListener('click', function(e) {
             var url = document.getElementById('url-val').innerText.trim();
             if (url.length > 10) {
-                // If the application is running in an iframe, keep navigation within it.
-                // If in own tab or window, just use location.href.
-                if (window.self !== window.top) {
-                    // Inside iframe, change this frame's location
-                    window.location.href = url;
-                } else if (window.opener == null || window.opener.closed) {
-                    // Not opened from another app/window, treat as normal single window/tab (in web app)
-                    window.location.href = url;
-                } else {
-                    // If opened as popup by another app, bring focus to this app and change location here
-                    window.location.href = url;
-                    window.focus();
-                }
-                // Prevent "Open Sandbox" from triggering any default form submission if in a form.
+                window.location.href = url;
                 if (e.preventDefault) {
                     e.preventDefault();
                 }
@@ -587,6 +574,44 @@
 
         document.querySelectorAll('.inputs-grid input').forEach(function(inp){
             inp.addEventListener('click',function(){ this.select(); });
+        });
+
+        // --- Open all anchor links in same application/page ---
+        document.addEventListener('DOMContentLoaded', function() {
+            document.body.addEventListener('click', function(e) {
+                // Check if an <a> element (or a child in one) was clicked and it has an href (and is not #)
+                let anchor = e.target;
+                while (anchor && anchor !== document.body && (!anchor.tagName || anchor.tagName.toLowerCase() !== "a")) {
+                    anchor = anchor.parentNode;
+                }
+                if (anchor && anchor.tagName && anchor.tagName.toLowerCase() === "a" && anchor.href) {
+                    // Only handle anchor if it's not just a hash link and is not for download/file/blob/mailto/tel
+                    let href = anchor.getAttribute('href');
+                    if (
+                        href && 
+                        href !== '#' &&
+                        !/^javascript:/i.test(href) &&
+                        !/^mailto:/i.test(href) &&
+                        !/^tel:/i.test(href) &&
+                        !/^#/.test(href) &&
+                        !anchor.hasAttribute('download') &&
+                        !anchor.hasAttribute('data-no-spa')
+                    ) {
+                        e.preventDefault();
+                        // Only handle if href is absolute (http/https) or relative url
+                        // Route navigation inside this page app
+                        window.location.href = anchor.href;
+                    }
+                }
+            });
+
+            // Optionally, remove target attributes and rel for anchors in static HTML
+            document.querySelectorAll('a[target]').forEach(function(a) {
+                a.removeAttribute('target');
+            });
+            document.querySelectorAll('a[rel]').forEach(function(a) {
+                a.removeAttribute('rel');
+            });
         });
         // Usage time notice only (not dynamic)
     </script>
