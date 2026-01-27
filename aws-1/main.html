@@ -206,8 +206,9 @@ button:disabled,
   vertical-align: middle;
 }
 
+/* Tab switcher hidden as per previous request */
 .tab-switcher {
-  display: flex;
+  display: none; 
   justify-content: center;
   margin-bottom: 25px;
 }
@@ -254,7 +255,7 @@ button:disabled,
   position: fixed;
   z-index: 1000;
   left: 0; top: 0; width: 100vw; height: 100vh;
-  background: rgba(30,40,60,0.35); /* slightly darker overlay */
+  background: rgba(30,40,60,0.35); 
   display: none;
   align-items: center;
   justify-content: center;
@@ -300,20 +301,12 @@ button:disabled,
 #modalMessageBox .modal-close-btn:hover {
   background: #16397a;
 }
-#modalMessageBox .modal-error {
-  color: #FFB7B6;
-}
-#modalMessageBox .modal-success {
-  color: #6DF89E;
-}
-#modalMessageBox .modal-warning {
-  color: #F8EF8E;
-}
-#modalMessageBox .modal-info {
-  color: #B0E0F7;
-}
+#modalMessageBox .modal-error { color: #FFB7B6; }
+#modalMessageBox .modal-success { color: #6DF89E; }
+#modalMessageBox .modal-warning { color: #F8EF8E; }
+#modalMessageBox .modal-info { color: #B0E0F7; }
 
-/* Google Sign-In Modal styles (CSS kept for compatibility) */
+/* Google Sign-In Modal styles (Hidden) */
 #googleModalOverlay {
   position: fixed;
   z-index: 2000;
@@ -384,19 +377,6 @@ button:disabled,
   background: #ebedf2;
   color: #191f22;
 }
-
-#googleModalBox .google-modal-body {
-  color: #575a64;
-  font-size: 0.98rem;
-  margin-bottom: 18px;
-}
-
-#googleModalBox .google-modal-error {
-  color: #c34747;
-  font-size: 0.98rem;
-  margin-top: 10px;
-  margin-bottom: 0;
-}
 </style>
 <body>
   <div class="wrapper">
@@ -405,7 +385,7 @@ button:disabled,
       <button id="signupTab" onclick="showForm('signup')">Sign Up</button>
     </div>
     <form id="loginForm" action="#" autocomplete="off">
-      <h2>Login Aws-1</h2>
+      <h2>Login aws-1</h2>
       <div class="input-field">
         <input type="text" required id="loginEmail" autocomplete="username">
         <label for="loginEmail">Enter your email</label>
@@ -430,14 +410,11 @@ button:disabled,
         </button>
       </div>
       <div class="register">
-        <p>
-          Don't have an account?
-          <a onclick="showForm('signup')">Register</a>
-        </p>
+        <p>Don't have an account? <a onclick="showForm('signup')">Register</a></p>
       </div>
     </form>
     <form id="signupForm" action="#" style="display: none;" autocomplete="off">
-      <h2>Sign Up Aws-1</h2>
+      <h2>Sign Up aws-1</h2>
       <div class="input-field">
         <input type="text" required id="signupName" autocomplete="name">
         <label for="signupName">Enter your name</label>
@@ -463,14 +440,11 @@ button:disabled,
         </button>
       </div>
       <div class="login-link">
-        <p>
-          Already have an account?
-          <a onclick="showForm('login')">Login</a>
-        </p>
+        <p>Already have an account? <a onclick="showForm('login')">Login</a></p>
       </div>
     </form>
   </div>
-  <!-- Modal Message Overlay for messages -->
+
   <div id="modalMessageOverlay">
     <div id="modalMessageBox">
       <div class="modal-title" id="modalMessageTitle"></div>
@@ -480,22 +454,7 @@ button:disabled,
       </div>
     </div>
   </div>
-  <!-- 
-    We keep the Google modal HTML & CSS for compatibility,
-    but it will no longer be shown/used by any button (per new requirements).
-  -->
-  <div id="googleModalOverlay" style="display: none;">
-    <div id="googleModalBox">
-      <div class="google-modal-title" id="googleModalTitle"></div>
-      <div class="google-modal-body" id="googleModalBody"></div>
-      <button class="google-popup-btn" id="googlePopupBtn">
-        <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo" />
-        <span id="googlePopupBtnText">Sign in with Google</span>
-      </button>
-      <div class="google-modal-error" id="googleModalError" style="display:none;"></div>
-      <button class="google-modal-close-btn" id="googleModalCloseBtn">Cancel</button>
-    </div>
-  </div>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
@@ -525,10 +484,26 @@ button:disabled,
     const auth = getAuth(app);
     const provider = new GoogleAuthProvider();
 
-    // Modal message logic (replaces alert)
+    // REMEMBER ME LOGIC (12 HOURS)
+    window.onload = () => {
+      const savedData = localStorage.getItem('rememberMeData');
+      if (savedData) {
+        const { email, timestamp } = JSON.parse(savedData);
+        const now = new Date().getTime();
+        const twelveHours = 12 * 60 * 60 * 1000;
+        
+        // If within 12 hours, pre-fill email and check box
+        if (now - timestamp < twelveHours) {
+          document.getElementById('loginEmail').value = email;
+          document.getElementById('remember').checked = true;
+        } else {
+          localStorage.removeItem('rememberMeData');
+        }
+      }
+    };
+
     function showMessage(msg, type = 'info', title = null, callbackAfterClose = null) {
       const overlay = document.getElementById('modalMessageOverlay');
-      const box = document.getElementById('modalMessageBox');
       const modalTitle = document.getElementById('modalMessageTitle');
       const modalBody = document.getElementById('modalMessageBody');
       let tTitle = '';
@@ -536,183 +511,91 @@ button:disabled,
         case 'success': tTitle = 'Success'; break;
         case 'error': tTitle = 'Error'; break;
         case 'warning': tTitle = 'Warning'; break;
-        case 'info': default: tTitle = 'Info';
+        default: tTitle = 'Info';
       }
       modalTitle.textContent = title || tTitle;
       modalTitle.className = 'modal-title modal-' + type;
       modalBody.textContent = msg;
-      modalBody.className = 'modal-body modal-' + type;
       overlay.style.display = 'flex';
 
-      function closeModal() {
+      document.getElementById('modalMessageCloseBtn').onclick = () => {
         overlay.style.display = 'none';
-        if (typeof callbackAfterClose === 'function') {
-          callbackAfterClose();
-        }
-      }
-
-      const closeBtn = document.getElementById('modalMessageCloseBtn');
-      closeBtn.onclick = closeModal;
-      overlay.onclick = function(e) {
-        if (e.target === overlay) closeModal();
-      };
-      document.onkeydown = function(e) {
-        if (e.key === "Escape") closeModal();
+        if (callbackAfterClose) callbackAfterClose();
       };
     }
 
-    window.showForm = function(form) {
-      const loginForm = document.getElementById('loginForm');
-      const signupForm = document.getElementById('signupForm');
-      const loginTab = document.getElementById('loginTab');
-      const signupTab = document.getElementById('signupTab');
-      if (form === 'login') {
-        loginForm.style.display = '';
-        signupForm.style.display = 'none';
-        loginTab.classList.add('active');
-        signupTab.classList.remove('active');
-      } else {
-        loginForm.style.display = 'none';
-        signupForm.style.display = '';
-        loginTab.classList.remove('active');
-        signupTab.classList.add('active');
-      }
+    window.showForm = (form) => {
+      document.getElementById('loginForm').style.display = (form === 'login' ? '' : 'none');
+      document.getElementById('signupForm').style.display = (form === 'signup' ? '' : 'none');
     };
 
-    // Forgot Password
-    window.forgotPassword = async function() {
+    window.forgotPassword = async () => {
       const email = document.getElementById('loginEmail').value.trim();
-      if (!email) {
-        showMessage('Please enter your email for password reset.', 'warning', 'Reset password');
-        document.getElementById('loginEmail').focus();
-        return;
-      }
-      const btn = document.getElementById('forgotBtn');
-      btn.disabled = true;
+      if (!email) return showMessage('Enter email first.', 'warning');
       try {
         await sendPasswordResetEmail(auth, email);
-        showMessage('Password reset link sent to ' + email, 'info', 'Reset password');
-      } catch (error) {
-        showMessage('Error: ' + (error.message || 'Unable to send reset email.'), 'error', 'Reset password');
-      }
-      btn.disabled = false;
+        showMessage('Reset link sent to ' + email, 'info');
+      } catch (error) { showMessage(error.message, 'error'); }
     };
 
-    // Email/Password Login
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
       const password = document.getElementById('loginPassword').value;
+      const rememberChecked = document.getElementById('remember').checked;
       const btn = document.getElementById('loginSubmitBtn');
+      
       btn.disabled = true;
       try {
-        const result = await signInWithEmailAndPassword(auth, email, password);
-        const user = result.user;
-        let displayName = user.displayName || "";
-        let userMessage = "";
-        if (displayName && displayName.trim() !== "") {
-          userMessage = `Welcome, ${displayName} (${user.email})! You have logged in successfully.`;
+        await signInWithEmailAndPassword(auth, email, password);
+        
+        // Save for 12 hours if checkbox is ticked
+        if (rememberChecked) {
+          const data = { email: email, timestamp: new Date().getTime() };
+          localStorage.setItem('rememberMeData', JSON.stringify(data));
         } else {
-          userMessage = `Welcome, ${user.email}! You have logged in successfully.`;
+          localStorage.removeItem('rememberMeData');
         }
-        showMessage(
-          userMessage,
-          'success',
-          'Login Success',
-          function() {
-            window.location.href = "veeraws1.html";
-          }
-        );
+
+        showMessage('Welcome back!', 'success', 'Login Success', () => {
+          window.location.href = "veeraws1.html";
+        });
       } catch (error) {
-        showMessage('Login failed: ' + (error.message || ''), 'error');
+        showMessage(error.message, 'error');
+        btn.disabled = false;
       }
-      btn.disabled = false;
     });
 
-    // Email/Password Signup
-    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('signupName').value.trim();
       const email = document.getElementById('signupEmail').value.trim();
-      const password = document.getElementById('signupPassword').value;
-      const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
+      const pass = document.getElementById('signupPassword').value;
+      const confirm = document.getElementById('signupPasswordConfirm').value;
+      
+      if (pass !== confirm) return showMessage('Passwords do not match', 'error');
+
       const btn = document.getElementById('signupSubmitBtn');
       btn.disabled = true;
-
-      if (!name) {
-        showMessage('Please enter your name', 'warning');
-        document.getElementById('signupName').focus();
-        btn.disabled = false;
-        return;
-      }
-      if (password !== passwordConfirm) {
-        showMessage('Passwords do not match', 'error');
-        btn.disabled = false;
-        return;
-      }
       try {
-        const result = await createUserWithEmailAndPassword(auth, email, password);
-        const user = result.user;
-        // Set displayName for new user
-        if (user && name) {
-          // Use updateProfile from Firebase Auth module
-          await updateProfile(user, { displayName: name });
-        }
-        let userMessage = "";
-        if (name && name.trim() !== "") {
-          userMessage = `Welcome, ${name} (${user.email})! Signup successful.`;
-        } else {
-          userMessage = `Welcome, ${user.email}! Signup successful.`;
-        }
-        showMessage(
-          userMessage,
-          'success',
-          'Signup Success',
-          function() {
-            window.location.href = "veeraws1.html";
-          }
-        );
+        const result = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(result.user, { displayName: name });
+        showMessage('Signup successful!', 'success', 'Success', () => {
+          window.location.href = "veeraws1.html";
+        });
       } catch (error) {
-        showMessage('Sign up failed: ' + (error.message || ''), 'error');
+        showMessage(error.message, 'error');
+        btn.disabled = false;
       }
-      btn.disabled = false;
     });
 
-    // Google Sign-In directly (no modal), continue "in this page" (in-app, no redirect or new tab)
-    window.continueWithGoogle = async function(context) {
-      let messagePre = (context === 'login')
-        ? 'Logging in with Google...'
-        : 'Signing up with Google...';
-
+    window.continueWithGoogle = async (context) => {
       try {
-        showMessage(messagePre, 'info', null);
-        // signInWithPopup: opens a popup but continues in same top-level app
         const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        let displayName = user.displayName || "";
-        let userMessage = "";
-        if (displayName && displayName.trim() !== "") {
-          userMessage =
-            (context === 'login' ?
-              `Welcome, ${displayName} (${user.email})! You have logged in successfully with Google.` :
-              `Welcome, ${displayName} (${user.email})! Signup successful with Google.`);
-        } else {
-          userMessage =
-            (context === 'login' ?
-              `Welcome, ${user.email}! You have logged in successfully with Google.` :
-              `Welcome, ${user.email}! Signup successful with Google.`);
-        }
-        showMessage(
-          userMessage,
-          'success',
-          (context === 'login' ? 'Login Success' : 'Signup Success'),
-          function() {
-            window.location.href = "veeraws1.html";
-          }
-        );
-      } catch (error) {
-        showMessage("Google sign in failed: " + (error.message || ''), 'error', "Google Sign In");
-      }
+        showMessage(`Hello ${result.user.displayName}!`, 'success', 'Google Success', () => {
+          window.location.href = "veeraws1.html";
+        });
+      } catch (error) { showMessage(error.message, 'error'); }
     };
   </script>
 </body>
