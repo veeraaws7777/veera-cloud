@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AWS Sandbox Dashboard</title>
-    <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png">
+      <link rel="icon" type="image/png" href="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
     <style>
         :root {
             --bg-dark: #0f0b29;
@@ -33,6 +35,7 @@
             max-width: 1100px;
         }
 
+        /* Header Section */
         .header {
             display: flex;
             justify-content: space-between;
@@ -75,6 +78,7 @@
             font-weight: 500;
         }
 
+        /* Main Panel Wrapper */
         .main-panel {
             background: var(--panel-bg);
             border-radius: 12px;
@@ -83,6 +87,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
+        /* Action Top Bar */
         .action-bar {
             display: flex;
             justify-content: space-between;
@@ -137,6 +142,7 @@
             color: var(--text-dim);
         }
 
+        /* Auto Shutdown Row */
         .status-bar {
             display: flex;
             align-items: center;
@@ -146,6 +152,7 @@
         }
         .status-bar i { color: var(--text-dim); }
 
+        /* Grid for Inputs and Sidebar */
         .content-layout {
             display: grid;
             grid-template-columns: 1fr 320px;
@@ -192,6 +199,7 @@
         }
         .field-container i:hover { color: white; }
 
+        /* Sidebar Info Box */
         .info-card {
             background: rgba(255,255,255,0.03);
             border-radius: 8px;
@@ -219,6 +227,7 @@
             text-decoration: underline; 
         }
 
+        /* Floating Help Button */
         .help-fab {
             position: fixed;
             bottom: 30px;
@@ -234,6 +243,7 @@
             cursor: pointer;
         }
         
+        /* Access Restriction Modal Styles */
         #access-restrict-modal {
             display:none;
             position:fixed;
@@ -287,14 +297,22 @@
                 <div class="url-section">
                     <label>Sandbox URL</label>
                     <div class="copy-box">
-                        <span id="url-val" style="user-select: all;">https://992382411773.signin.aws.amazon.com/console?region=us-east-1</span>
+
+
+                        
+                        <span id="url-val" style="user-select: all;">https://767397965014.signin.aws.amazon.com/console?region=us-east-1</span>
+
+
+
+                        
                     </div>
                 </div>
             </div>
+
             <div class="status-bar" id="status-bar">
                 <i class="far fa-clock"></i>
                 <span>
-                    <strong>Usage Window</strong>: <b>09:00 AM</b> to <b>01:00 PM</b>. Access is only allowed during this time period.
+                    <strong>Usage Window</strong>: <b>09:15 AM</b> to <b>01:15 PM</b>. Access is only allowed during this time period.
                 </span>
             </div>
             <div style="background: #fff3cd; color: #856404; border: 1px solid #ffeeba; border-radius: 6px; padding: 9px 15px; margin: 12px 0; font-size: 15px; display: flex; align-items: center; gap: 9px;">
@@ -304,6 +322,9 @@
                 </span>
             </div><br>
             <br>
+
+
+            
 
             <div class="content-layout">
                 <div class="inputs-grid">
@@ -322,7 +343,7 @@
                                 
                                 
                                 
-                                value="7SW[wzTpEi1H}]uD92h="
+                                value="USO9]hJBx2S+j#-5mg6h"
                                 
                                 
                                 
@@ -366,10 +387,11 @@
                   </div>
                 </div>
 
+                
                 <aside class="info-card">
                     <h3>Extend Your Session</h3>
                     <p>Your sandbox will automatically expire 4 hours after your start time. If you need to extend your session, you will receive a notification when you have 1 hour remaining that will allow you to extend your sandbox session for an additional 4 hours.</p>
-                    <a href="https://docs.aws.amazon.com/console/open-console-using-incognito">Learn more about why this matters in our Knowledge base article.</a>
+                    <a href="https://docs.aws.amazon.com/console/open-console-using-incognito" target="_blank" rel="noopener">Learn more about why this matters in our Knowledge base article.</a>
                 </aside>
             </div>
         </div>
@@ -385,7 +407,7 @@
             <i class="fas fa-lock"></i><br>
             <b>Access Restricted</b>
             <div style="margin-top:14px;font-size:16px;">
-                Sandbox access is allowed only between <b>09:00 AM</b> and <b>01:00 PM</b>.<br>
+                Sandbox access is allowed only between <b>09:15 AM</b> and <b>01:15 PM</b>.<br>
                 Please return during access hours.
             </div>
         </div>
@@ -420,7 +442,7 @@
                 <li>Use <strong>Incognito mode</strong> for AWS Sandbox to avoid cross-account issues.</li>
                 <li>Click <i class="far fa-copy"></i> icons to copy credentials.</li>
                 <li>You can <i class="far fa-eye"></i> to show/hide passwords.</li>
-                <li>Use "Open Sandbox" to launch the AWS Console in the same page.</li>
+                <li>Use "Open Sandbox" to launch the AWS Console in a new tab.</li>
             </ul>
         </div>
     </div>
@@ -428,11 +450,15 @@
     <script>
         // --- Time Access Restriction Logic ---
         (function() {
+            // Allowed window: 9:15AM (9*60+15) to 1:15PM (13*60+15)
             var now = new Date();
             var mins = now.getHours() * 60 + now.getMinutes();
-            var start = 9 * 60;
-            var end = 13 * 60;
+            var start = 9 * 60 + 15; // 9:15 AM
+            var end = 13 * 60 + 15; // 1:15 PM
+
+            // If outside window, show modal and disable interactions
             if (mins < start || mins > end) {
+                // Hide main sandbox UI and show restriction modal
                 document.addEventListener('DOMContentLoaded',function() {
                     document.querySelector('.sandbox-container').style.filter="blur(2.5px)";
                     document.querySelector('.sandbox-container').style.pointerEvents="none";
@@ -483,12 +509,14 @@
         }
         // Copy handlers
         document.addEventListener('click', function(e) {
+            // Copy icons
             if (e.target.matches('[data-copy-target]')) {
                 var input = document.getElementById(e.target.getAttribute('data-copy-target'));
                 if (input) {
                     copyToClipboard(input.value || input.innerText);
                 }
             }
+            // Copy URL
             if (e.target.matches('#copy-url')) {
                 let urlSpan = document.getElementById('url-val');
                 copyToClipboard(urlSpan.innerText || urlSpan.textContent);
@@ -511,19 +539,17 @@
                 }
             }
         });
+        // Ensure correct icon shown for eye/eye-slash on page load
         document.querySelectorAll('[data-toggle-pass]').forEach(function(ic) {
-            ic.classList.remove('fa-copy');
+            ic.classList.remove('fa-copy'); // make sure it isn't fa-copy
             ic.classList.add('fa-eye');
         });
 
-        // Open Sandbox button - open ONLY inside this application (not new tab, not outside this app)
-        document.getElementById('btn-open').addEventListener('click', function(e) {
+        // Open Sandbox button
+        document.getElementById('btn-open').addEventListener('click', function() {
             var url = document.getElementById('url-val').innerText.trim();
             if (url.length > 10) {
-                window.location.href = url;
-                if (e.preventDefault) {
-                    e.preventDefault();
-                }
+                window.open(url, "_blank", "noopener,noreferrer");
             } else {
                 showStatus('No Sandbox URL!', 1500, true);
             }
@@ -532,6 +558,7 @@
         // Delete Sandbox button
         document.getElementById('btn-delete').addEventListener('click', function() {
             if (confirm('Are you sure you want to delete this sandbox? This action cannot be undone.')) {
+                // For demonstration, just disable open/delete and gray credentials out
                 document.getElementById('btn-open').disabled = true;
                 document.getElementById('btn-delete').disabled = true;
                 document.getElementById('status-bar').innerHTML = 
@@ -542,7 +569,9 @@
             }
         });
 
+        // Close button closes the current tab/window if possible
         document.getElementById('btn-close').addEventListener('click',function() {
+            // Prefer closing, else fall back to hiding the container
             if (window.close && window.top == window.self) {
                 window.close();
             } else {
@@ -551,14 +580,17 @@
             }
         });
 
+        // Help FAB opens help modal
         document.getElementById('help-fab').addEventListener('click',function(){
             document.getElementById('help-modal').style.display = 'flex';
         });
 
+        // Make help modal close on background click (not the help content)
         document.getElementById('help-modal').addEventListener('click', function(e) {
             if (e.target === this) this.style.display = 'none';
         });
 
+        // Optional: select the value in <span id="url-val"> on click for easier copy
         document.getElementById('url-val').addEventListener('click', function(){
             if(document.body.createTextRange) {
                 var range = document.body.createTextRange();
@@ -572,48 +604,14 @@
             }
         });
 
+        // Optional: select input on click for easier copy
         document.querySelectorAll('.inputs-grid input').forEach(function(inp){
             inp.addEventListener('click',function(){ this.select(); });
         });
 
-        // --- Open all anchor links in same application/page ---
-        document.addEventListener('DOMContentLoaded', function() {
-            document.body.addEventListener('click', function(e) {
-                // Check if an <a> element (or a child in one) was clicked and it has an href (and is not #)
-                let anchor = e.target;
-                while (anchor && anchor !== document.body && (!anchor.tagName || anchor.tagName.toLowerCase() !== "a")) {
-                    anchor = anchor.parentNode;
-                }
-                if (anchor && anchor.tagName && anchor.tagName.toLowerCase() === "a" && anchor.href) {
-                    // Only handle anchor if it's not just a hash link and is not for download/file/blob/mailto/tel
-                    let href = anchor.getAttribute('href');
-                    if (
-                        href && 
-                        href !== '#' &&
-                        !/^javascript:/i.test(href) &&
-                        !/^mailto:/i.test(href) &&
-                        !/^tel:/i.test(href) &&
-                        !/^#/.test(href) &&
-                        !anchor.hasAttribute('download') &&
-                        !anchor.hasAttribute('data-no-spa')
-                    ) {
-                        e.preventDefault();
-                        // Only handle if href is absolute (http/https) or relative url
-                        // Route navigation inside this page app
-                        window.location.href = anchor.href;
-                    }
-                }
-            });
+        // -- Usage time notice only, not dynamic auto shutdown
+        // The usage window is always displayed as 09:15 AM to 01:15 PM in the UI.
 
-            // Optionally, remove target attributes and rel for anchors in static HTML
-            document.querySelectorAll('a[target]').forEach(function(a) {
-                a.removeAttribute('target');
-            });
-            document.querySelectorAll('a[rel]').forEach(function(a) {
-                a.removeAttribute('rel');
-            });
-        });
-        // Usage time notice only (not dynamic)
     </script>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-MBJM2CCKJ6"></script>
@@ -624,5 +622,6 @@
 
   gtag('config', 'G-MBJM2CCKJ6');
 </script>
+
 </body>
 </html>
