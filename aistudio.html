@@ -134,43 +134,70 @@ video {
   const VIDEO_SRC_1080 = "https://aibyabinashkumarveercloud.s3.us-west-2.amazonaws.com/ai+-+intro+by+abi.mp4";
   const SKIP_TIME = 51; // 52 seconds to show skip button
 
-  window.addEventListener('DOMContentLoaded', function() {
-    // Hint for browser to preload video
-    const preloadLink = document.createElement('link');
-    preloadLink.rel = 'preload';
-    preloadLink.as = 'video';
-    preloadLink.href = VIDEO_SRC_1080;
-    document.head.appendChild(preloadLink);
+  // 1. rel=preload
+  const preloadLink = document.createElement('link');
+  preloadLink.rel = 'preload';
+  preloadLink.as = 'video';
+  preloadLink.href = VIDEO_SRC_1080;
+  document.head.appendChild(preloadLink);
 
-    // Prepare a preloader <video> to prompt network loading
-    const preloadVideo = document.createElement("video");
-    preloadVideo.src = VIDEO_SRC_1080;
-    preloadVideo.preload = "auto";
-    preloadVideo.setAttribute("playsinline", "");
-    preloadVideo.setAttribute("style", "display: none;");
-    document.body.appendChild(preloadVideo);
+  // 2. Hidden video element for parallel preloading
+  const preloadVideo = document.createElement("video");
+  preloadVideo.src = VIDEO_SRC_1080;
+  preloadVideo.preload = "auto";
+  preloadVideo.setAttribute("playsinline", "");
+  preloadVideo.setAttribute("muted", "");
+  preloadVideo.setAttribute("style", "display: none;");
+  document.body.appendChild(preloadVideo);
+  window._preloadVideo = preloadVideo;
 
-    // Keep global for later removal
-    window._preloadVideo = preloadVideo;
-  });
+  // 3. Blob pre-fetch
+  let videoBlobURL = null;
+  const videoBlobPromise = fetch(VIDEO_SRC_1080)
+    .then(resp => {
+      if (!resp.ok) throw new Error('Failed to fetch');
+      return resp.blob();
+    }).then(blob => {
+      videoBlobURL = URL.createObjectURL(blob);
+      return videoBlobURL;
+    }).catch(() => null);
 
-  // Show video after 5 seconds, force auto play
-  setTimeout(() => {
-    const overlay = document.getElementById("overlay");
-    if (overlay) {
-      overlay.parentNode.removeChild(overlay);
+  // Ensure overlay displays until everything is ready
+  async function showVideoNoWait() {
+    // Wait for overlay fade-in/animation
+    await new Promise(res => setTimeout(res, 3500));
+
+    // Now ensure video is as ready as possible; prefer Blob, fallback to browser cache
+    let finalSrc = VIDEO_SRC_1080;
+
+    // Prioritize blob if arrived in parallel
+    if (videoBlobURL) {
+      finalSrc = videoBlobURL;
+    } else {
+      try {
+        const gotBlob = await Promise.race([
+          videoBlobPromise,
+          new Promise(res => setTimeout(() => res(null), 600))
+        ]);
+        if (gotBlob) finalSrc = gotBlob;
+      } catch {}
     }
-    const videoBg = document.getElementById("videoBg");
-    const skipBtn = document.getElementById("skipBtn");
+
+    // Remove overlay
+    const overlay = document.getElementById("overlay");
+    if (overlay) overlay.parentNode.removeChild(overlay);
 
     // Remove preloader
     if (window._preloadVideo && window._preloadVideo.parentNode) {
       window._preloadVideo.parentNode.removeChild(window._preloadVideo);
     }
 
-    // Create the main video element
+    // Main video logic
+    const videoBg = document.getElementById("videoBg");
+    const skipBtn = document.getElementById("skipBtn");
+
     const video = document.createElement("video");
-    video.src = VIDEO_SRC_1080;
+    video.src = finalSrc;
     video.autoplay = true;
     video.playsInline = true;
     video.controls = false;
@@ -180,17 +207,38 @@ video {
     video.setAttribute("width", "1920");
     video.setAttribute("height", "1080");
     video.setAttribute("style", "width: 100%; height: 100%; object-fit: cover; background: black; display: block;");
-
     video.addEventListener("contextmenu", (e) => e.preventDefault());
 
-    // Attempt auto play; fallback to muted autoplay if needed by browser policy
+    // Show video container as soon as possible
+    video.addEventListener("loadeddata", function showNow() {
+      videoBg.innerHTML = "";
+      videoBg.appendChild(video);
+      videoBg.style.display = "block";
+      videoBg.style.pointerEvents = "auto";
+      if (video.paused) {
+        try { video.play(); } catch {}
+      }
+    }, { once: true });
+
+    // Defensive: always show after 1s if loadeddata missed for any reason
+    setTimeout(() => {
+      if (!videoBg.contains(video)) {
+        videoBg.innerHTML = "";
+        videoBg.appendChild(video);
+        videoBg.style.display = "block";
+        videoBg.style.pointerEvents = "auto";
+        if (video.paused) {
+          try { video.play(); } catch {}
+        }
+      }
+    }, 1200);
+
     const tryPlay = () => {
       video.muted = false;
       video.volume = 1;
       let playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // If browser blocks autoplay with audio, try with muted=true as fallback
           video.muted = true;
           video.play();
         });
@@ -198,7 +246,6 @@ video {
     };
     video.addEventListener('canplay', tryPlay, { once: true });
 
-    // Setup skip button
     if (skipBtn) {
       skipBtn.style.display = "block";
       skipBtn.addEventListener('click', function() {
@@ -206,8 +253,7 @@ video {
       });
     }
 
-    // Show skip button at 52s
-    video.addEventListener('timeupdate', function onTimeUpdate() {
+    video.addEventListener("timeupdate", function onTimeUpdate() {
       if (video.currentTime >= SKIP_TIME) {
         if (skipBtn && !skipBtn.classList.contains("visible")) {
           skipBtn.classList.add("visible");
@@ -215,16 +261,14 @@ video {
       }
     });
 
-    // Optionally, if video ends naturally, redirect to ai.html
     video.addEventListener('ended', function() {
       window.location.href = "ai.html";
     });
+  }
 
-    videoBg.innerHTML = "";
-    videoBg.appendChild(video);
-    videoBg.style.display = "block";
-    videoBg.style.pointerEvents = "auto";
-  }, 5000);
+  window.addEventListener('DOMContentLoaded', () => {
+    showVideoNoWait();
+  });
 </script>
 
 </body>
