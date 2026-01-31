@@ -85,9 +85,9 @@ video {
 .skip-btn {
   position: absolute;
   right: 36px;
-  top: 36px;
+  bottom: 36px; /* changed from top: 36px to bottom: 36px */
   z-index: 10;
-  background: rgba(0,0,0,0.7);
+  background: red;
   color: #fff;
   font-size: 18px;
   padding: 12px 28px;
@@ -118,7 +118,7 @@ video {
 <!-- VIDEO (loaded later) -->
 <div class="video-bg" id="videoBg"></div>
 
-<!-- Skip button to be shown at 52s in video -->
+<!-- Skip button to be shown at 31s in video, in bottom right corner-->
 <button id="skipBtn" class="skip-btn" style="display:none;">Skip</button>
 
 <!-- TEXT -->
@@ -131,8 +131,8 @@ video {
 
 <script>
   // Video direct link (720p)
-  const VIDEO_SRC_720 = "https://aibyabinashkumarveercloud.s3.us-west-2.amazonaws.com/ai+-+intro+by+abi.mp4";
-  const SKIP_TIME = 51; // 52 seconds to show skip button
+  const VIDEO_SRC_720 = "https://storage.googleapis.com/aistudiobyabinash/ai%20-%20intro%20by%20abi.mp4";
+  const SKIP_TIME = 31; // 31 seconds to show skip button
 
   // 1. rel=preload
   const preloadLink = document.createElement('link');
