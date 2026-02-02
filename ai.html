@@ -1,465 +1,321 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Veera Cloud | AI Studio</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #ec4899;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",sans-serif}
+        body {
+            background-color: #030712;
+            color: #f9fafb;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
 
-body{
-  background:#000;
-  color:#fff;
-  overflow-x:hidden;
-}
+        /* Animated Mesh Background */
+        .mesh-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 10% 10%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(236, 72, 153, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(34, 211, 238, 0.05) 0%, transparent 40%);
+            z-index: -2;
+            filter: blur(80px);
+        }
 
-.bg{
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at 20% 20%,#6366f1,transparent 40%),
-    radial-gradient(circle at 80% 30%,#ec4899,transparent 40%),
-    radial-gradient(circle at 50% 80%,#22d3ee,transparent 40%);
-  animation:bgMove 15s infinite alternate;
-  z-index:-2;
-}
-@keyframes bgMove{
-  0%{filter:hue-rotate(0deg)}
-  100%{filter:hue-rotate(60deg)}
-}
-canvas{
-  position:fixed;
-  inset:0;
-  z-index:-1;
-}
+        /* Glassmorphism utility */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-/* ================= LOADER ================= */
-#loader{
-  position:fixed;
-  inset:0;
-  background:#000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  z-index:9999;
-}
-#loader h1{
-  font-size:2rem;
-  background:linear-gradient(90deg,#6366f1,#ec4899);
-  -webkit-background-clip:text;
-  color:transparent;
-  animation:pulse 1.2s infinite;
-}
-@keyframes pulse{
-  50%{transform:scale(1.1)}
-}
+        .glass-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.2);
+            transform: translateY(-5px);
+        }
 
-/* ----- HERO ----- */
-.hero{
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  opacity:0;
-  transform:translateY(60px);
-  transition:1.2s ease;
-}
-.hero.show{
-  opacity:1;
-  transform:none;
-}
-.hero h2{
-  font-size:3.5rem;
-  background:linear-gradient(90deg,#22d3ee,#6366f1,#ec4899);
-  -webkit-background-clip:text;
-  color:transparent;
-  animation:shine 6s infinite linear;
-}
-@keyframes shine{
-  to{filter:hue-rotate(360deg)}
-}
+        /* Glow Text */
+        .glow-text {
+            text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
 
-/* --------- FEATURE BUTTON PANEL --------- */
-.feature-cards-row{
-  display: flex;
-  gap: 32px;
-  margin-top: 45px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-.feature-card-btn{
-  position:relative;
-  background: #131522;
-  border: none;
-  border-radius: 22px;
-  padding: 32px 20px 26px 20px;
-  min-width: 240px;
-  max-width: 260px;
-  flex: 1 1 240px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  box-shadow: 0 2px 28px #1c203533, 0 0 0 1.5px #232542;
-  cursor: pointer;
-  transition: box-shadow .19s, background .15s, border .15s;
-  overflow: hidden;
-}
-.feature-card-btn:hover, .feature-card-btn:focus {
-  background: #22244c;
-  box-shadow: 0 0 0 2.2px #6366f1, 0 6px 36px #6366f16b;
-}
-.feature-card-top-meta{
-  display: flex;
-  align-items:center;
-  width:100%;
-  margin-bottom:18px;
-}
-.fcb-tier{
-  color: #aeb9e3;
-  font-size: 1.08rem;
-  font-weight: 600;
-  letter-spacing:.01em;
-  margin-right: 10px;
-  background: #232542;
-  padding: 3px 17px 3px 11px;
-  border-radius: 12px;
-}
-.fcb-name{
-  font-size: 1.13rem;
-  font-weight:600;
-  color: #fff;
-}
-.fcb-icon-wrap{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  margin: 28px 0 21px 0;
-  width:62px;
-  height:62px;
-  background:rgba(36,90,232,0.13);
-  border-radius:50%;
-  box-shadow: 0 4px 32px #6366f160;
-  font-size:2.1rem;
-  color: #4786ff;
-}
-.fcb-desc{
-  color: #bbc5e6;
-  font-size: 1.01rem;
-  font-weight: 400;
-  line-height: 1.6;
-  min-height: 38px;
-}
-.fcb-learn {
-  display:inline-block;
-  margin-top:22px;
-  background: #232542;
-  color: #b8b8fa;
-  font-size: .99rem;
-  border-radius: 8px;
-  padding: 8px 20px;
-  text-decoration:none;
-  cursor:pointer;
-  border: none;
-  transition: background .12s, color .15s;
-}
-.feature-card-btn:hover .fcb-learn, .feature-card-btn:focus .fcb-learn {
-  background: #6366f1;
-  color: #fff;
-}
+        /* Terminal Animation */
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+        .typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid var(--primary);
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary); }
+        }
 
-@media (max-width:1100px){
-  .feature-cards-row{
-    gap:18px;
-  }
-  .feature-card-btn{
-    min-width:160px;
-    max-width:400px;
-  }
-}
-
-@media (max-width:800px){
-  .feature-cards-row{
-    flex-direction: column;
-    align-items: stretch;
-    gap:22px;
-  }
-  .feature-card-btn{
-    width:100%;
-    max-width:none;
-    min-width:0;
-    align-items: flex-start;
-    padding:34px 22px 22px 22px;
-  }
-}
-
-section{
-  padding:100px 10%;
-}
-
-/* ================= FEATURE CARDS (IN GRID) ================= */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:40px;
-}
-.card{
-  position:relative;
-  padding:35px;
-  border-radius:24px;
-  background:rgba(255,255,255,.05);
-  backdrop-filter:blur(20px);
-  border:1px solid rgba(255,255,255,.1);
-  box-shadow:0 0 60px rgba(99,102,241,.2);
-  transform-style:preserve-3d;
-  transition:.2s;
-}
-.card::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  border-radius:inherit;
-  background:linear-gradient(90deg,#6366f1,#ec4899,#22d3ee);
-  opacity:.3;
-  z-index:-1;
-  animation:borderGlow 6s infinite linear;
-}
-@keyframes borderGlow{
-  to{filter:hue-rotate(360deg)}
-}
-.card h3{
-  margin-bottom:10px;
-}
-.reveal{
-  opacity:0;
-  transform:translateY(60px);
-  transition:1s ease;
-}
-.reveal.show{
-  opacity:1;
-  transform:none;
-}
-
-/* ================= 3D ORB ================= */
-.orb-wrap{
-  display:flex;
-  justify-content:center;
-}
-.orb{
-  width:200px;
-  height:200px;
-  border-radius:50%;
-  background:radial-gradient(circle at 30% 30%,#fff,#6366f1,#000);
-  box-shadow:0 0 100px #6366f1;
-  animation:float 6s ease-in-out infinite;
-}
-@keyframes float{
-  50%{transform:translateY(-40px)}
-}
-
-/* ================= FOOTER ================= */
-footer{
-  text-align:center;
-  padding:30px;
-  opacity:.6;
-}
-</style>
+        #loader {
+            background: #030712;
+            transition: opacity 0.8s ease;
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="bg"></div>
-<canvas id="particles"></canvas>
+<div class="mesh-bg"></div>
+<canvas id="particles" class="fixed inset-0 z-[-1] pointer-events-none"></canvas>
 
-<!-- LOADER -->
-<div id="loader">
-  <h1>Veera Cloud AI Studio</h1>
+<div id="loader" class="fixed inset-0 z-[9999] flex flex-col items-center justify-center">
+    <div class="w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+    <h1 class="text-xl font-mono tracking-widest text-white">INITIALIZING_STUDIO_V4...</h1>
 </div>
 
-<!-- HERO -->
-<section class="hero" id="hero">
-  <h2>AI Tools</h2>
+<nav class="fixed top-0 w-full z-50 px-8 py-4 flex justify-between items-center glass-card border-none bg-black/40">
+    <div class="flex items-center gap-3">
+        <img src="https://static.vecteezy.com/system/resources/thumbnails/045/720/728/small_2x/dark-cat-head-free-png.png" alt="Logo" class="w-10 h-10 object-contain rounded-full shadow-md"/>
+        <span class="text-2xl font-black bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">
+            VEERA CLOUD
+        </span>
+    </div>
+    <div class="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-gray-400">
+        <a href="#hero" class="hover:text-white transition">Dashboard</a>
+        <a href="#factory" class="hover:text-white transition">App Factory</a>
+        <a href="#terminal" class="hover:text-white transition">Console</a>
+    </div>
+    <button class="bg-indigo-600 hover:bg-indigo-500 px-6 py-2 rounded-lg text-sm font-bold transition shadow-lg shadow-indigo-500/20">
+        DEPLOY PROJECT
+    </button>
+</nav>
 
-  <div class="feature-cards-row" style="margin-top:48px;">
-    <button class="feature-card-btn star-bg" onclick="window.location.href='#resume-builder'">
-      <div class="stars"></div>
-      <div class="feature-card-top-meta">
-        <span class="fcb-name" >Resume Builder</span>
-      </div>
-      <div class="fcb-icon-wrap" aria-hidden="true" style="display: flex; align-items: center; justify-content: center;">
-        <!-- SVG or Emoji Icon -->
-        <img src="https://cdn-icons-png.flaticon.com/256/942/942748.png" alt="Resume Icon" width="48" height="48" style="display: block; margin: 0 auto;" />
-      </div>
-      <div class="fcb-desc">Best for creating, previewing, and exporting professional resumes.</div>
-      <a class="fcb-learn" href="aistudiopolicy/resumebuilder.html">Learn more</a>
-    </button>
-    <button class="feature-card-btn star-bg" onclick="window.location.href='#ats-check'">
-      <div class="stars"></div>
-      <div class="feature-card-top-meta">
-        <span class="fcb-name">ATS Resume Check</span>
-      </div>
-      <div class="fcb-icon-wrap" aria-hidden="true">
-        <img src="https://images.seeklogo.com/logo-png/52/2/ats-logo-png_seeklogo-528146.png" alt="ATS Logo" width="48" height="48" style="display: block; margin: 0 auto; background: #232b50; border-radius: 50%;" />
-      </div>
-      <div class="fcb-desc">Instantly analyze keywords & boost hiring success with AI-powered insights.</div>
-      <a class="fcb-learn" href="aistudiopolicy/atscheck.html">Learn more</a>
-    </button>
-    <button class="feature-card-btn star-bg" onclick="window.location.href='#code-ai'">
-      <div class="stars"></div>
-      <div class="feature-card-top-meta">
-        <span class="fcb-name">Code AI</span>
-      </div>
-      <div class="fcb-icon-wrap" aria-hidden="true">
-        <img src="https://www.shutterstock.com/image-vector/ai-generate-logo-artificial-intelligence-600nw-2519534733.jpg" alt="AI Generate Logo" width="48" height="48" style="display: block; margin: 0 auto; border-radius: 50%;" />
-      </div>
-      <div class="fcb-desc">Generate, refactor, and debug code instantly with AI assistance.</div>
-      <a class="fcb-learn" href="aistudiopolicy/codeai.html">Learn more</a>
-    </button>
-    <button class="feature-card-btn star-bg" onclick="window.location.href='#app-studio'">
-      <div class="stars"></div>
-      <div class="feature-card-top-meta">
-        <span class="fcb-name">App Studio</span>
-      </div>
-      <div class="fcb-icon-wrap" aria-hidden="true">
-        <img src="https://cdn-icons-png.flaticon.com/512/8297/8297314.png" alt="App Studio Icon" width="48" height="48" style="display: block; margin: 0 auto; background: #232b50; border-radius: 50%;" />
-      </div>
-      <div class="fcb-desc">Visually design apps using AI logic—fast, creative, and efficient.</div>
-      <a class="fcb-learn" href="aistudiopolicy/appstudio.html">Learn more</a>
-    </button>
-  </div>
-  <!-- Add this CSS either inside your <style> block or externally: -->
-  <style>
-    .star-bg {
-      position: relative;
-      overflow: hidden;
-    }
-    .star-bg .stars {
-      pointer-events: none;
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-    }
-    .star-bg > *:not(.stars) {
-      position: relative;
-      z-index: 1;
-    }
-  </style>
-  <!-- Add this JavaScript at the bottom or in a script tag: -->
-  <script>
-    function createMovingStars(container, starCount = 32) {
-      const stars = [];
-      const width = container.offsetWidth;
-      const height = container.offsetHeight;
-      for (let i = 0; i < starCount; i++) {
-        const star = document.createElement('div');
-        star.className = 'star-moving';
-        star.style.position = "absolute";
-        star.style.left = Math.random() * 100 + "%";
-        star.style.top = Math.random() * 100 + "%";
-        const size = 1.2 + Math.random() * 1.6;
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
-        star.style.background = "#e0e5ffcc";
-        star.style.borderRadius = "50%";
-        star.style.opacity = 0.6 + Math.random() * 0.35;
-        star.style.animation = `star-move ${3 + Math.random()*5}s linear infinite`;
-        star.style.animationDelay = `${Math.random()* 6}s`;
-        star.style.boxShadow = `0 0 6px #fff4`;
-        stars.push(star);
-        container.appendChild(star);
-      }
-    }
-    document.querySelectorAll('.feature-card-btn .stars').forEach(div => {
-      createMovingStars(div, 15 + Math.floor(Math.random() * 7));
-    });
-  </script>
-  <style>
-    @keyframes star-move {
-      0% { transform: translateY(0px); }
-      100% { transform: translateY(-28px);}
-    }
-  </style>
+<section id="hero" class="min-h-screen flex flex-col items-center justify-center pt-24 px-4">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-indigo-500/30 bg-indigo-500/10 text-indigo-400 text-[10px] font-black uppercase mb-8">
+        <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+        </span>
+        Enterprise AI Development Suite
+    </div>
+    <h1 class="text-5xl md:text-7xl font-black text-center mb-6 leading-tight tracking-tighter">
+        The Future of <br>
+        <span class="bg-gradient-to-r from-indigo-400 via-purple-500 to-pink-500 bg-clip-text text-transparent glow-text">
+            Autonomous Building
+        </span>
+    </h1>
+    <p class="text-gray-400 text-center max-w-xl mb-12 text-sm md:text-base leading-relaxed">
+        Stop coding from scratch. Use neural architectures to design, build, and deploy full-stack applications in a unified AI ecosystem.
+    </p>
 
+    <div class="flex flex-wrap justify-center gap-4 mb-20">
+        <div class="glass-card px-6 py-4 rounded-2xl flex items-center gap-4">
+            <i class="fa-solid fa-file-code text-indigo-400"></i>
+            <div>
+                <p class="text-xs font-bold">Resume Architect</p>
+                <p class="text-[10px] text-gray-500">ATS Optimized</p>
+            </div>
+        </div>
+        <div class="glass-card px-6 py-4 rounded-2xl flex items-center gap-4">
+            <i class="fa-solid fa-bug-slash text-cyan-400"></i>
+            <div>
+                <p class="text-xs font-bold">Logic Debugger</p>
+                <p class="text-[10px] text-gray-500">Neural Patching</p>
+            </div>
+        </div>
+    </div>
 </section>
 
-<!-- FEATURES -->
+<section id="factory" class="py-24 px-8 border-t border-white/5">
+    <div class="container mx-auto max-w-7xl">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+            <div>
+                <h2 class="text-4xl font-black mb-2 uppercase tracking-tight">AI App <span class="text-indigo-500">Factory</span></h2>
+                <p class="text-gray-400">Automatically engines for complete application lifecycle management.</p>
+            </div>
+            <div id="active-instances" class="text-xs font-mono text-gray-500 bg-white/5 px-4 py-2 rounded-lg border border-white/10">
+                ACTIVE_INSTANCES: <span id="active-instances-count">1,248</span>
+            </div>
+            <script>
+                function getRandomInt(min, max) {
+                    return Math.floor(Math.random() * (max - min + 1)) + min;
+                }
+                function updateActiveInstances() {
+                    // Simulating instance count change between 1150 and 1350
+                    const count = getRandomInt(1150, 1350).toLocaleString();
+                    document.getElementById('active-instances-count').textContent = count;
+                }
+                updateActiveInstances(); // Initial call
+                setInterval(updateActiveInstances, 1000); // Update every second
+            </script>
+        </div>
 
-<!-- CAT EYES GIF -->
-<section class="cat-eyes-wrap" style="display: flex; justify-content: center; align-items: center; margin: 38px 0;">
-  <img src="https://i.ibb.co/Rpnh6L3H/cat-eyes-clean-blink.gif" alt="Cat Eyes Blinking" style="max-width: 240px; width: 100%; height: auto; border-radius: 20px; box-shadow: 0 6px 40px #131c25aa;">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+            
+            <div onclick="window.location.href='https://full-application-786084835977.us-west1.run.app/';" class="cursor-pointer md:col-span-8 glass-card rounded-3xl p-10 flex flex-col justify-between group relative overflow-hidden bg-gradient-to-br from-indigo-500/10 to-transparent">
+                <div class="relative z-10">
+                    <i class="fa-solid fa-flask text-4xl text-indigo-500 mb-6"></i>
+                    <h3 class="text-3xl font-bold mb-4">AI Studio</h3>
+                    <p class="text-gray-400 text-lg max-w-md leading-relaxed">
+                        A full stack web application platform. Rapidly design, build, and deploy AI-driven web solutions from a single, unified studio.
+                    </p>
+                </div>
+                <div class="mt-12 flex gap-4 relative z-10">
+                    <button class="bg-white text-black px-8 py-3 rounded-xl font-black hover:bg-indigo-500 hover:text-white transition uppercase text-xs tracking-widest">
+                        Launch Studio
+                    </button>
+                </div>
+                <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-[100px] group-hover:bg-indigo-500/20 transition"></div>
+            </div>
+
+            <div onclick="window.location.href='https://resumeai-786084835977.us-west1.run.app';" class="cursor-pointer md:col-span-4 glass-card rounded-3xl p-8 flex flex-col group border-blue-500/20 hover:shadow-lg transition hover:border-blue-500/50" style="text-decoration: none;">
+                <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6 border border-blue-500/40">
+                    <i class="fa-solid fa-file-lines text-blue-500 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">AI Resume Builder</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">Create a tailored, professional resume in seconds. Simply input your experience—AI handles wording, formatting, and ready-to-download PDF export.</p>
+                <div class="mt-auto flex justify-between items-center text-xs font-black uppercase text-blue-400">
+                    <span>Resume Engine</span>
+                    <i class="fa-solid fa-arrow-right-long group-hover:translate-x-2 transition"></i>
+                </div>
+            </div>
+
+            <div class="md:col-span-4 glass-card rounded-3xl p-8 flex flex-col group border-cyan-500/20">
+                <div class="w-14 h-14 bg-cyan-500/20 rounded-2xl flex items-center justify-center mb-6 border border-cyan-500/40">
+                    <i class="fa-solid fa-code text-cyan-400 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Code Generator</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    Instantly generate both backend and frontend code. Describe your app—AI creates Node.js/Python APIs and React/Next.js interfaces automatically.
+                </p>
+                <div class="mt-auto flex justify-between items-center text-xs font-black uppercase text-cyan-400">
+                    <span>Back &amp; Front Engine</span>
+                    <i class="fa-solid fa-arrow-right-long group-hover:translate-x-2 transition"></i>
+                </div>
+            </div>
+
+            <div class="md:col-span-4 glass-card rounded-3xl p-8 flex flex-col group border-orange-500/20">
+                <div class="w-14 h-14 bg-orange-500/20 rounded-2xl flex items-center justify-center mb-6 border border-orange-500/40">
+                    <i class="fa-solid fa-database text-orange-400 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Schema Genius</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">Optimized database structuring. AI-driven SQL normalization and automatic indexing recommendations.</p>
+                <div class="mt-auto flex justify-between items-center text-xs font-black uppercase text-orange-400">
+                    <span>Data Engine</span>
+                    <i class="fa-solid fa-arrow-right-long group-hover:translate-x-2 transition"></i>
+                </div>
+            </div>
+
+            <div class="md:col-span-4 glass-card rounded-3xl p-8 flex flex-col group border-purple-500/20 bg-purple-500/5">
+                <div class="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 border border-purple-500/40">
+                    <i class="fa-solid fa-robot text-purple-400 text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Agent Swarm</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">Build autonomous worker agents that handle customer support, data entry, and code reviews while you sleep.</p>
+                <div class="mt-auto flex justify-between items-center text-xs font-black uppercase text-purple-400">
+                    <span>Agent Engine</span>
+                    <i class="fa-solid fa-arrow-right-long group-hover:translate-x-2 transition"></i>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </section>
 
-<footer>
-  Developed by Abinash Kumar • Veera Cloud © 2026
+<section id="terminal" class="py-24 px-8 bg-black/40">
+    <div class="container mx-auto max-w-4xl">
+        <div class="bg-[#0a0c14] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
+            <div class="bg-white/5 px-4 py-2 border-b border-white/10 flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-500/50"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500/50"></div>
+                <span class="ml-4 text-[10px] font-mono text-gray-500 uppercase tracking-widest">Deployment_Terminal_v4.2</span>
+            </div>
+            <div class="p-8 font-mono text-sm leading-relaxed">
+                <p class="text-green-400 mb-2">> Initializing Veera_Cloud_Core...</p>
+                <p class="text-gray-400 mb-2">> Pulling latest neural weights from server...</p>
+                <p class="text-gray-400 mb-2">> Scanning for application vulnerabilities... [CLEAN]</p>
+                <p class="text-indigo-400 mb-2 font-bold typewriter">> Ready for prompt... Type 'build app' to start.</p>
+                <div class="mt-8 pt-4 border-t border-white/5 flex items-center gap-2">
+                    <span class="text-indigo-500">$</span>
+                    <input type="text" class="bg-transparent border-none outline-none text-white w-full" placeholder="Type a command...">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="py-12 px-8 border-t border-white/5 text-center">
+    <p class="text-gray-500 text-[10px] font-bold uppercase tracking-[0.2em]">
+        Developed by Abinash Kumar • Veera Cloud AI © 2026
+    </p>
 </footer>
 
 <script>
-/* ===== LOADER ===== */
-setTimeout(()=>{
-  loader.style.display="none";
-  hero.classList.add("show");
-},1500);
+    // Loader Script
+    window.addEventListener('load', () => {
+        const loader = document.getElementById('loader');
+        setTimeout(() => {
+            loader.style.opacity = '0';
+            setTimeout(() => loader.style.display = 'none', 800);
+        }, 1200);
+    });
 
-function go(){
-  document.querySelector("section:nth-of-type(2)").scrollIntoView({behavior:"smooth"});
-}
+    // Simple Particles
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
 
-/* ===== REVEAL ===== */
-const revealEls=document.querySelectorAll(".reveal");
-window.addEventListener("scroll",()=>{
-  revealEls.forEach(el=>{
-    const top=el.getBoundingClientRect().top;
-    if(top<window.innerHeight-80)el.classList.add("show");
-  });
-});
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.onresize = resize; resize();
 
-/* ===== 3D TILT ===== */
-document.querySelectorAll(".tilt").forEach(card=>{
-  card.addEventListener("mousemove",e=>{
-    const r=card.getBoundingClientRect();
-    const x=e.clientX-r.left;
-    const y=e.clientY-r.top;
-    card.style.transform=
-      `rotateX(${(y/r.height-.5)*20}deg)
-       rotateY(${(x/r.width-.5)*-20}deg)
-       translateZ(20px)`;
-  });
-  card.addEventListener("mouseleave",()=>{
-    card.style.transform="rotateX(0) rotateY(0)";
-  });
-});
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.size = Math.random() * 1.5;
+            this.speedX = Math.random() * 0.4 - 0.2;
+            this.speedY = Math.random() * 0.4 - 0.2;
+        }
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.x < 0) this.x = canvas.width;
+            if (this.y > canvas.height) this.y = 0;
+            if (this.y < 0) this.y = canvas.height;
+        }
+        draw() {
+            ctx.fillStyle = "rgba(99, 102, 241, 0.3)";
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
 
-/* ===== PARTICLES ===== */
-const c=document.getElementById("particles"),
-ctx=c.getContext("2d");
-let w,h,p=[];
-function resize(){
-  w=c.width=window.innerWidth;
-  h=c.height=window.innerHeight;
-}
-window.onresize=resize;resize();
+    for (let i = 0; i < 80; i++) particles.push(new Particle());
 
-for(let i=0;i<80;i++){
-  p.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5),vy:(Math.random()-.5)});
-}
-
-function draw(){
-  ctx.clearRect(0,0,w,h);
-  ctx.fillStyle="rgba(255,255,255,.6)";
-  p.forEach(a=>{
-    a.x+=a.vx;a.y+=a.vy;
-    if(a.x<0||a.x>w)a.vx*=-1;
-    if(a.y<0||a.y>h)a.vy*=-1;
-    ctx.beginPath();
-    ctx.arc(a.x,a.y,1.5,0,Math.PI*2);
-    ctx.fill();
-  });
-  requestAnimationFrame(draw);
-}
-draw();
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => { p.update(); p.draw(); });
+        requestAnimationFrame(animate);
+    }
+    animate();
 </script>
 
 </body>
