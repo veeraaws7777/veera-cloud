@@ -1,507 +1,395 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login & Signup Form</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Professional Login & Signup Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700&display=swap");
+    :root {
+      --primary-bg: rgba(255,255,255,0.02);
+      --primary-border: rgba(255, 255, 255, 0.15);
+      --primary-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+      --modal-bg: rgba(22,23,38,0.98);
+      --primary-btn-bg: #276EF1;
+      --primary-btn-hover: #16397a;
+      --danger-color: #FFB7B6;
+      --success-color: #6DF89E;
+      --warning-color: #F8EF8E;
+      --info-color: #B0E0F7;
+      --input-border: #ccc;
+      --input-focus: #A0C1FA;
+      --google-btn-bg: #fff;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Open Sans", sans-serif;
+    }
+    body {
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      width: 100vw; height:100vh;
+      top: 0; left: 0;
+      background: url("https://cdn.pixabay.com/photo/2023/10/30/20/24/grasshopper-8353753_1280.jpg") center/cover, #1c1f2a;
+      z-index: -1;
+    }
+    .wrapper {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 12px;
+      padding: 32px;
+      margin: 30px 0;
+      text-align: center;
+      border: 1px solid var(--primary-border);
+      backdrop-filter: blur(16px);
+      background-color: var(--primary-bg);
+      box-shadow: var(--primary-shadow);
+      transition: box-shadow .24s;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      transition: .3s;
+    }
+    h2 {
+      font-size: 2.2rem;
+      margin-bottom: 22px;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: .03em;
+    }
+    .input-field {
+      position: relative;
+      border-bottom: 2px solid var(--input-border);
+      margin: 17px 0;
+      transition: border-color 0.2s;
+    }
+    .input-field label {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      color: #efefef;
+      font-size: 16px;
+      pointer-events: none;
+      transition: font-size 0.15s, top 0.15s, color 0.18s;
+    }
+    .input-field input {
+      width: 100%;
+      height: 42px;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      color: #fff;
+      padding-left: 2px;
+    }
+    .input-field input:focus ~ label,
+    .input-field input:valid ~ label {
+      font-size: 0.78rem;
+      top: 10px;
+      color: var(--input-focus);
+      transform: translateY(-140%);
+    }
+    .input-field input:focus {
+      box-shadow: none;
+    }
+    .forget {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 26px 0 36px 0;
+      color: #ececec;
+    }
+    #remember {
+      accent-color: #fff;
+    }
+    .forget label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .forget label p {
+      margin-left: 8px;
+      font-size: 0.97em;
+      user-select: none;
+    }
+    .wrapper a {
+      color: #efefef;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .wrapper a:hover, button.link-btn:hover {
+      text-decoration: underline;
+    }
+    button, .link-btn {
+      background: #fff;
+      color: #1a1a1a;
+      font-weight: 600;
+      border: none;
+      padding: 13px 22px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 16px;
+      border: 2px solid transparent;
+      transition: color 0.23s, border 0.23s, background 0.22s;
+      outline: none;
+      margin: 0;
+    }
+    button:hover:not(:disabled), .link-btn:hover:not(:disabled) {
+      color: #fff;
+      border-color: #fff;
+      background: rgba(255,255,255,0.16);
+    }
+    button:disabled, .google-btn[disabled], .link-btn:disabled {
+      opacity: 0.65;
+      pointer-events: none;
+    }
+    .register, .login-link {
+      text-align: center;
+      margin-top: 32px;
+      color: #fff;
+      font-size: 1.05em;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 24px 0 18px 0;
+    }
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #ccc;
+      opacity: 0.30;
+    }
+    .divider span {
+      margin: 0 12px;
+      color: #cccccc;
+      font-size: 0.98rem;
+    }
+    .social-btn {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+    .google-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--google-btn-bg);
+      color: #383a42;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0.5px 3px rgba(68,68,68,.08);
+      border-radius: 3px;
+      padding: 11px 24px;
+      border: 1.7px solid #d9d9d9;
+      font-size: 15.5px;
+      transition: box-shadow .18s, background 0.18s;
+    }
+    .google-btn:hover:not(:disabled) {
+      box-shadow: 0 3px 16px rgba(60,60,70,0.14);
+      background: #f4f7fa;
+    }
+    .google-icon {
+      width: 22px;
+      height: 22px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .tab-switcher {
+      display: none;
+      justify-content: center;
+      margin-bottom: 27px;
+    }
+    .tab-switcher button {
+      border-radius: 8px 8px 0 0;
+      background: rgba(255,255,255,.09);
+      margin: 0 6px;
+      padding: 8px 25px;
+      font-size: 1.02rem;
+      border: 1px solid rgba(255,255,255,0.19);
+      border-bottom: none;
+      color: #fff;
+      transition: background .2s, color .18s;
+    }
+    .tab-switcher button.active {
+      background: #fff;
+      color: #232c44;
+      font-weight: bold;
+    }
+    .tab-switcher button:not(.active):hover {
+      background: rgba(255,255,255,0.19);
+    }
+    .forgot-btn {
+      background: transparent;
+      color: #efefef;
+      border: none;
+      font: inherit;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      transition: color .15s;
+    }
+    .forgot-btn:disabled {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    #modalMessageOverlay {
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(30,40,60,0.38);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    #modalMessageBox {
+      background: var(--modal-bg);
+      color: #fff;
+      padding: 28px 36px 22px 36px;
+      border-radius: 11px;
+      min-width: 320px;
+      max-width: 95vw;
+      text-align: center;
+      box-shadow: 0 7px 38px 0 rgba(40,40,90,0.23);
+      position: relative;
+      border: 2px solid #293771;
+    }
+    #modalMessageBox .modal-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.7em;
+      font-weight: 700;
+      text-shadow: 0 1px 10px #1a1d3399;
+      letter-spacing: .03em;
+    }
+    #modalMessageBox .modal-body {
+      font-size: 1.07rem;
+      word-break: break-word;
+    }
+    #modalMessageBox .modal-footer {
+      margin-top: 21px;
+    }
+    #modalMessageBox .modal-close-btn {
+      background: var(--primary-btn-bg);
+      color: #fff;
+      border: none;
+      font-size: 15.5px;
+      border-radius: 4px;
+      padding: 8px 26px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.19s;
+      box-shadow: 0 2px 6px 0 #1a1f3c10;
+    }
+    #modalMessageBox .modal-close-btn:hover {
+      background: var(--primary-btn-hover);
+    }
+    #modalMessageBox .modal-error { color: var(--danger-color); }
+    #modalMessageBox .modal-success { color: var(--success-color); }
+    #modalMessageBox .modal-warning { color: var(--warning-color); }
+    #modalMessageBox .modal-info { color: var(--info-color); }
+  </style>
 </head>
-<style>
-  @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700&display=swap");
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Open Sans", sans-serif;
-}
-
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  width: 100%;
-  padding: 0 10px;
-  position: relative;
-  z-index: 0;
-}
-
-body::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: url("https://4kwallpapers.com/images/walls/thumbs_3t/25008.jpg"), #000;
-  background-position: center;
-  background-size: cover;
-  z-index: -1;
-}
-
-.wrapper {
-  width: 400px;
-  border-radius: 8px;
-  padding: 30px;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(9px);
-  -webkit-backdrop-filter: blur(9px);
-  background-color: rgba(255,255,255,0.02);
-  box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 );
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  transition: .3s;
-}
-
-h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #fff;
-}
-
-.input-field {
-  position: relative;
-  border-bottom: 2px solid #ccc;
-  margin: 15px 0;
-}
-
-.input-field label {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  color: #fff;
-  font-size: 16px;
-  pointer-events: none;
-  transition: 0.15s ease;
-}
-
-.input-field input {
-  width: 100%;
-  height: 40px;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  color: #fff;
-}
-
-.input-field input:focus~label,
-.input-field input:valid~label {
-  font-size: 0.8rem;
-  top: 10px;
-  transform: translateY(-120%);
-}
-
-.forget {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 25px 0 35px 0;
-  color: #fff;
-}
-
-#remember {
-  accent-color: #fff;
-}
-
-.forget label {
-  display: flex;
-  align-items: center;
-}
-
-.forget label p {
-  margin-left: 8px;
-}
-
-.wrapper a {
-  color: #efefef;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.wrapper a:hover {
-  text-decoration: underline;
-}
-
-button {
-  background: #fff;
-  color: #000;
-  font-weight: 600;
-  border: none;
-  padding: 12px 20px;
-  cursor: pointer;
-  border-radius: 3px;
-  font-size: 16px;
-  border: 2px solid transparent;
-  transition: 0.3s ease;
-}
-
-button:hover {
-  color: #fff;
-  border-color: #fff;
-  background: rgba(255, 255, 255, 0.15);
-}
-
-button:disabled,
-.google-btn[disabled] {
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-.register,
-.login-link {
-  text-align: center;
-  margin-top: 30px;
-  color: #fff;
-}
-.divider {
-  display: flex;
-  align-items: center;
-  margin: 22px 0 18px 0;
-}
-.divider::before, .divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: #ccc;
-  opacity: 0.35;
-}
-.divider span {
-  margin: 0 15px;
-  color: #ccc;
-  font-size: 0.95rem;
-}
-.social-btn {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 14px;
-}
-.google-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: none;
-  background: #fff;
-  color: #444;
-  font-weight: 600;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  border-radius: 3px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 15px;
-  transition: box-shadow .2s;
-}
-.google-btn:hover {
-  box-shadow: 0 3px 12px rgba(0,0,0,0.20);
-}
-
-.google-icon {
-  width: 20px;
-  height: 20px;
-  display: inline-block;
-  vertical-align: middle;
-}
-
-.tab-switcher {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 25px;
-}
-
-.tab-switcher button {
-  border-radius: 8px 8px 0 0;
-  background: rgba(255,255,255,.08);
-  margin: 0 4px;
-  padding: 8px 24px;
-  font-size: 1rem;
-  border: 1px solid rgba(255,255,255,0.22);
-  border-bottom: none;
-  color: #fff;
-  transition: background .2s;
-}
-
-.tab-switcher button.active {
-  background: #fff;
-  color: #222;
-  font-weight: bold;
-}
-
-.tab-switcher button:not(.active):hover {
-  background: rgba(255,255,255,0.18);
-}
-
-.forgot-btn {
-  background: transparent;
-  color: #efefef;
-  border: none;
-  font: inherit;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-}
-
-.forgot-btn:disabled {
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-/* Custom styles for modal message */
-#modalMessageOverlay {
-  position: fixed;
-  z-index: 1000;
-  left: 0; top: 0; width: 100vw; height: 100vh;
-  background: rgba(30,40,60,0.35); /* slightly darker overlay */
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-
-#modalMessageBox {
-  background: rgba(22,23,38,0.98);
-  color: #fff;
-  padding: 26px 35px 22px 35px;
-  border-radius: 8px;
-  min-width: 320px;
-  max-width: 90vw;
-  text-align: center;
-  box-shadow: 0 4px 24px 0 rgba(60,60,110,0.18);
-  position: relative;
-}
-
-#modalMessageBox .modal-title {
-  font-size: 1.15rem;
-  margin-bottom: 0.65em;
-  font-weight: 700;
-}
-
-#modalMessageBox .modal-body {
-  font-size: 1rem;
-}
-
-#modalMessageBox .modal-footer {
-  margin-top: 20px;
-}
-
-#modalMessageBox .modal-close-btn {
-  background: #276EF1;
-  color: #fff;
-  border: none;
-  font-size: 15px;
-  border-radius: 3px;
-  padding: 7px 22px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: background 0.18s;
-}
-#modalMessageBox .modal-close-btn:hover {
-  background: #16397a;
-}
-#modalMessageBox .modal-error {
-  color: #FFB7B6;
-}
-#modalMessageBox .modal-success {
-  color: #6DF89E;
-}
-#modalMessageBox .modal-warning {
-  color: #F8EF8E;
-}
-#modalMessageBox .modal-info {
-  color: #B0E0F7;
-}
-
-/* Google Sign-In Modal styles (CSS kept for compatibility) */
-#googleModalOverlay {
-  position: fixed;
-  z-index: 2000;
-  left: 0; top: 0; width: 100vw; height: 100vh;
-  background: rgba(30,40,60,0.55);
-  display: none;
-  align-items: center;
-  justify-content: center;
-}
-
-#googleModalBox {
-  background: rgba(255,255,255,0.97);
-  padding: 36px 35px 32px 35px;
-  border-radius: 18px;
-  min-width: 328px;
-  max-width: 95vw;
-  text-align: center;
-  box-shadow: 0 4px 32px 0 rgba(60,60,110,0.27);
-  position: relative;
-  color: #222;
-}
-
-#googleModalBox .google-modal-title {
-  font-size: 1.23rem;
-  margin-bottom: 0.85em;
-  font-weight: 700;
-  color: #364149;
-}
-
-#googleModalBox .google-popup-btn {
-  display: flex;
-  align-items: center;
-  background: #fff;
-  color: #222;
-  border: 1px solid #888;
-  border-radius: 2.5em;
-  padding: 12px 28px;
-  margin: 0 auto 16px auto;
-  gap: 12px;
-  font-size: 1.06rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.15s, box-shadow 0.14s;
-  box-shadow: 0 2px 8px 0 rgba(180,180,180,0.06);
-}
-#googleModalBox .google-popup-btn:hover {
-  background: #f7f8fa;
-  box-shadow: 0 3px 12px rgba(51,70,150,0.09);
-}
-#googleModalBox .google-icon {
-  width: 22px;
-  height: 22px;
-}
-
-#googleModalBox .google-modal-close-btn {
-  background: #f4f6fc;
-  color: #454e52;
-  border: none;
-  font-size: 15px;
-  border-radius: 3px;
-  padding: 7px 28px;
-  cursor: pointer;
-  font-weight: 600;
-  margin-top: 16px;
-  transition: background 0.13s, color 0.13s;
-}
-#googleModalBox .google-modal-close-btn:hover {
-  background: #ebedf2;
-  color: #191f22;
-}
-
-#googleModalBox .google-modal-body {
-  color: #575a64;
-  font-size: 0.98rem;
-  margin-bottom: 18px;
-}
-
-#googleModalBox .google-modal-error {
-  color: #c34747;
-  font-size: 0.98rem;
-  margin-top: 10px;
-  margin-bottom: 0;
-}
-</style>
 <body>
-  <div class="wrapper">
-    <div class="tab-switcher">
-      <button id="loginTab" class="active" onclick="showForm('login')">Login</button>
-      <button id="signupTab" onclick="showForm('signup')">Sign Up</button>
+  <div class="wrapper" aria-label="Authentication Container">
+    <div class="tab-switcher" aria-hidden="true">
+      <button id="loginTab" class="active" type="button" onclick="showForm('login')">Sign In</button>
+      <button id="signupTab" type="button" onclick="showForm('signup')">Register</button>
     </div>
-    <form id="loginForm" action="#" autocomplete="off">
-      <h2>Login Aws-4</h2>
+    <form id="loginForm" action="#" autocomplete="off" aria-label="Login Form">
+      <h2>AWS Login 4</h2>
       <div class="input-field">
-        <input type="text" required id="loginEmail" autocomplete="username">
+        <input type="email" required id="loginEmail" autocomplete="username" aria-label="Email" />
         <label for="loginEmail">Enter your email</label>
       </div>
       <div class="input-field">
-        <input type="password" required id="loginPassword" autocomplete="current-password">
+        <input type="password" required id="loginPassword" autocomplete="current-password" aria-label="Password" />
         <label for="loginPassword">Enter your password</label>
       </div>
       <div class="forget">
-        <label for="remember">
-          <input type="checkbox" id="remember">
+        <label for="remember" style="user-select:none;">
+          <input type="checkbox" id="remember" />
           <p>Remember me</p>
         </label>
-        <button type="button" class="forgot-btn" id="forgotBtn" onclick="forgotPassword()">Forgot password?</button>
+        <button type="button" class="forgot-btn" id="forgotBtn" onclick="window.forgotPassword()" aria-label="Forgot password?">Forgot password?</button>
       </div>
-      <button type="submit" id="loginSubmitBtn">Log In</button>
+      <button type="submit" id="loginSubmitBtn" aria-label="Log In">Log In</button>
       <div class="divider"><span>or</span></div>
       <div class="social-btn">
-        <button type="button" class="google-btn" id="googleLoginBtn" onclick="continueWithGoogle('login')">
+        <button type="button" class="google-btn" id="googleLoginBtn" onclick="window.continueWithGoogle('login')" aria-label="Continue with Google">
           <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo"/>
           Continue with Google
         </button>
       </div>
       <div class="register">
-        <p>
-          Don't have an account?
-          <a onclick="showForm('signup')">Register</a>
-        </p>
+        <p>Don't have an account? <a href="#" onclick="showForm('signup')" role="button" tabindex="0">Register</a></p>
       </div>
     </form>
-    <form id="signupForm" action="#" style="display: none;" autocomplete="off">
-      <h2>Sign Up Aws-4</h2>
+    <form id="signupForm" action="#" style="display: none;" autocomplete="off" aria-label="Sign Up Form">
+      <h2>AWS Sign Up 4</h2>
       <div class="input-field">
-        <input type="text" required id="signupName" autocomplete="name">
+        <input type="text" required id="signupName" autocomplete="name" aria-label="Full name" />
         <label for="signupName">Enter your name</label>
       </div>
       <div class="input-field">
-        <input type="text" required id="signupEmail" autocomplete="email">
+        <input type="email" required id="signupEmail" autocomplete="email" aria-label="Email" />
         <label for="signupEmail">Enter your email</label>
       </div>
       <div class="input-field">
-        <input type="password" required id="signupPassword" autocomplete="new-password">
+        <input type="password" required id="signupPassword" autocomplete="new-password" aria-label="Password" />
         <label for="signupPassword">Create password</label>
       </div>
       <div class="input-field">
-        <input type="password" required id="signupPasswordConfirm" autocomplete="new-password">
+        <input type="password" required id="signupPasswordConfirm" autocomplete="new-password" aria-label="Confirm password" />
         <label for="signupPasswordConfirm">Confirm password</label>
       </div>
-      <button type="submit" id="signupSubmitBtn">Sign Up</button>
+      <button type="submit" id="signupSubmitBtn" aria-label="Sign Up">Sign Up</button>
       <div class="divider"><span>or</span></div>
       <div class="social-btn">
-        <button type="button" class="google-btn" id="googleSignupBtn" onclick="continueWithGoogle('signup')">
+        <button type="button" class="google-btn" id="googleSignupBtn" onclick="window.continueWithGoogle('signup')" aria-label="Sign Up with Google">
           <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo"/>
           Continue with Google
         </button>
       </div>
       <div class="login-link">
-        <p>
-          Already have an account?
-          <a onclick="showForm('login')">Login</a>
-        </p>
+        <p>Already have an account? <a href="#" onclick="showForm('login')" role="button" tabindex="0">Login</a></p>
       </div>
     </form>
   </div>
-  <!-- Modal Message Overlay for messages -->
-  <div id="modalMessageOverlay">
-    <div id="modalMessageBox">
+
+  <div id="modalMessageOverlay" tabindex="-1" aria-modal="true" role="dialog">
+    <div id="modalMessageBox" role="document">
       <div class="modal-title" id="modalMessageTitle"></div>
       <div class="modal-body" id="modalMessageBody"></div>
       <div class="modal-footer" style="text-align: center;">
-        <button class="modal-close-btn" id="modalMessageCloseBtn">OK</button>
+        <button class="modal-close-btn" id="modalMessageCloseBtn" tabindex="0">OK</button>
       </div>
     </div>
   </div>
-  <!-- 
-    We keep the Google modal HTML & CSS for compatibility,
-    but it will no longer be shown/used by any button (per new requirements).
-  -->
-  <div id="googleModalOverlay" style="display: none;">
-    <div id="googleModalBox">
-      <div class="google-modal-title" id="googleModalTitle"></div>
-      <div class="google-modal-body" id="googleModalBody"></div>
-      <button class="google-popup-btn" id="googlePopupBtn">
-        <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo" />
-        <span id="googlePopupBtnText">Sign in with Google</span>
-      </button>
-      <div class="google-modal-error" id="googleModalError" style="display:none;"></div>
-      <button class="google-modal-close-btn" id="googleModalCloseBtn">Cancel</button>
-    </div>
-  </div>
+
   <script type="module">
+    // Firebase imports
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
-    import { 
-      getAuth, 
-      signInWithEmailAndPassword, 
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
       createUserWithEmailAndPassword,
       sendPasswordResetEmail,
       GoogleAuthProvider,
@@ -509,6 +397,7 @@ button:disabled,
       updateProfile
     } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
+    // Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyDBSIUwdfN38xiPeapdueeyCvdgV7ep-YE",
       authDomain: "abinash-482505.firebaseapp.com",
@@ -520,198 +409,157 @@ button:disabled,
       measurementId: "G-MBJM2CCKJ6"
     };
 
+    // App Initialization
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
+    getAnalytics(app);
     const auth = getAuth(app);
-    const provider = new GoogleAuthProvider();
+    const googleProvider = new GoogleAuthProvider();
 
-    // Modal message logic (replaces alert)
-    function showMessage(msg, type = 'info', title = null, callbackAfterClose = null) {
-      const overlay = document.getElementById('modalMessageOverlay');
-      const box = document.getElementById('modalMessageBox');
-      const modalTitle = document.getElementById('modalMessageTitle');
-      const modalBody = document.getElementById('modalMessageBody');
-      let tTitle = '';
-      switch(type) {
-        case 'success': tTitle = 'Success'; break;
-        case 'error': tTitle = 'Error'; break;
-        case 'warning': tTitle = 'Warning'; break;
-        case 'info': default: tTitle = 'Info';
+    // Utilities
+    const $ = (sel) => document.querySelector(sel);
+
+    // --- REMEMBER ME LOGIC (12 HOURS) ---
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const saved = localStorage.getItem('rememberMeData');
+        if (saved) {
+          const { email, timestamp } = JSON.parse(saved);
+          const now = Date.now();
+          const expiry = 12 * 60 * 60 * 1000;
+          if (now - timestamp < expiry) {
+            $('#loginEmail').value = email;
+            $('#remember').checked = true;
+          } else {
+            localStorage.removeItem('rememberMeData');
+          }
+        }
+      } catch (err) {
+        // ignore data corruption
+        localStorage.removeItem('rememberMeData');
       }
-      modalTitle.textContent = title || tTitle;
-      modalTitle.className = 'modal-title modal-' + type;
-      modalBody.textContent = msg;
-      modalBody.className = 'modal-body modal-' + type;
-      overlay.style.display = 'flex';
+    });
 
+    /**
+     * Custom modal message handler, advanced & accessible
+     * @param {string} msg
+     * @param {'info'|'success'|'error'|'warning'} type
+     * @param {string?} title
+     * @param {function?} callbackAfterClose
+     */
+    function showMessage(msg, type = 'info', title = null, callbackAfterClose = null) {
+      const overlay = $('#modalMessageOverlay');
+      const modalTitle = $('#modalMessageTitle');
+      const modalBody = $('#modalMessageBody');
+      const ESC_KEY = 27;
+      const tTitle = title || ({
+        success: 'Success',
+        error: 'Error',
+        warning: 'Warning'
+      }[type] || 'Info');
+      modalTitle.textContent = tTitle;
+      modalTitle.className = `modal-title modal-${type}`;
+      modalBody.textContent = msg;
+      overlay.style.display = 'flex';
+      $("#modalMessageCloseBtn").focus();
+
+      // accessibility: close via Escape
+      let keyHandler = (e) => {
+        if (e.key === "Escape" || e.keyCode === ESC_KEY) {
+          closeModal();
+        }
+      };
       function closeModal() {
         overlay.style.display = 'none';
-        if (typeof callbackAfterClose === 'function') {
-          callbackAfterClose();
-        }
+        document.removeEventListener('keydown', keyHandler);
+        typeof callbackAfterClose === 'function' && callbackAfterClose();
       }
-
-      const closeBtn = document.getElementById('modalMessageCloseBtn');
-      closeBtn.onclick = closeModal;
-      overlay.onclick = function(e) {
-        if (e.target === overlay) closeModal();
-      };
-      document.onkeydown = function(e) {
-        if (e.key === "Escape") closeModal();
-      };
+      $('#modalMessageCloseBtn').onclick = closeModal;
+      document.addEventListener('keydown', keyHandler, { once: true });
     }
 
-    window.showForm = function(form) {
-      const loginForm = document.getElementById('loginForm');
-      const signupForm = document.getElementById('signupForm');
-      const loginTab = document.getElementById('loginTab');
-      const signupTab = document.getElementById('signupTab');
-      if (form === 'login') {
-        loginForm.style.display = '';
-        signupForm.style.display = 'none';
-        loginTab.classList.add('active');
-        signupTab.classList.remove('active');
-      } else {
-        loginForm.style.display = 'none';
-        signupForm.style.display = '';
-        loginTab.classList.remove('active');
-        signupTab.classList.add('active');
-      }
+    // --- Form Toggle Handler ---
+    window.showForm = (form) => {
+      $('#loginForm').style.display = (form === 'login' ? '' : 'none');
+      $('#signupForm').style.display = (form === 'signup' ? '' : 'none');
     };
 
-    // Forgot Password
-    window.forgotPassword = async function() {
-      const email = document.getElementById('loginEmail').value.trim();
-      if (!email) {
-        showMessage('Please enter your email for password reset.', 'warning', 'Reset password');
-        document.getElementById('loginEmail').focus();
-        return;
-      }
-      const btn = document.getElementById('forgotBtn');
-      btn.disabled = true;
+    // --- Password Reset Handler ---
+    window.forgotPassword = async () => {
+      const email = $('#loginEmail').value.trim();
+      if (!email) return showMessage('Please enter your email to reset password.', 'warning', 'Missing Email');
       try {
         await sendPasswordResetEmail(auth, email);
-        showMessage('Password reset link sent to ' + email, 'info', 'Reset password');
+        showMessage('Reset link sent to: ' + email, 'success', 'Reset Email Sent');
       } catch (error) {
-        showMessage('Error: ' + (error.message || 'Unable to send reset email.'), 'error', 'Reset password');
+        showMessage(error.message, 'error', 'Reset Failed');
       }
-      btn.disabled = false;
     };
 
-    // Email/Password Login
-    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    // --- Login Form Submit Handler ---
+    $('#loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('loginEmail').value.trim();
-      const password = document.getElementById('loginPassword').value;
-      const btn = document.getElementById('loginSubmitBtn');
+      const email = $('#loginEmail').value.trim();
+      const password = $('#loginPassword').value;
+      const remember = $('#remember').checked;
+      const btn = $('#loginSubmitBtn');
       btn.disabled = true;
       try {
-        const result = await signInWithEmailAndPassword(auth, email, password);
-        const user = result.user;
-        let displayName = user.displayName || "";
-        let userMessage = "";
-        if (displayName && displayName.trim() !== "") {
-          userMessage = `Welcome, ${displayName} (${user.email})! You have logged in successfully.`;
+        await signInWithEmailAndPassword(auth, email, password);
+        if (remember) {
+          localStorage.setItem('rememberMeData', JSON.stringify({
+            email,
+            timestamp: Date.now()
+          }));
         } else {
-          userMessage = `Welcome, ${user.email}! You have logged in successfully.`;
+          localStorage.removeItem('rememberMeData');
         }
-        showMessage(
-          userMessage,
-          'success',
-          'Login Success',
-          function() {
-            window.location.href = "veeraws4.html";
-          }
-        );
-      } catch (error) {
-        showMessage('Login failed: ' + (error.message || ''), 'error');
+        showMessage('Welcome back!', 'success', 'Login Success', () => {
+          window.location.href = "veeraws4.html";
+        });
+      } catch (err) {
+        showMessage(err.message, 'error', 'Login Error');
+        btn.disabled = false;
       }
-      btn.disabled = false;
     });
 
-    // Email/Password Signup
-    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+    // --- Sign Up Form Submit Handler ---
+    $('#signupForm').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById('signupName').value.trim();
-      const email = document.getElementById('signupEmail').value.trim();
-      const password = document.getElementById('signupPassword').value;
-      const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
-      const btn = document.getElementById('signupSubmitBtn');
+      const name = $('#signupName').value.trim();
+      const email = $('#signupEmail').value.trim();
+      const pass = $('#signupPassword').value;
+      const confirm = $('#signupPasswordConfirm').value;
+      const btn = $('#signupSubmitBtn');
+      if (pass !== confirm) {
+        showMessage('Passwords do not match.', 'error', "Validation Error");
+        return;
+      }
       btn.disabled = true;
-
-      if (!name) {
-        showMessage('Please enter your name', 'warning');
-        document.getElementById('signupName').focus();
-        btn.disabled = false;
-        return;
-      }
-      if (password !== passwordConfirm) {
-        showMessage('Passwords do not match', 'error');
-        btn.disabled = false;
-        return;
-      }
       try {
-        const result = await createUserWithEmailAndPassword(auth, email, password);
-        const user = result.user;
-        // Set displayName for new user
-        if (user && name) {
-          // Use updateProfile from Firebase Auth module
-          await updateProfile(user, { displayName: name });
-        }
-        let userMessage = "";
-        if (name && name.trim() !== "") {
-          userMessage = `Welcome, ${name} (${user.email})! Signup successful.`;
-        } else {
-          userMessage = `Welcome, ${user.email}! Signup successful.`;
-        }
-        showMessage(
-          userMessage,
-          'success',
-          'Signup Success',
-          function() {
-            window.location.href = "veeraws4.html";
-          }
-        );
-      } catch (error) {
-        showMessage('Sign up failed: ' + (error.message || ''), 'error');
+        const result = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(result.user, { displayName: name });
+        showMessage('Signup successful!', 'success', 'Welcome', () => {
+          window.location.href = "veeraws4.html";
+        });
+      } catch (err) {
+        showMessage(err.message, 'error', 'Registration Error');
+        btn.disabled = false;
       }
-      btn.disabled = false;
     });
 
-    // Google Sign-In directly (no modal), continue "in this page" (in-app, no redirect or new tab)
-    window.continueWithGoogle = async function(context) {
-      let messagePre = (context === 'login')
-        ? 'Logging in with Google...'
-        : 'Signing up with Google...';
-
+    // --- Google Sign In Handler ---
+    window.continueWithGoogle = async (context) => {
+      const btn = context === 'login' ? $('#googleLoginBtn') : $('#googleSignupBtn');
+      if (btn) btn.disabled = true;
       try {
-        showMessage(messagePre, 'info', null);
-        // signInWithPopup: opens a popup but continues in same top-level app
-        const result = await signInWithPopup(auth, provider);
-        const user = result.user;
-        let displayName = user.displayName || "";
-        let userMessage = "";
-        if (displayName && displayName.trim() !== "") {
-          userMessage =
-            (context === 'login' ?
-              `Welcome, ${displayName} (${user.email})! You have logged in successfully with Google.` :
-              `Welcome, ${displayName} (${user.email})! Signup successful with Google.`);
-        } else {
-          userMessage =
-            (context === 'login' ?
-              `Welcome, ${user.email}! You have logged in successfully with Google.` :
-              `Welcome, ${user.email}! Signup successful with Google.`);
-        }
-        showMessage(
-          userMessage,
-          'success',
-          (context === 'login' ? 'Login Success' : 'Signup Success'),
-          function() {
-            window.location.href = "veeraws4.html";
-          }
-        );
-      } catch (error) {
-        showMessage("Google sign in failed: " + (error.message || ''), 'error', "Google Sign In");
+        const userCred = await signInWithPopup(auth, googleProvider);
+        showMessage(`Hello ${userCred.user.displayName || userCred.user.email}!`, 'success', 'Google Login', () => {
+          window.location.href = "veeraws4.html";
+        });
+      } catch (err) {
+        showMessage(err.message, 'error', "Google Sign-in Failed");
+      } finally {
+        if (btn) btn.disabled = false;
       }
     };
   </script>
