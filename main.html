@@ -213,6 +213,13 @@
                 }
             </style>
             <!-- Sidebar navigation with proper "active" support -->
+            <!-- Loading animation markup -->
+            <div id="sidebar-loading-overlay" style="position:fixed;z-index:9999;display:none;top:0;left:0;width:100vw;height:100vh;background:rgba(18,13,29,0.90);align-items:center;justify-content:center;">
+                <div class="sidebar-spinner">
+                    <div class="spinner-circle"></div>
+                    <span style="display:block;margin-top:16px;color:#fff;font-weight:bold;font-size:16px;letter-spacing:1px;">Loading...</span>
+                </div>
+            </div>
             <nav class="sidebar-anim-container" style="display: flex; flex-direction: column; align-items: center; width: 100%;">
                 <a href="#" 
                    class="nav-item mouse-anim active no-expand" 
@@ -237,23 +244,95 @@
                     <span style="font-weight:bold; color:#eaeaed; text-shadow:0 0 1px #000, 0 1px 1px #221b37;">🛠️ Hands-on</span>
                 </a>
                 <a href="https://python-786084835977.us-west1.run.app/" 
-                   class="nav-item mouse-anim" 
+                   class="nav-item mouse-anim" id="python-link"
                    style="min-width:220px; max-width:350px; width:100%; text-align:center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background:#221b37; margin:4px 0; position:relative; overflow:hidden; text-decoration:none;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow:0 0 1px #000, 0 1px 1px #221b37;">🐍 Python</span>
                 </a>
                 <a href="https://kubenets-786084835977.us-west1.run.app" 
-                   class="nav-item mouse-anim" 
+                   class="nav-item mouse-anim" id="kube-link"
                    style="min-width:220px; max-width:350px; width:100%; text-align:center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background:#221b37; margin:4px 0; position:relative; overflow:hidden; text-decoration:none;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow:0 0 1px #000, 0 1px 1px #221b37;">🛞 Kubernetes</span>
                 </a>
                
                 <a href="aistudio.html" 
-                   class="nav-item mouse-anim" 
+                   class="nav-item mouse-anim" id="aistudio-link"
                    style="min-width:220px; max-width:350px; width:100%; text-align:center; border-top:2px solid #000; border-bottom:2px solid #000; box-sizing:border-box; padding:10px 0; background:#221b37; margin:4px 0; position:relative; overflow:hidden; text-decoration:none;">
                     <span style="font-weight:bold; color:#eaeaed; text-shadow:0 0 1px #000, 0 1px 1px #221b37;">🧠 Ai studio</span>
                 </a>
-                
             </nav>
+            <style>
+                /* Loading spinner animation for sidebar overlay */
+                #sidebar-loading-overlay {
+                    display: flex; /* via JS toggle this "flex" to "none" */
+                }
+                .sidebar-spinner {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                }
+                .spinner-circle {
+                    width: 64px;
+                    height: 64px;
+                    border: 6px solid #eebaff55;
+                    border-top: 6px solid #f02d64;
+                    border-radius: 50%;
+                    animation: sidebar-spin 1.1s linear infinite;
+                }
+                @keyframes sidebar-spin {
+                    0%   { transform: rotate(0deg);}
+                    100% { transform: rotate(360deg);}
+                }
+            </style>
+            <script>
+                // Always check on page load if user previously "signed in" (persistent across close/open)
+                document.addEventListener("DOMContentLoaded", function() {
+                    if (localStorage.getItem("user_login_remembered") === "true") {
+                        // Optionally, update UI to indicate remembered sign-in
+                        // Example: document.body.classList.add("user-remembered");
+                        // Or notify user: alert("Welcome back! You are remembered.");
+                        // You can expand this to auto-fill, auto-login, etc.
+                    }
+                });
+
+                // Show loading animation, go to requested link after delay
+                function showSidebarLoadingAndNavigate(href) {
+                    var overlay = document.getElementById('sidebar-loading-overlay');
+                    overlay.style.display = "flex";
+                    setTimeout(function(){
+                        window.location.href = href;
+                    }, 800); // 800ms show spinner before navigating, adjust if you'd like
+                }
+
+                // When user clicks the channel link, remember the sign-in persistently
+                document.getElementById("channels-link").addEventListener("click", function(event){
+                    localStorage.setItem("user_login_remembered", "true");
+                    // The flag remains even if the browser/app is closed and reopened
+                    // Show loading and then change page
+                    event.preventDefault();
+                    showSidebarLoadingAndNavigate(this.getAttribute("href"));
+                });
+
+                // Add loading for all external (non-home) nav items
+                document.getElementById("python-link").addEventListener("click", function(e){
+                    e.preventDefault();
+                    showSidebarLoadingAndNavigate(this.getAttribute("href"));
+                });
+                document.getElementById("kube-link").addEventListener("click", function(e){
+                    e.preventDefault();
+                    showSidebarLoadingAndNavigate(this.getAttribute("href"));
+                });
+                document.getElementById("aistudio-link").addEventListener("click", function(e){
+                    e.preventDefault();
+                    showSidebarLoadingAndNavigate(this.getAttribute("href"));
+                });
+                // For Certifications and Hands-on as well (if you want loading)
+                document.querySelectorAll('a.nav-item[href$="Certification.html"],a.nav-item[href$="hand-on.html"]').forEach(function(link){
+                    link.addEventListener('click',function(e){
+                        e.preventDefault();
+                        showSidebarLoadingAndNavigate(this.getAttribute("href"));
+                    });
+                });
+            </script>
             <script>
                 // Always check on page load if user previously "signed in" (persistent across close/open)
                 document.addEventListener("DOMContentLoaded", function() {
