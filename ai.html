@@ -95,9 +95,11 @@
     <div class="hidden md:flex gap-8 text-xs font-bold uppercase tracking-widest text-gray-400">
         <a href="#hero" class="hover:text-white transition">Dashboard</a>
         <a href="#factory" class="hover:text-white transition">App Factory</a>
-        <a href="#terminal" class="hover:text-white transition">Console</a>
     </div>
-    <button class="bg-indigo-600 hover:bg-indigo-500 px-6 py-2 rounded-lg text-sm font-bold transition shadow-lg shadow-indigo-500/20">
+    <button 
+        class="bg-indigo-600 hover:bg-indigo-500 px-6 py-2 rounded-lg text-sm font-bold transition shadow-lg shadow-indigo-500/20"
+        onclick="showLoaderAndGo('https://full-application-786084835977.us-west1.run.app/');"
+    >
         DEPLOY PROJECT
     </button>
 </nav>
@@ -162,9 +164,30 @@
             </script>
         </div>
 
+        <!-- Basic Loader overlay (hidden by default, in DOM for quick show/hide) -->
+        <div id="custom-loader-overlay" style="display:none; position:fixed; z-index:9999;top:0;left:0;width:100vw;height:100vh;background:rgba(18,21,34,0.85);" class="flex items-center justify-center">
+            <div class="flex flex-col items-center gap-4">
+                <div class="loader-spin mb-4"></div>
+                <span class="text-white font-semibold text-lg">Loading...</span>
+            </div>
+        </div>
+        <style>
+        .loader-spin {
+          border: 6px solid #818cf8;
+          border-top: 6px solid #ec4899;
+          border-radius: 50%;
+          width: 48px;
+          height: 48px;
+          animation: loader-normal-spin 0.8s linear infinite;
+        }
+        @keyframes loader-normal-spin {
+          0% { transform: rotate(0deg);}
+          100% { transform: rotate(360deg);}
+        }
+        </style>
         <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
-            
-            <div onclick="window.location.href='https://full-application-786084835977.us-west1.run.app/';" class="cursor-pointer md:col-span-8 glass-card rounded-3xl p-10 flex flex-col justify-between group relative overflow-hidden bg-gradient-to-br from-indigo-500/10 to-transparent">
+
+            <div onclick="showLoaderAndGo('https://full-application-786084835977.us-west1.run.app/')" class="cursor-pointer md:col-span-8 glass-card rounded-3xl p-10 flex flex-col justify-between group relative overflow-hidden bg-gradient-to-br from-indigo-500/10 to-transparent">
                 <div class="relative z-10">
                     <i class="fa-solid fa-flask text-4xl text-indigo-500 mb-6"></i>
                     <h3 class="text-3xl font-bold mb-4">AI Studio</h3>
@@ -180,7 +203,7 @@
                 <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-indigo-500/10 rounded-full blur-[100px] group-hover:bg-indigo-500/20 transition"></div>
             </div>
 
-            <div onclick="window.location.href='https://resumeai-786084835977.us-west1.run.app';" class="cursor-pointer md:col-span-4 glass-card rounded-3xl p-8 flex flex-col group border-blue-500/20 hover:shadow-lg transition hover:border-blue-500/50" style="text-decoration: none;">
+            <div onclick="showLoaderAndGo('https://resumeai-786084835977.us-west1.run.app')" class="cursor-pointer md:col-span-4 glass-card rounded-3xl p-8 flex flex-col group border-blue-500/20 hover:shadow-lg transition hover:border-blue-500/50" style="text-decoration: none;">
                 <div class="w-14 h-14 bg-blue-500/20 rounded-2xl flex items-center justify-center mb-6 border border-blue-500/40">
                     <i class="fa-solid fa-file-lines text-blue-500 text-2xl"></i>
                 </div>
@@ -192,69 +215,238 @@
                 </div>
             </div>
 
-            <div class="md:col-span-4 glass-card rounded-3xl p-8 flex flex-col group border-cyan-500/20">
-                <div class="w-14 h-14 bg-cyan-500/20 rounded-2xl flex items-center justify-center mb-6 border border-cyan-500/40">
-                    <i class="fa-solid fa-code text-cyan-400 text-2xl"></i>
+            <div onclick="showLoaderAndGo('https://terraform-generator-786084835977.us-west1.run.app')" class="cursor-pointer md:col-span-4 glass-card rounded-3xl p-8 flex flex-col group border-emerald-500/20">
+                <div class="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center mb-6 border border-emerald-500/40">
+                    <i class="fa-solid fa-file-code text-emerald-400 text-2xl"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-2">Code Generator</h3>
+                <h3 class="text-xl font-bold mb-2">Terraform Code Generator</h3>
                 <p class="text-gray-400 text-sm leading-relaxed mb-6">
-                    Instantly generate both backend and frontend code. Describe your app—AI creates Node.js/Python APIs and React/Next.js interfaces automatically.
+                    Instantly generate infrastructure as code with AI-powered Terraform configuration. Describe your desired cloud setup – AI creates ready-to-deploy .tf files for AWS, GCP, Azure and more.
                 </p>
-                <div class="mt-auto flex justify-between items-center text-xs font-black uppercase text-cyan-400">
-                    <span>Back &amp; Front Engine</span>
+                <div class="mt-auto flex justify-between items-center text-xs font-black uppercase text-emerald-400">
+                    <span>IaC Engine</span>
                     <i class="fa-solid fa-arrow-right-long group-hover:translate-x-2 transition"></i>
                 </div>
             </div>
 
-            <div class="md:col-span-4 glass-card rounded-3xl p-8 flex flex-col group border-orange-500/20">
+            <div onclick="showLoaderAndGo('https://ats-score-checker-786084835977.us-west1.run.app')" class="cursor-pointer md:col-span-4 glass-card rounded-3xl p-8 flex flex-col group border-orange-500/20">
                 <div class="w-14 h-14 bg-orange-500/20 rounded-2xl flex items-center justify-center mb-6 border border-orange-500/40">
-                    <i class="fa-solid fa-database text-orange-400 text-2xl"></i>
+                    <i class="fa-solid fa-clipboard-check text-orange-400 text-2xl"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-2">Schema Genius</h3>
-                <p class="text-gray-400 text-sm leading-relaxed mb-6">Optimized database structuring. AI-driven SQL normalization and automatic indexing recommendations.</p>
+                <h3 class="text-xl font-bold mb-2">ATS Resume Score Checker</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    Instantly analyze your resume for ATS compatibility. Get AI-powered feedback and a score to improve your chances of passing automated resume screenings.
+                </p>
                 <div class="mt-auto flex justify-between items-center text-xs font-black uppercase text-orange-400">
-                    <span>Data Engine</span>
+                    <span>ATS Analyzer</span>
                     <i class="fa-solid fa-arrow-right-long group-hover:translate-x-2 transition"></i>
                 </div>
             </div>
 
-            <div class="md:col-span-4 glass-card rounded-3xl p-8 flex flex-col group border-purple-500/20 bg-purple-500/5">
+            <div onclick="showLoaderAndGo('https://shell-scripting-generator-786084835977.us-west1.run.app')" class="cursor-pointer md:col-span-4 glass-card rounded-3xl p-8 flex flex-col group border-purple-500/20 bg-purple-500/5">
                 <div class="w-14 h-14 bg-purple-500/20 rounded-2xl flex items-center justify-center mb-6 border border-purple-500/40">
-                    <i class="fa-solid fa-robot text-purple-400 text-2xl"></i>
+                    <i class="fa-solid fa-terminal text-purple-400 text-2xl"></i>
                 </div>
-                <h3 class="text-xl font-bold mb-2">Agent Swarm</h3>
-                <p class="text-gray-400 text-sm leading-relaxed mb-6">Build autonomous worker agents that handle customer support, data entry, and code reviews while you sleep.</p>
+                <h3 class="text-xl font-bold mb-2">Shell Scripting Generator</h3>
+                <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                    Instantly generate robust shell scripts with AI. Describe your automation needs—receive secure, ready-to-run bash, zsh, or sh scripts in seconds.
+                </p>
                 <div class="mt-auto flex justify-between items-center text-xs font-black uppercase text-purple-400">
-                    <span>Agent Engine</span>
+                    <span>Shell Script Engine</span>
                     <i class="fa-solid fa-arrow-right-long group-hover:translate-x-2 transition"></i>
                 </div>
             </div>
-
         </div>
-    </div>
+        <script>
+        // Basic loading function
+        function showLoaderAndGo(url) {
+            const loader = document.getElementById('custom-loader-overlay');
+            if(loader) {
+                loader.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => {
+                    window.location.href = url;
+                }, 650); // brief delay for user perception
+            } else {
+                window.location.href = url;
+            }
+        }
+        </script>
 </section>
 
-<section id="terminal" class="py-24 px-8 bg-black/40">
+<section id="advanced-terminal" class="py-24 px-8 bg-black/50">
     <div class="container mx-auto max-w-4xl">
-        <div class="bg-[#0a0c14] border border-white/10 rounded-xl overflow-hidden shadow-2xl">
-            <div class="bg-white/5 px-4 py-2 border-b border-white/10 flex items-center gap-2">
-                <div class="w-3 h-3 rounded-full bg-red-500/50"></div>
-                <div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
-                <div class="w-3 h-3 rounded-full bg-green-500/50"></div>
-                <span class="ml-4 text-[10px] font-mono text-gray-500 uppercase tracking-widest">Deployment_Terminal_v4.2</span>
+        <div class="bg-gradient-to-br from-[#11121d] to-[#171a2b] border border-indigo-500/20 rounded-2xl overflow-hidden shadow-2xl relative">
+            <!-- Terminal Header -->
+            <div class="bg-white/10 px-4 py-3 border-b border-white/15 flex items-center gap-2">
+                <span class="inline-flex gap-1">
+                    <div class="w-3 h-3 rounded-full bg-red-500/60 ring-1 ring-white/10"></div>
+                    <div class="w-3 h-3 rounded-full bg-yellow-400/60 ring-1 ring-white/10"></div>
+                    <div class="w-3 h-3 rounded-full bg-green-400/60 ring-1 ring-white/10"></div>
+                </span>
+                <span class="ml-4 text-xs font-mono text-indigo-300 uppercase tracking-widest select-none">Advanced_Terminal_V5.0</span>
+                <span class="ml-auto flex items-center gap-2 text-xs text-gray-400">
+                    <i class="fa-solid fa-clock text-indigo-400"></i>
+                    <span id="terminal-time" class="tracking-wider font-semibold"></span>
+                </span>
             </div>
-            <div class="p-8 font-mono text-sm leading-relaxed">
-                <p class="text-green-400 mb-2">> Initializing Veera_Cloud_Core...</p>
-                <p class="text-gray-400 mb-2">> Pulling latest neural weights from server...</p>
-                <p class="text-gray-400 mb-2">> Scanning for application vulnerabilities... [CLEAN]</p>
-                <p class="text-indigo-400 mb-2 font-bold typewriter">> Ready for prompt... Type 'build app' to start.</p>
-                <div class="mt-8 pt-4 border-t border-white/5 flex items-center gap-2">
-                    <span class="text-indigo-500">$</span>
-                    <input type="text" class="bg-transparent border-none outline-none text-white w-full" placeholder="Type a command...">
+            <!-- Terminal Body with scroll, response log, etc. -->
+            <div class="p-8 font-mono text-sm leading-relaxed bg-transparent overflow-y-auto transition-all min-h-[360px]" id="terminal-log">
+                <div class="terminal-line text-green-400 mb-2 flex items-center gap-2">
+                    <span>&gt;</span>
+                    <span>Initializing Veera_Cloud_Core...</span>
+                    <i class="fa-solid fa-circle-notch fa-spin text-indigo-400"></i>
                 </div>
+                <div class="terminal-line text-gray-400 mb-2">
+                    &gt; Pulling latest neural weights from server...
+                    <span class="ml-2 animate-pulse text-indigo-300">[SYNCED]</span>
+                </div>
+                <div class="terminal-line text-gray-400 mb-2">
+                    &gt; Scanning for application vulnerabilities...
+                    <span class="ml-2 text-green-400">[CLEAN]</span>
+                </div>
+                <div class="terminal-line text-yellow-400 mb-2 flex items-center">
+                    <span>&gt; Environment:</span>
+                    <span class="ml-2 font-semibold text-emerald-300">Production - Kubernetes 1.25 / GPU Optimized</span>
+                </div>
+                <div class="terminal-line text-pink-400 mb-2 flex items-center">
+                    <span>&gt; Cluster Load:</span>
+                    <span class="ml-2 font-semibold text-pink-300">38% utilization, AI Autoscaler: <i class="fa-solid fa-bolt text-yellow-400"></i> ACTIVE</span>
+                </div>
+                <div class="terminal-line text-indigo-400 mb-3 font-bold typewriter">
+                    &gt; Ready for prompt... Type 'deploy start', 'help', 
+                     below.
+                </div>
+                
+                <!-- Dynamic output area for future command results -->
+                <div id="terminal-output"></div>
             </div>
+            <!-- Advanced Prompt Input -->
+            <form id="terminal-form" autocomplete="off" class="block">
+                <div class="bg-black/40 px-4 py-3 border-t border-white/10 flex items-center gap-2 relative">
+                    <span class="text-indigo-500 font-bold">$</span>
+                    <input 
+                        id="terminal-input"
+                        type="text"
+                        class="bg-transparent border-none outline-none text-white w-full font-mono placeholder-gray-500 transition"
+                        placeholder="Type a command... (try 'deploy start', 'status', 'logs', 'help', or 'funny')"
+                        autofocus
+                        spellcheck="false"
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="ml-1 px-3 py-1 rounded-lg bg-indigo-500/80 hover:bg-indigo-600 text-white text-xs font-bold border border-indigo-400 transition">
+                        <i class="fa-solid fa-share"></i>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+    <script>
+        // Clock
+        function updateTerminalTime() {
+            const el = document.getElementById('terminal-time');
+            if (el) {
+                const now = new Date();
+                el.textContent = now.toLocaleTimeString();
+            }
+        }
+        setInterval(updateTerminalTime, 1000);
+        updateTerminalTime();
+
+        // Basic interactive terminal
+        const terminalForm = document.getElementById('terminal-form');
+        const terminalInput = document.getElementById('terminal-input');
+        const outputDiv = document.getElementById('terminal-output');
+        const logDiv = document.getElementById('terminal-log');
+        const commandHandlers = {
+            'help': function() {
+                return `<span class='text-blue-400'>Available commands: 
+                    <b class='text-white'>deploy start</b>, 
+                    <b class='text-white'>status</b>, 
+                    <b class='text-white'>logs</b>, 
+                    <b class='text-white'>clear</b>, 
+                    <b class='text-white'>help</b>, 
+                    <b class='text-white'>funny</b>
+                </span>`;
+            },
+            'deploy start': function() {
+                return "<span class='text-green-400'>[DEPLOYMENT STARTED]</span> Orchestrating microservices, allocating GPU nodes, <span class='text-pink-400'>Live monitoring enabled</span>.";
+            },
+            'status': function() {
+                return "<span class='text-gray-400'>Cluster Status: <span class='text-indigo-400 font-bold'>All systems operational.</span></span>";
+            },
+            'logs': function() {
+                return `<pre class='bg-black/60 p-2 rounded text-[11px] text-green-200 max-h-36 overflow-y-auto mt-2'>
+[12:21:34] Service API: Running
+[12:21:36] DB Sync: OK
+[12:21:38] Worker: Scale-up triggered
+[12:22:01] JokeBot: Sleeping on the job... again!
+</pre>`;
+            },
+            'clear': function() {
+                outputDiv.innerHTML = "";
+                return "";
+            },
+            'funny': function() {
+                const jokes = [
+                    "Why do programmers hate nature?<br><span class='text-yellow-400'>It has too many bugs!</span>",
+                    "Why did the Cloud break up with the Server?<br><span class='text-pink-400'>Because it found someone more scalable.</span>",
+                    "Why was the JavaScript developer sad?<br><span class='text-emerald-400'>Because he didn't 'null' his feelings.</span>",
+                    "Knock knock.<br>Who's there?<br>AI.<br>AI who?<br><span class='text-indigo-400'>AI am your new DevOps engineer!</span>",
+                    "How does a terminal flirt?<br><span class='text-orange-300'>'sudo make me yours'</span>",
+                    "What do DevOps engineers use at parties?<br><span class='text-green-400'>Continuous Integration!</span>"
+                ];
+                const idx = Math.floor(Math.random() * jokes.length);
+                return `<div class='text-yellow-300 animate-bounce'>&#128514; [JokeBot]:</div><div class='mb-2'>${jokes[idx]}</div>`;
+            }
+        };
+
+        terminalForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const cmd = terminalInput.value.trim().toLowerCase();
+
+            if(cmd) {
+                // Log user's command
+                const userLine = document.createElement('div');
+                userLine.className = 'terminal-line text-indigo-300 mb-1 flex items-center';
+                userLine.innerHTML = `<span>$</span><span class="ml-2">${cmd}</span>`;
+                // Insert at the TOP of outputDiv
+                if (outputDiv.firstChild) {
+                    outputDiv.insertBefore(userLine, outputDiv.firstChild);
+                } else {
+                    outputDiv.appendChild(userLine);
+                }
+
+                // Process response
+                if (Object.prototype.hasOwnProperty.call(commandHandlers, cmd)) {
+                    const result = commandHandlers[cmd]();
+                    if (result && cmd !== 'clear') {
+                        const resDiv = document.createElement('div');
+                        resDiv.className = 'terminal-line mb-2';
+                        resDiv.innerHTML = result;
+                        // Insert at TOP, so answer is always above user's cmd
+                        if (outputDiv.firstChild) {
+                            outputDiv.insertBefore(resDiv, outputDiv.firstChild);
+                        } else {
+                            outputDiv.appendChild(resDiv);
+                        }
+                    }
+                } else if (cmd.length > 0) {
+                    const errDiv = document.createElement('div');
+                    errDiv.className = 'terminal-line text-red-400 mb-2';
+                    errDiv.innerHTML = "<b>[ERROR]</b> Command not found. Try <b class='text-white'>help</b> or <b class='text-white'>funny</b>!";
+                    if (outputDiv.firstChild) {
+                        outputDiv.insertBefore(errDiv, outputDiv.firstChild);
+                    } else {
+                        outputDiv.appendChild(errDiv);
+                    }
+                }
+                // Now scroll to TOP instead of bottom
+                logDiv.scrollTop = 0;
+                terminalInput.value = "";
+            }
+        });
+    </script>
 </section>
 
 <footer class="py-12 px-8 border-t border-white/5 text-center">
