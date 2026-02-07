@@ -1,0 +1,567 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Professional Login & Signup Portal</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700&display=swap");
+    :root {
+      --primary-bg: rgba(255,255,255,0.02);
+      --primary-border: rgba(255, 255, 255, 0.15);
+      --primary-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+      --modal-bg: rgba(22,23,38,0.98);
+      --primary-btn-bg: #276EF1;
+      --primary-btn-hover: #16397a;
+      --danger-color: #FFB7B6;
+      --success-color: #6DF89E;
+      --warning-color: #F8EF8E;
+      --info-color: #B0E0F7;
+      --input-border: #ccc;
+      --input-focus: #A0C1FA;
+      --google-btn-bg: #fff;
+    }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Open Sans", sans-serif;
+    }
+    body {
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      width: 100vw; height:100vh;
+      top: 0; left: 0;
+      background: url("https://4kwallpapers.com/images/walls/thumbs_3t/535.jpg") center/cover, #1c1f2a;
+      z-index: -1;
+    }
+    .wrapper {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 12px;
+      padding: 32px;
+      margin: 30px 0;
+      text-align: center;
+      border: 1px solid var(--primary-border);
+      backdrop-filter: blur(16px);
+      background-color: var(--primary-bg);
+      box-shadow: var(--primary-shadow);
+      transition: box-shadow .24s;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      transition: .3s;
+    }
+    h2 {
+      font-size: 2.2rem;
+      margin-bottom: 22px;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: .03em;
+    }
+    .input-field {
+      position: relative;
+      border-bottom: 2px solid var(--input-border);
+      margin: 17px 0;
+      transition: border-color 0.2s;
+    }
+    .input-field label {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      color: #efefef;
+      font-size: 16px;
+      pointer-events: none;
+      transition: font-size 0.15s, top 0.15s, color 0.18s;
+    }
+    .input-field input {
+      width: 100%;
+      height: 42px;
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      color: #fff;
+      padding-left: 2px;
+    }
+    .input-field input:focus ~ label,
+    .input-field input:valid ~ label {
+      font-size: 0.78rem;
+      top: 10px;
+      color: var(--input-focus);
+      transform: translateY(-140%);
+    }
+    .input-field input:focus {
+      box-shadow: none;
+    }
+    .forget {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 26px 0 36px 0;
+      color: #ececec;
+    }
+    #remember {
+      accent-color: #fff;
+    }
+    .forget label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+    }
+    .forget label p {
+      margin-left: 8px;
+      font-size: 0.97em;
+      user-select: none;
+    }
+    .wrapper a {
+      color: #efefef;
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .wrapper a:hover, button.link-btn:hover {
+      text-decoration: underline;
+    }
+    button, .link-btn {
+      background: #fff;
+      color: #1a1a1a;
+      font-weight: 600;
+      border: none;
+      padding: 13px 22px;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 16px;
+      border: 2px solid transparent;
+      transition: color 0.23s, border 0.23s, background 0.22s;
+      outline: none;
+      margin: 0;
+    }
+    button:hover:not(:disabled), .link-btn:hover:not(:disabled) {
+      color: #fff;
+      border-color: #fff;
+      background: rgba(255,255,255,0.16);
+    }
+    button:disabled, .google-btn[disabled], .link-btn:disabled {
+      opacity: 0.65;
+      pointer-events: none;
+    }
+    .register, .login-link {
+      text-align: center;
+      margin-top: 32px;
+      color: #fff;
+      font-size: 1.05em;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 24px 0 18px 0;
+    }
+    .divider::before,
+    .divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: #ccc;
+      opacity: 0.30;
+    }
+    .divider span {
+      margin: 0 12px;
+      color: #cccccc;
+      font-size: 0.98rem;
+    }
+    .social-btn {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 15px;
+    }
+    .google-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--google-btn-bg);
+      color: #383a42;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08), 0 0.5px 3px rgba(68,68,68,.08);
+      border-radius: 3px;
+      padding: 11px 24px;
+      border: 1.7px solid #d9d9d9;
+      font-size: 15.5px;
+      transition: box-shadow .18s, background 0.18s;
+    }
+    .google-btn:hover:not(:disabled) {
+      box-shadow: 0 3px 16px rgba(60,60,70,0.14);
+      background: #f4f7fa;
+    }
+    .google-icon {
+      width: 22px;
+      height: 22px;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .tab-switcher {
+      display: none;
+      justify-content: center;
+      margin-bottom: 27px;
+    }
+    .tab-switcher button {
+      border-radius: 8px 8px 0 0;
+      background: rgba(255,255,255,.09);
+      margin: 0 6px;
+      padding: 8px 25px;
+      font-size: 1.02rem;
+      border: 1px solid rgba(255,255,255,0.19);
+      border-bottom: none;
+      color: #fff;
+      transition: background .2s, color .18s;
+    }
+    .tab-switcher button.active {
+      background: #fff;
+      color: #232c44;
+      font-weight: bold;
+    }
+    .tab-switcher button:not(.active):hover {
+      background: rgba(255,255,255,0.19);
+    }
+    .forgot-btn {
+      background: transparent;
+      color: #efefef;
+      border: none;
+      font: inherit;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      transition: color .15s;
+    }
+    .forgot-btn:disabled {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    #modalMessageOverlay {
+      position: fixed;
+      z-index: 1000;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(30,40,60,0.38);
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    #modalMessageBox {
+      background: var(--modal-bg);
+      color: #fff;
+      padding: 28px 36px 22px 36px;
+      border-radius: 11px;
+      min-width: 320px;
+      max-width: 95vw;
+      text-align: center;
+      box-shadow: 0 7px 38px 0 rgba(40,40,90,0.23);
+      position: relative;
+      border: 2px solid #293771;
+    }
+    #modalMessageBox .modal-title {
+      font-size: 1.2rem;
+      margin-bottom: 0.7em;
+      font-weight: 700;
+      text-shadow: 0 1px 10px #1a1d3399;
+      letter-spacing: .03em;
+    }
+    #modalMessageBox .modal-body {
+      font-size: 1.07rem;
+      word-break: break-word;
+    }
+    #modalMessageBox .modal-footer {
+      margin-top: 21px;
+    }
+    #modalMessageBox .modal-close-btn {
+      background: var(--primary-btn-bg);
+      color: #fff;
+      border: none;
+      font-size: 15.5px;
+      border-radius: 4px;
+      padding: 8px 26px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.19s;
+      box-shadow: 0 2px 6px 0 #1a1f3c10;
+    }
+    #modalMessageBox .modal-close-btn:hover {
+      background: var(--primary-btn-hover);
+    }
+    #modalMessageBox .modal-error { color: var(--danger-color); }
+    #modalMessageBox .modal-success { color: var(--success-color); }
+    #modalMessageBox .modal-warning { color: var(--warning-color); }
+    #modalMessageBox .modal-info { color: var(--info-color); }
+  </style>
+</head>
+<body>
+  <div class="wrapper" aria-label="Authentication Container">
+    <div class="tab-switcher" aria-hidden="true">
+      <button id="loginTab" class="active" type="button" onclick="showForm('login')">Sign In</button>
+      <button id="signupTab" type="button" onclick="showForm('signup')">Register</button>
+    </div>
+    <form id="loginForm" action="#" autocomplete="off" aria-label="Login Form">
+      <h2>AWS Girls Login 3</h2>
+      <div class="input-field">
+        <input type="email" required id="loginEmail" autocomplete="username" aria-label="Email" />
+        <label for="loginEmail">Enter your email</label>
+      </div>
+      <div class="input-field">
+        <input type="password" required id="loginPassword" autocomplete="current-password" aria-label="Password" />
+        <label for="loginPassword">Enter your password</label>
+      </div>
+      <div class="forget">
+        <label for="remember" style="user-select:none;">
+          <input type="checkbox" id="remember" />
+          <p>Remember me</p>
+        </label>
+        <button type="button" class="forgot-btn" id="forgotBtn" onclick="window.forgotPassword()" aria-label="Forgot password?">Forgot password?</button>
+      </div>
+      <button type="submit" id="loginSubmitBtn" aria-label="Log In">Log In</button>
+      <div class="divider"><span>or</span></div>
+      <div class="social-btn">
+        <button type="button" class="google-btn" id="googleLoginBtn" onclick="window.continueWithGoogle('login')" aria-label="Continue with Google">
+          <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo"/>
+          Continue with Google
+        </button>
+      </div>
+      <div class="register">
+        <p>Don't have an account? <a href="#" onclick="showForm('signup')" role="button" tabindex="0">Register</a></p>
+      </div>
+    </form>
+    <form id="signupForm" action="#" style="display: none;" autocomplete="off" aria-label="Sign Up Form">
+      <h2>AWS Girls Sign Up 3</h2>
+      <div class="input-field">
+        <input type="text" required id="signupName" autocomplete="name" aria-label="Full name" />
+        <label for="signupName">Enter your name</label>
+      </div>
+      <div class="input-field">
+        <input type="email" required id="signupEmail" autocomplete="email" aria-label="Email" />
+        <label for="signupEmail">Enter your email</label>
+      </div>
+      <div class="input-field">
+        <input type="password" required id="signupPassword" autocomplete="new-password" aria-label="Password" />
+        <label for="signupPassword">Create password</label>
+      </div>
+      <div class="input-field">
+        <input type="password" required id="signupPasswordConfirm" autocomplete="new-password" aria-label="Confirm password" />
+        <label for="signupPasswordConfirm">Confirm password</label>
+      </div>
+      <button type="submit" id="signupSubmitBtn" aria-label="Sign Up">Sign Up</button>
+      <div class="divider"><span>or</span></div>
+      <div class="social-btn">
+        <button type="button" class="google-btn" id="googleSignupBtn" onclick="window.continueWithGoogle('signup')" aria-label="Sign Up with Google">
+          <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png" alt="Google logo"/>
+          Continue with Google
+        </button>
+      </div>
+      <div class="login-link">
+        <p>Already have an account? <a href="#" onclick="showForm('login')" role="button" tabindex="0">Login</a></p>
+      </div>
+    </form>
+  </div>
+
+  <div id="modalMessageOverlay" tabindex="-1" aria-modal="true" role="dialog">
+    <div id="modalMessageBox" role="document">
+      <div class="modal-title" id="modalMessageTitle"></div>
+      <div class="modal-body" id="modalMessageBody"></div>
+      <div class="modal-footer" style="text-align: center;">
+        <button class="modal-close-btn" id="modalMessageCloseBtn" tabindex="0">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    // Firebase imports
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      sendPasswordResetEmail,
+      GoogleAuthProvider,
+      signInWithPopup,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDBSIUwdfN38xiPeapdueeyCvdgV7ep-YE",
+      authDomain: "abinash-482505.firebaseapp.com",
+      databaseURL: "https://abinash-482505-default-rtdb.firebaseio.com",
+      projectId: "abinash-482505",
+      storageBucket: "abinash-482505.firebasestorage.app",
+      messagingSenderId: "262782630272",
+      appId: "1:262782630272:web:b50bb959a3ec87a3696965",
+      measurementId: "G-MBJM2CCKJ6"
+    };
+
+    // App Initialization
+    const app = initializeApp(firebaseConfig);
+    getAnalytics(app);
+    const auth = getAuth(app);
+    const googleProvider = new GoogleAuthProvider();
+
+    // Utilities
+    const $ = (sel) => document.querySelector(sel);
+
+    // --- REMEMBER ME LOGIC (12 HOURS) ---
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const saved = localStorage.getItem('rememberMeData');
+        if (saved) {
+          const { email, timestamp } = JSON.parse(saved);
+          const now = Date.now();
+          const expiry = 12 * 60 * 60 * 1000;
+          if (now - timestamp < expiry) {
+            $('#loginEmail').value = email;
+            $('#remember').checked = true;
+          } else {
+            localStorage.removeItem('rememberMeData');
+          }
+        }
+      } catch (err) {
+        // ignore data corruption
+        localStorage.removeItem('rememberMeData');
+      }
+    });
+
+    /**
+     * Custom modal message handler, advanced & accessible
+     * @param {string} msg
+     * @param {'info'|'success'|'error'|'warning'} type
+     * @param {string?} title
+     * @param {function?} callbackAfterClose
+     */
+    function showMessage(msg, type = 'info', title = null, callbackAfterClose = null) {
+      const overlay = $('#modalMessageOverlay');
+      const modalTitle = $('#modalMessageTitle');
+      const modalBody = $('#modalMessageBody');
+      const ESC_KEY = 27;
+      const tTitle = title || ({
+        success: 'Success',
+        error: 'Error',
+        warning: 'Warning'
+      }[type] || 'Info');
+      modalTitle.textContent = tTitle;
+      modalTitle.className = `modal-title modal-${type}`;
+      modalBody.textContent = msg;
+      overlay.style.display = 'flex';
+      $("#modalMessageCloseBtn").focus();
+
+      // accessibility: close via Escape
+      let keyHandler = (e) => {
+        if (e.key === "Escape" || e.keyCode === ESC_KEY) {
+          closeModal();
+        }
+      };
+      function closeModal() {
+        overlay.style.display = 'none';
+        document.removeEventListener('keydown', keyHandler);
+        typeof callbackAfterClose === 'function' && callbackAfterClose();
+      }
+      $('#modalMessageCloseBtn').onclick = closeModal;
+      document.addEventListener('keydown', keyHandler, { once: true });
+    }
+
+    // --- Form Toggle Handler ---
+    window.showForm = (form) => {
+      $('#loginForm').style.display = (form === 'login' ? '' : 'none');
+      $('#signupForm').style.display = (form === 'signup' ? '' : 'none');
+    };
+
+    // --- Password Reset Handler ---
+    window.forgotPassword = async () => {
+      const email = $('#loginEmail').value.trim();
+      if (!email) return showMessage('Please enter your email to reset password.', 'warning', 'Missing Email');
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showMessage('Reset link sent to: ' + email, 'success', 'Reset Email Sent');
+      } catch (error) {
+        showMessage(error.message, 'error', 'Reset Failed');
+      }
+    };
+
+    // --- Login Form Submit Handler ---
+    $('#loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = $('#loginEmail').value.trim();
+      const password = $('#loginPassword').value;
+      const remember = $('#remember').checked;
+      const btn = $('#loginSubmitBtn');
+      btn.disabled = true;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        if (remember) {
+          localStorage.setItem('rememberMeData', JSON.stringify({
+            email,
+            timestamp: Date.now()
+          }));
+        } else {
+          localStorage.removeItem('rememberMeData');
+        }
+        showMessage('Welcome back!', 'success', 'Login Success', () => {
+          window.location.href = "veerawsg3.html";
+        });
+      } catch (err) {
+        showMessage(err.message, 'error', 'Login Error');
+        btn.disabled = false;
+      }
+    });
+
+    // --- Sign Up Form Submit Handler ---
+    $('#signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = $('#signupName').value.trim();
+      const email = $('#signupEmail').value.trim();
+      const pass = $('#signupPassword').value;
+      const confirm = $('#signupPasswordConfirm').value;
+      const btn = $('#signupSubmitBtn');
+      if (pass !== confirm) {
+        showMessage('Passwords do not match.', 'error', "Validation Error");
+        return;
+      }
+      btn.disabled = true;
+      try {
+        const result = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(result.user, { displayName: name });
+        showMessage('Signup successful!', 'success', 'Welcome', () => {
+          window.location.href = "veerawsg3.html";
+        });
+      } catch (err) {
+        showMessage(err.message, 'error', 'Registration Error');
+        btn.disabled = false;
+      }
+    });
+
+    // --- Google Sign In Handler ---
+    window.continueWithGoogle = async (context) => {
+      const btn = context === 'login' ? $('#googleLoginBtn') : $('#googleSignupBtn');
+      if (btn) btn.disabled = true;
+      try {
+        const userCred = await signInWithPopup(auth, googleProvider);
+        showMessage(`Hello ${userCred.user.displayName || userCred.user.email}!`, 'success', 'Google Login', () => {
+          window.location.href = "veerawsg3.html";
+        });
+      } catch (err) {
+        showMessage(err.message, 'error', "Google Sign-in Failed");
+      } finally {
+        if (btn) btn.disabled = false;
+      }
+    };
+  </script>
+</body>
+</html>
