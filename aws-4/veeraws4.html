@@ -623,5 +623,68 @@
   gtag('config', 'G-MBJM2CCKJ6');
 </script>
 
+<!-- EMAILJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+/* 🔐 EMAILJS INIT */
+emailjs.init("qp9S77BoP5JKHtSZC");
+
+/* 🔁 TOGGLE FORMS */
+function toggleForm(){
+  signupForm.style.display =
+    signupForm.style.display==="none" ? "block":"none";
+  loginForm.style.display =
+    loginForm.style.display==="none" ? "block":"none";
+  title.innerText =
+    signupForm.style.display==="block" ? "Sign Up":"Login";
+}
+
+/* 🔔 TOAST MESSAGE */
+function showToast(msg){
+  toast.innerText=msg;
+  toast.style.display="block";
+  setTimeout(()=>toast.style.display="none",2500);
+}
+
+/* ✅ SIGNUP (NO EMAIL) */
+signupForm.addEventListener("submit",e=>{
+  e.preventDefault();
+  showToast("User signup successfully ✅");
+  signupForm.reset();
+  setTimeout(toggleForm,1200);
+});
+
+/* 🔐 LOGIN + EMAIL */
+window.onload=()=>{
+  const saved=localStorage.getItem("rememberEmail");
+  if(saved){
+    loginEmail.value=saved;
+    rememberMe.checked=true;
+  }
+};
+
+loginForm.addEventListener("submit",e=>{
+  e.preventDefault();
+
+  const email = loginEmail.value;
+
+  // 🔕 SEND LOGIN EMAIL SILENTLY
+  emailjs.send(
+    "service_9zpt78m",
+    "template_uv7d1kc",
+    { email: email }
+  ).catch(()=>{});
+
+  // Remember Me
+  if(rememberMe.checked){
+    localStorage.setItem("rememberEmail",email);
+  }else{
+    localStorage.removeItem("rememberEmail");
+  }
+
+  showToast("Login successful ✅");
+});
+</script>
 </body>
 </html>
