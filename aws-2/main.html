@@ -563,5 +563,218 @@
       }
     };
   </script>
+
+
+
+
+
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-analytics.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      createUserWithEmailAndPassword,
+      sendPasswordResetEmail,
+      GoogleAuthProvider,
+      signInWithPopup,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDBSIUwdfN38xiPeapdueeyCvdgV7ep-YE",
+      authDomain: "abinash-482505.firebaseapp.com",
+      databaseURL: "https://abinash-482505-default-rtdb.firebaseio.com",
+      projectId: "abinash-482505",
+      storageBucket: "abinash-482505.firebasestorage.app",
+      messagingSenderId: "262782630272",
+      appId: "1:262782630272:web:b50bb959a3ec87a3696965",
+      measurementId: "G-MBJM2CCKJ6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+
+    // REMEMBER ME LOGIC (12 HOURS)
+    window.onload = () => {
+      const savedData = localStorage.getItem('rememberMeData');
+      if (savedData) {
+        const { email, timestamp } = JSON.parse(savedData);
+        const now = new Date().getTime();
+        const twelveHours = 12 * 60 * 60 * 1000;
+        
+        // If within 12 hours, pre-fill email and check box
+        if (now - timestamp < twelveHours) {
+          document.getElementById('loginEmail').value = email;
+          document.getElementById('remember').checked = true;
+        } else {
+          localStorage.removeItem('rememberMeData');
+        }
+      }
+    };
+
+    function showMessage(msg, type = 'info', title = null, callbackAfterClose = null) {
+      const overlay = document.getElementById('modalMessageOverlay');
+      const modalTitle = document.getElementById('modalMessageTitle');
+      const modalBody = document.getElementById('modalMessageBody');
+      let tTitle = '';
+      switch(type) {
+        case 'success': tTitle = 'Success'; break;
+        case 'error': tTitle = 'Error'; break;
+        case 'warning': tTitle = 'Warning'; break;
+        default: tTitle = 'Info';
+      }
+      modalTitle.textContent = title || tTitle;
+      modalTitle.className = 'modal-title modal-' + type;
+      modalBody.textContent = msg;
+      overlay.style.display = 'flex';
+
+      document.getElementById('modalMessageCloseBtn').onclick = () => {
+        overlay.style.display = 'none';
+        if (callbackAfterClose) callbackAfterClose();
+      };
+    }
+
+    window.showForm = (form) => {
+      document.getElementById('loginForm').style.display = (form === 'login' ? '' : 'none');
+      document.getElementById('signupForm').style.display = (form === 'signup' ? '' : 'none');
+    };
+
+    window.forgotPassword = async () => {
+      const email = document.getElementById('loginEmail').value.trim();
+      if (!email) return showMessage('Enter email first.', 'warning');
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showMessage('Reset link sent to ' + email, 'info');
+      } catch (error) { showMessage(error.message, 'error'); }
+    };
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('loginEmail').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const rememberChecked = document.getElementById('remember').checked;
+      const btn = document.getElementById('loginSubmitBtn');
+      
+      btn.disabled = true;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        
+        // Save for 12 hours if checkbox is ticked
+        if (rememberChecked) {
+          const data = { email: email, timestamp: new Date().getTime() };
+          localStorage.setItem('rememberMeData', JSON.stringify(data));
+        } else {
+          localStorage.removeItem('rememberMeData');
+        }
+
+        showMessage('Welcome back!', 'success', 'Login Success', () => {
+          window.location.href = "veeraws1.html";
+        });
+      } catch (error) {
+        showMessage(error.message, 'error');
+        btn.disabled = false;
+      }
+    });
+
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('signupName').value.trim();
+      const email = document.getElementById('signupEmail').value.trim();
+      const pass = document.getElementById('signupPassword').value;
+      const confirm = document.getElementById('signupPasswordConfirm').value;
+      
+      if (pass !== confirm) return showMessage('Passwords do not match', 'error');
+
+      const btn = document.getElementById('signupSubmitBtn');
+      btn.disabled = true;
+      try {
+        const result = await createUserWithEmailAndPassword(auth, email, pass);
+        await updateProfile(result.user, { displayName: name });
+        showMessage('Signup successful!', 'success', 'Success', () => {
+          window.location.href = "veeraws1.html";
+        });
+      } catch (error) {
+        showMessage(error.message, 'error');
+        btn.disabled = false;
+      }
+    });
+
+    window.continueWithGoogle = async (context) => {
+      try {
+        const result = await signInWithPopup(auth, provider);
+        showMessage(`Hello ${result.user.displayName}!`, 'success', 'Google Success', () => {
+          window.location.href = "veeraws1.html";
+        });
+      } catch (error) { showMessage(error.message, 'error'); }
+    };
+  </script>
+  
+<!-- EMAILJS -->
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+/* 🔐 EMAILJS INIT */
+emailjs.init("qp9S77BoP5JKHtSZC");
+
+/* 🔁 TOGGLE FORMS */
+function toggleForm(){
+  signupForm.style.display =
+    signupForm.style.display==="none" ? "block":"none";
+  loginForm.style.display =
+    loginForm.style.display==="none" ? "block":"none";
+  title.innerText =
+    signupForm.style.display==="block" ? "Sign Up":"Login";
+}
+
+/* 🔔 TOAST MESSAGE */
+function showToast(msg){
+  toast.innerText=msg;
+  toast.style.display="block";
+  setTimeout(()=>toast.style.display="none",2500);
+}
+
+/* ✅ SIGNUP (NO EMAIL) */
+signupForm.addEventListener("submit",e=>{
+  e.preventDefault();
+  showToast("User signup successfully ✅");
+  signupForm.reset();
+  setTimeout(toggleForm,1200);
+});
+
+/* 🔐 LOGIN + EMAIL */
+window.onload=()=>{
+  const saved=localStorage.getItem("rememberEmail");
+  if(saved){
+    loginEmail.value=saved;
+    rememberMe.checked=true;
+  }
+};
+
+loginForm.addEventListener("submit",e=>{
+  e.preventDefault();
+
+  const email = loginEmail.value;
+
+  // 🔕 SEND LOGIN EMAIL SILENTLY
+  emailjs.send(
+    "service_9zpt78m",
+    "template_uv7d1kc",
+    { email: email }
+  ).catch(()=>{});
+
+  // Remember Me
+  if(rememberMe.checked){
+    localStorage.setItem("rememberEmail",email);
+  }else{
+    localStorage.removeItem("rememberEmail");
+  }
+
+  showToast("Login successful ✅");
+});
+</script>
 </body>
 </html>
